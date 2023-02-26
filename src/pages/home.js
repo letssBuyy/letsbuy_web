@@ -1,14 +1,12 @@
 import React from "react";
-import { Title } from '../assets/styles/HomeStyle'
+import { Title } from '../assets/styles/home'
 
-function Home() {
+export default function Home() {
     return (
         <>
             <div>
-                <Title>ola mundo</Title>
+                <Title>Ola mundo</Title>
             </div>
         </>
     )
 }
-
-export default Home;
