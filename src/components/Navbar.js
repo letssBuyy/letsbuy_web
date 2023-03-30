@@ -10,28 +10,28 @@ import {
     ContainerPrincipal,
     NavbarMobile,
     BackgroundOffCanvas
-} from '../assets/styles/navbar'
-import { useNavigate } from 'react-router-dom';
+} from '../assets/styles/components/navbarStyle'
+// import { useNavigate } from 'react-router-dom';
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
     var isAuthenticated = props.isAuthenticated ? props.isAuthenticated : false
     var userName = localStorage.getItem("USER_NAME") ? localStorage.getItem("USER_NAME") : 'Usuário'
-    let navigate = useNavigate();
+    // let navigate = useNavigate();
 
     const [visible, setVisible] = useState(false);
 
-    function Navigate(to) {
-        navigate(to);
-    };
+    // function Navigate(to) {
+    //     navigate(to);
+    // };
 
     switch (type) {
         case "basic":
             return (
                 <ContainerBasic>
                     {showBackButton ?
-                        <ImageBackButton onClick={Navigate("/")} src={BackButton} alt="Voltar" />
+                        <ImageBackButton src={BackButton} alt="Voltar" />
                         :
                         <></>
                     }
