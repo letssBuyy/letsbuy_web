@@ -1,14 +1,14 @@
 import React from "react";
-import { Title } from '../assets/styles/home'
-import Navbar from "../components/Navbar";
+import { Title } from '../assets/styles/HomeStyle'
 
-export default function Home() {
+function Home() {
     return (
         <>
-        <Navbar type='principal' isAuthenticated={false}/>
             <div>
-                <Title>pagina inicial</Title>
+                <Title>ola mundo</Title>
             </div>
         </>
     )
 }
+
+export default Home;
