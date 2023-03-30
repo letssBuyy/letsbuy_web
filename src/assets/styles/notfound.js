@@ -3,6 +3,8 @@ import { colors } from "../../utils/colors";
 import { fonts } from '../../utils/fonts'
 
 export const Container = styled.div`
+    max-width: 100vw;
+    height: 85vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,8 +12,8 @@ export const Container = styled.div`
 `
 
 export const Image = styled.img`
-    width: 380px;
-    height: 250px;
+    max-width: 90%;
+    height: auto;
 `;
 
 export const Title = styled.p`
@@ -21,6 +23,7 @@ export const Title = styled.p`
     font-size: 16px;
     text-align: center;
     margin-top: 80px;
+    padding: 0 10%;
 `
 
 export const Button = styled.button`
