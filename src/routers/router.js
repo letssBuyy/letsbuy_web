@@ -6,6 +6,7 @@ import Login from '../pages/Login';
 import NotFound from '../pages/NotFound';
 import RecoveryEmail  from '../pages/RecoveryEmail';
 import RecoveryPassword  from '../pages/RecoveryPassword';
+import AboutUs  from '../pages/AboutUs';
 
 export default function Routers() {
     return (
@@ -15,6 +16,7 @@ export default function Routers() {
                 <Route  path='/entrar' element={<Login />} />
                 <Route path='/recuperar-email' element={<RecoveryEmail />}/>
                 <Route path='/recuperar-senha' element={<RecoveryPassword />}/>
+                <Route path='/sobre-nos' element={<AboutUs />}/>
                 <Route  path='*' element={<NotFound />} />
             </Routes>
         </Router>
