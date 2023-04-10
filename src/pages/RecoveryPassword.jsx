@@ -17,7 +17,8 @@ export default function Recovery() {
     }
 
     function enviar(){
-
+        console.log(password)
+        setShowPasswordError(false)
     }
 
     return (

@@ -15,6 +15,8 @@ export default function Recovery() {
 
     function enviar(){
         console.log('enviando')
+        setShowEmailError(false)
+        console.log(email)
     }
 
     return (

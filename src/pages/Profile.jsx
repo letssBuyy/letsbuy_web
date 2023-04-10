@@ -42,7 +42,15 @@ export default function Profile() {
     }, [])
 
     function load() {
-
+        setName('Ana Julia')
+        setCity('São Paulo')
+        setState('SP')
+        setSubscribeSince('2023')
+        setProfileIcon('');
+        setUserVerify(true);
+        setOrdination('mais_recentes"')
+        setSelectedTab(1)
+        setCardList([1,2,3,4,5])
     }
 
     const [isSelectedHeart, setIsSelectedHeart] = useState(false)

@@ -26,6 +26,8 @@ export default function Home() {
     function login() {
         console.log(email)
         console.log(password)
+        setShowEmailError(false)
+        setShowPasswordError(false)
 
         const token = ""
         localStorage.setItem("TOKEN", token)
