@@ -1,6 +1,6 @@
 import React from "react";
 import FallingAstronaut from '../assets/images/astronaut.svg'
-import { Container, Image, Title, Button } from '../assets/styles/notfound'
+import { Container, Image, Title, Button } from '../assets/styles/notFoundStyle'
 import Navbar from '../components/Navbar'
 import { useNavigate } from 'react-router-dom';
 
