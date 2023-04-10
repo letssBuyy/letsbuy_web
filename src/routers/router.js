@@ -9,6 +9,7 @@ import RecoveryEmail  from '../pages/RecoveryEmail';
 import RecoveryPassword  from '../pages/RecoveryPassword';
 import AboutUs  from '../pages/AboutUs';
 import Profile from '../pages/Profile';
+import SuccessfulPayment  from '../pages/SuccessfulPayment';
 
 export default function Routers() {
     return (
@@ -21,6 +22,7 @@ export default function Routers() {
                 <Route path='/recuperar-senha' element={<RecoveryPassword />}/>
                 <Route path='/sobre-nos' element={<AboutUs />}/>
                 <Route path='/profile' element={<Profile />}/>
+                <Route path='/pagamento-concluido' element={<SuccessfulPayment />}/>
                 <Route  path='*' element={<NotFound />} />
             </Routes>
         </Router>
