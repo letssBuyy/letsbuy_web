@@ -1,5 +1,5 @@
 import React from "react";
-import { Title } from '../assets/styles/home'
+import { Title } from '../assets/styles/homeStyle'
 import Navbar from "../components/Navbar";
 
 export default function Home() {
