@@ -1,3 +1,4 @@
+import React from 'react';
 import { Description, Title, Container, ChangeWindow } from "../assets/styles/successfulPaymentStyle";
 import Navbar from "../components/Navbar";
 
