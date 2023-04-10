@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Label,  InputContainer} from '../assets/styles/components/InputStyle'
+import {Label,  InputContainer} from '../assets/styles/components/InputStyle';
 
 export default function Input(props) {
     var isHiddenLabel = props.isHiddenLabel ? props.isHiddenLabel : false

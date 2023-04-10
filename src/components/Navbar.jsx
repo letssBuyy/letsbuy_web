@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Logo from '../assets/images/logo-black-pink.svg'
-import BackButton from '../assets/images/icon-back-button.svg'
-import User from '../assets/images/icon-user.svg'
-import Menu from '../assets/images/icon-menu-black.svg'
+import Logo from '../assets/images/logo-black-pink.svg';
+import BackButton from '../assets/images/icon-back-button.svg';
+import User from '../assets/images/icon-user.svg';
+import Menu from '../assets/images/icon-menu-black.svg';
 import {
     ContainerBasic,
     LogoBasic,
@@ -10,21 +10,15 @@ import {
     ContainerPrincipal,
     NavbarMobile,
     BackgroundOffCanvas
-} from '../assets/styles/components/navbarStyle'
-// import { useNavigate } from 'react-router-dom';
+} from '../assets/styles/components/navbarStyle';
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
     var isAuthenticated = props.isAuthenticated ? props.isAuthenticated : false
     var userName = localStorage.getItem("USER_NAME") ? localStorage.getItem("USER_NAME") : 'Usuário'
-    // let navigate = useNavigate();
 
     const [visible, setVisible] = useState(false);
-
-    // function Navigate(to) {
-    //     navigate(to);
-    // };
 
     switch (type) {
         case "basic":

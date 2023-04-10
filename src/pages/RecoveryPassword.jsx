@@ -1,6 +1,6 @@
 import React,{ useState } from "react";
 import { ContainerError, InputContainer, Label } from '../assets/styles/components/InputStyle';
-import { Container, ForgotPassword, SignIn, SignUp, Title } from '../assets/styles/loginStyle';
+import { Container, SignIn, Title } from '../assets/styles/loginStyle';
 import EyeClose from '../assets/images/icon-eye-close.svg';
 import EyeOpen from '../assets/images/icon-eye-open.svg';
 import { Description } from "../assets/styles/recoveryStyle";

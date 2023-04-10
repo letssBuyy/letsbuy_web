@@ -1,6 +1,6 @@
 import React,{ useState } from "react";
 import { ContainerError, InputContainer, Label } from '../assets/styles/components/InputStyle';
-import { Container, ForgotPassword, SignIn, SignUp, Title } from '../assets/styles/loginStyle';
+import { Container, SignIn, Title } from '../assets/styles/loginStyle';
 import { Description } from "../assets/styles/recoveryStyle";
 import IconError from '../assets/images/icon-error.svg';
 import Navbar from "../components/Navbar";
@@ -14,7 +14,7 @@ export default function Recovery() {
     }
 
     function enviar(){
-
+        console.log('enviando')
     }
 
     return (
