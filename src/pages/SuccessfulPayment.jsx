@@ -2,10 +2,6 @@ import { Description, Title, Container, ChangeWindow } from "../assets/styles/su
 import Navbar from "../components/Navbar";
 
 export default function SuccessfulPayment() {
-    function minhasCompras(){
-
-    }
-
     return (
         <>
             <Navbar type='principal'

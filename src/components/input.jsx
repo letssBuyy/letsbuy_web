@@ -19,6 +19,8 @@ export default function Input(props) {
       props.onTextChange(newValue);
     }
 
+    console.log(inputValue)
+
     return (
         <>
             {

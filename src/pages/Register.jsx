@@ -60,6 +60,14 @@ export default function Register() {
         console.log(phoneNumber)
         console.log(email)
         console.log(password)
+
+        setShowNameError(false)
+        setShowCpfError(false)
+        setShowDateOfBirthError(false)
+        setShowPhoneNumberError(false)
+        setShowEmailError(false)
+        setShowPasswordError(false)
+        setShowTermsError(false)
     }
 
     return (
