@@ -64,7 +64,7 @@ export default function Profile() {
             <Container>
                 <InfoUser>
                     <ProfileIcon>
-                        <img src={profileIcon != "" ? profileIcon : ImageDefault} alt={name} />
+                        <img src={profileIcon !== "" ? profileIcon : ImageDefault} alt={name} />
                     </ProfileIcon>
                     <BoxText>
                         <h1>{name}</h1>
