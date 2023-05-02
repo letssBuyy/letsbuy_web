@@ -12,6 +12,7 @@ import Profile from '../pages/Profile';
 import SuccessfulPayment from '../pages/SuccessfulPayment';
 import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
+import PublishAd from '../pages/PublishAd';
 
 export default function Routers() {
     return (
@@ -27,6 +28,7 @@ export default function Routers() {
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
+                <Route path='/publicar-anuncio' element={<PublishAd />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
