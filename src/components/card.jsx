@@ -67,7 +67,7 @@ export default function Card(props) {
                             </div>
                             <div>
                                 <h1>{props.sellerName}</h1>
-                                <p>{props.sellerCity}</p>
+                                <p>{props.sellerCity} - {props.sellerState}</p>
                             </div>
                         </InfoSalle>
                     </ContainerDivs>
