@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import Search from "../assets/images/icon-search.svg";
 import {
-    CardList,
     CardsSection,
     CategorysSection,
     Container,
@@ -14,13 +13,12 @@ import Banner from "../components/Banner";
 import Cookies from "../components/Cookies";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import Card from "../components/Card";
 import Carrousel from '../components/Carrousel';
 import CarouselCategory from "../components/CarrouselCategorys";
 import CarrouselCards from "../components/CarrouselCards";
 
 export default function Home() {
-    const [resultSearch, setResultSearch] = useState(["Tênis", "Tênis Nike"])
+    // const [resultSearch, setResultSearch] = useState(["Tênis", "Tênis Nike"])
     const categorys = [
         "Eletrônicos",
         "Moda e Acessórios",
@@ -36,124 +34,116 @@ export default function Home() {
 
     const advertise = [
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
         {
-            image: null,
+            image: "https://i.imgur.com/fwOCAJz.png",
             price: "200",
             name: "Bolsa marrom",
             brand: "Tommy",
             sellerName: "Luiz",
             sellerCity: "São Paulo",
             sellerIsVerify: true,
-            sellerImageProfile: null,
+            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             isSelectedHeart: false,
             onClickHeart: null,
             onClickSeller: null,
-            onClickCard: null,
-            margin: '5px'
+            onClickCard: null
         },
     ]
 
