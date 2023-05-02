@@ -14,7 +14,7 @@ import {
     OrdinationSelect,
     ListAdvertise
 } from '../assets/styles/profileStyle';
-import Card from "../components/card";
+import Card from "../components/Card";
 
 export default function Profile() {
     const [name, setName] = useState('Ana Julia')
