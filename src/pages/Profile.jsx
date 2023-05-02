@@ -42,7 +42,15 @@ export default function Profile() {
     }, [])
 
     function load() {
-
+        setName('Ana Julia')
+        setCity('São Paulo')
+        setState('SP')
+        setSubscribeSince('2023')
+        setProfileIcon('');
+        setUserVerify(true);
+        setOrdination('mais_recentes"')
+        setSelectedTab(1)
+        setCardList([1,2,3,4,5])
     }
 
     const [isSelectedHeart, setIsSelectedHeart] = useState(false)
@@ -64,7 +72,7 @@ export default function Profile() {
             <Container>
                 <InfoUser>
                     <ProfileIcon>
-                        <img src={profileIcon != "" ? profileIcon : ImageDefault} alt={name} />
+                        <img src={profileIcon !== "" ? profileIcon : ImageDefault} alt={name} />
                     </ProfileIcon>
                     <BoxText>
                         <h1>{name}</h1>
