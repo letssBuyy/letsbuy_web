@@ -21,7 +21,7 @@ export default function Routers() {
                 <Route path='/recuperar-email' element={<RecoveryEmail />}/>
                 <Route path='/recuperar-senha' element={<RecoveryPassword />}/>
                 <Route path='/sobre-nos' element={<AboutUs />}/>
-                <Route path='/profile' element={<Profile />}/>
+                <Route path='/perfil' element={<Profile />}/>
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />}/>
                 <Route  path='*' element={<NotFound />} />
             </Routes>
