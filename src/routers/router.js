@@ -14,6 +14,7 @@ import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
+import Chat from '../pages/Chat';
 
 export default function Routers() {
     return (
@@ -31,6 +32,7 @@ export default function Routers() {
                 <Route path='/fac' element={<Fac />}/>
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
+                <Route path='/chat' element={<Chat/>} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
