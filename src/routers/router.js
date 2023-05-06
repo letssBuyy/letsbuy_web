@@ -15,6 +15,7 @@ import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
 import Chat from '../pages/Chat';
+import Favoritos from '../pages/Favoritos';
 
 export default function Routers() {
     return (
@@ -29,10 +30,11 @@ export default function Routers() {
                 <Route path='/perfil' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
                 <Route path='/checkout' element={<Checkout />} />
-                <Route path='/fac' element={<Fac />}/>
+                <Route path='/fac' element={<Fac />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
-                <Route path='/chat' element={<Chat/>} />
+                <Route path='/chat' element={<Chat />} />
+                <Route path='/favoritos' element={<Favoritos />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
