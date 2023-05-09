@@ -15,11 +15,8 @@ import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
 import Chat from '../pages/Chat';
-<<<<<<< HEAD
 import MyShoppings from '../pages/MyShoppings';
-=======
 import Favoritos from '../pages/Favoritos';
->>>>>>> 818b5a9d303fbd953650f2b92c91353332b0c8d9
 
 export default function Routers() {
     return (
