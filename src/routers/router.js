@@ -15,7 +15,11 @@ import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
 import Chat from '../pages/Chat';
+<<<<<<< HEAD
 import MyShoppings from '../pages/MyShoppings';
+=======
+import Favoritos from '../pages/Favoritos';
+>>>>>>> 818b5a9d303fbd953650f2b92c91353332b0c8d9
 
 export default function Routers() {
     return (
@@ -30,11 +34,16 @@ export default function Routers() {
                 <Route path='/perfil' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
                 <Route path='/checkout' element={<Checkout />} />
-                <Route path='/fac' element={<Fac />}/>
+                <Route path='/fac' element={<Fac />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
+<<<<<<< HEAD
                 <Route path='/chat' element={<Chat/>} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
+=======
+                <Route path='/chat' element={<Chat />} />
+                <Route path='/favoritos' element={<Favoritos />} />
+>>>>>>> 818b5a9d303fbd953650f2b92c91353332b0c8d9
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

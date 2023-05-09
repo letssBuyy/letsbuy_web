@@ -235,7 +235,7 @@ export default function Chat() {
 
     return (
         <>
-            <Navbar type='principal' isAuthenticated={false} />
+            <Navbar type='basic' isAuthenticated={false} showBackButton={true} />
             <Container>
                 <SideBar ref={sideBarRef}>
                     {chats.map((item, index) => (
