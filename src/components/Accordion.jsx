@@ -13,22 +13,31 @@ export default function Accordion(props) {
     const contentRef = React.useRef(null);
     const height = isOpen ? contentRef.current.scrollHeight : 0;
 
+    function toUppercase(string) {
+        let minhaString = string;
+        let minhaStringMaiuscula = minhaString.toUpperCase();
+        return minhaStringMaiuscula
+    }
+
+    function confirm() {
+        alert("confirmou")
+    }
+
     return (
         <>
             <AccordionWrapper>
                 <AccordionHeader onClick={() => setIsOpen(!isOpen)}>
                     <div>
-                        <img src="https://i.imgur.com/fwOCAJz.png" alt="anuncio" />
+                        <img src={props.image} alt="anuncio" />
                         <div>
-                            <h1>Bolsa marrom</h1>
-                            <p>Tommy</p>
-                            <span>R$200</span>
+                            <h1>{props.title}</h1>
+                            <span>{props.preco}</span>
                         </div>
                     </div>
                     <div>
                         {
                             props.finalized ?
-                                <button>Pedido recebido</button>
+                                <button onClick={() => confirm()}>Pedido recebido</button>
                                 :
                                 <ButtonDisabled disabled={true}>Pedido finalizado</ButtonDisabled>
                         }
@@ -40,19 +49,17 @@ export default function Accordion(props) {
                 >
                     <div>
                         <p>Informações do pedido</p>
-                        <span>Vendido por: LUIZ ALVES RODRIGUES
-                            CPF: 022-***-***-**</span>
-                        <span>06/05/2023 10:00:00</span>
-                        <span>ID do anúncio: 123456789</span>
+                        <span>Vendido por: {toUppercase(props.sellerName)}
+                            CPF: {props.cpf.substring(0, 3)}.***.***-**</span>
+                        <span>{props.date}</span>
+                        <span>ID do anúncio: {props.id}</span>
                     </div>
                     <div>
                         <p>Endereço de entrega</p>
-                        <span>
-                            Rua Sabbado D’Angelo, 281 - 08210790 Apartamento 1007, torre B
-                        </span>
+                        <span>{props.adress}</span>
                     </div>
                     <ContainerCheckout>
-                        <Checkout/>
+                        <Checkout etapa={2} />
                     </ContainerCheckout>
                 </AccordionContent>
             </AccordionWrapper>

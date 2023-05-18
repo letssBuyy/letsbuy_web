@@ -11,9 +11,9 @@ export const AccordionWrapper = styled.div`
 export const ContainerCheckout = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
+  margin: 55px 0 30px 0;
 `;
 
 export const AccordionHeader = styled.div`
@@ -68,9 +68,10 @@ export const AccordionHeader = styled.div`
     color: ${colors.white};
     cursor: pointer;
     border-radius: 5px;
+    z-index: 5;
   }
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 500px) {
       display: flex;
       flex-direction: column;
 
@@ -88,20 +89,20 @@ export const AccordionContent = styled.div`
   flex-direction: column;
   border-top: 1px solid ${colors.gray};
 
-  >div {
+  >div:not(div:last-child) {
     display: flex;
     flex-direction: column;
     padding: 20px;
   }
 
-  >p {
+  >div:not(div:last-child) p {
       font-family: ${fonts.medium};
       font-size: 16px;
       color: ${colors.black};
       margin: 10px 0;
   }
 
-  >span {
+  >div:not(div:last-child) span {
     max-width: 260px;
     font-family: ${fonts.medium};
       font-size: 14px;
