@@ -17,6 +17,8 @@ import Fac from '../pages/Fac';
 import Chat from '../pages/Chat';
 import MyShoppings from '../pages/MyShoppings';
 import Favoritos from '../pages/Favoritos';
+import SearchAd from '../pages/SearchAd';
+import Help from '../pages/Help';
 
 export default function Routers() {
     return (
@@ -38,6 +40,8 @@ export default function Routers() {
                 <Route path='/minhas-compras' element={<MyShoppings />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/favoritos' element={<Favoritos />} />
+                <Route path='/buscar' element={<SearchAd />} />
+                <Route path='/disputa' element={<Help />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

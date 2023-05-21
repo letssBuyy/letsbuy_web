@@ -7,14 +7,23 @@ export const colorOptions = [
 
 export const categoryOptions = [
     { value: '', label: 'Selecione uma categoria' },
-    { value: '1', label: 'Eletrônicos' },
-    { value: '2', label: 'Infantil' },
-    { value: '3', label: 'Pet' },
+    { value: 'VEHICLES', label: 'Veículos' },
+    { value: 'ELECTRONICS', label: 'Eletrônicos' },
+    { value: 'FASHION_ACESSORIES', label: 'Acessorios' },
+    { value: 'HOUSE_DECORATION', label: 'Casa e decoração' },
+    { value: 'BOOKS', label: 'Livros' },
+    { value: 'FILMS', label: 'Filmes' },
+    { value: 'HOBBIES', label: 'Hobbies' },
+    { value: 'AUTO_PARTS', label: 'Auto peças' },
+    { value: 'SPORTS_LEISURE', label: 'Esporte e lazer' },
+    { value: 'PETS', label: 'Pets' },
+    { value: 'CHILDREN', label: 'Bebês e crianças' },
 ];
 
 export const qualityOptions = [
     { value: '', label: 'Selecione a qualidade' },
-    { value: '1', label: 'Novo' },
-    { value: '2', label: 'Usado' },
-    { value: '3', label: 'Bom estado' },
+    { value: 'NEW', label: 'Novo' },
+    { value: 'SEMI_NEW', label: 'Semi Novo' },
+    { value: 'USED', label: 'Usado' },
+    { value: 'DEFECTIVE', label: 'Defeituoso' },
 ];
