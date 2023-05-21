@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar"
 import {
     Container
 } from "../assets/styles/MyShoppingsStyle"
-import Accordion from "../components/Accordion";
+import Accordion from "../components/AccordionMyShoppings";
 import Helpdesk from "../components/helpdesk";
 
 export default function MyShoppings() {
