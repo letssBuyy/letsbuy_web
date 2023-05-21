@@ -169,3 +169,33 @@ export const ContainerError = styled.div`
         height: 16px;
     }
 `;
+
+export const CoupleInputs = styled.div`
+  display: flex;
+  margin-top: 20px;
+
+  div span {
+    font-family: ${fonts.regular};
+    font-size: 12px;
+    color: ${colors.grayMedium};
+  }
+
+  input {
+    width: 90%;
+    height: 48px;
+    outline: none;
+    border: none;
+    background-color: 0;
+    font-size: 14px;
+    font-family: ${fonts.regular};
+    color: ${colors.grayMedium};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid ${colors.gray};
+    border-radius: 5px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    margin-top: 12px;
+  }
+`;
