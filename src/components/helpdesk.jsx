@@ -1,21 +1,52 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { colors } from '../utils/colors';
+import { fonts } from '../utils/fonts';
+import iconHelp from "../assets/images/icon-helpdesk.svg"
 
-class Helpdesk extends Component {
-  componentDidMount() {
-    var Tawk_API=Tawk_API||{ }, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6456cfccad80445890eb8240/1gvphndm9';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-  }
+export default function Helpdesk() {
+  const [isOpen, setIsOpen] = useState(false);
 
-  render() {
-    return <div />;
-  }
+  const handleFormToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <>
+      <FormContainer onClick={handleFormToggle}>
+        <Text>Não recebeu o produto?</Text>
+        <Icon>
+          <img src={iconHelp} alt="Não recebeu o produto?" />
+        </Icon>
+      </FormContainer>
+    </>
+  )
 }
 
-export default Helpdesk;
+// Estilização do componente
+const FormContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  z-index: 9999;
+`;
+
+const Icon = styled.div`
+  background-color: ${colors.pink};
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Text = styled.span`
+  margin-right: 10px;
+  font-size: 14px;
+  font-family: ${fonts.medium};
+  color: ${colors.black};
+`;

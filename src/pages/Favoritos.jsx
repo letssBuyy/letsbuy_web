@@ -6,7 +6,7 @@ import {
     Container
 } from "../assets/styles/FavoritosStyle"
 export default function Favoritos() {
-    const [cardList, setCardList] = useState([1, 2, 3, 4, 5])
+    const [cardList, setCardList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
 
     function handleClickSeller() {
         console.log('clicou no vendedor')
