@@ -80,4 +80,8 @@ export const ButtonUpdate = styled.button`
   color: ${colors.white};
 
   margin: 0 auto;
+
+  @media screen and (max-width: 600px) {
+    width: 100%;
+  }
 `;

@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Accordion from "../components/Accordion";
 import IconError from '../assets/images/icon-error.svg';
 import IconCamPink from "../assets/images/icon-cam-gray.svg";
+import axios from "axios";
 import {
     Container,
     Title,
@@ -14,7 +15,8 @@ import {
     ContainerError,
     InputContainer,
     Label,
-    ImagemSelecionada
+    ImagemSelecionada,
+    CoupleInputs
 } from '../assets/styles/components/InputStyle';
 
 export default function EditProfile() {
@@ -34,6 +36,8 @@ export default function EditProfile() {
     const [number, setNumber] = useState('');
     const [neighborhood, setNeighborhood] = useState('')
     const [complement, setComplement] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
 
     const [showNameError, setShowNameError] = useState(false);
     const [showCpfError, setShowCpfError] = useState(false);
@@ -48,6 +52,10 @@ export default function EditProfile() {
     const [showNeighborhoodError, setShowNeighborhoodError] = useState(false)
     const [showNumberError, setShowNumberError] = useState(false);
     const [showComplementError, setShowComplementError] = useState(false);
+    const [showCityError, setShowCityError] = useState('');
+    const [showStateError, setShowStateError] = useState('');
+
+    const [disabledAdressInputs, setDisableAdressInputs] = useState(true)
 
     function handleChangeProfileImage(event) {
         const file = event.target.files[0];
@@ -57,6 +65,59 @@ export default function EditProfile() {
             setProfileImage(reader.result);
         };
     }
+
+    const formatBankNumber = (value) => {
+        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+        if (formattedValue.length > 3) {
+            return `${formattedValue.slice(0, 3)}-${formattedValue.slice(3)}`;
+        } else {
+            return formattedValue;
+        }
+    };
+
+    const formatAgencyNumber = (value) => {
+        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+        if (formattedValue.length > 4) {
+            return `${formattedValue.slice(0, 4)}-${formattedValue.slice(4)}`;
+        } else {
+            return formattedValue;
+        }
+    };
+
+    const formatAccountNumber = (value) => {
+        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+        if (formattedValue.length > 5) {
+            return `${formattedValue.slice(0, 5)}-${formattedValue.slice(5)}`;
+        } else {
+            return formattedValue;
+        }
+    };
+
+    const handleBankChange = (e) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatBankNumber(inputValue);
+        setBank(formattedValue);
+    };
+
+    const handleAgencyChange = (e) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatAgencyNumber(inputValue);
+        setAgency(formattedValue);
+    };
+
+    const handleAccountChange = (e) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatAccountNumber(inputValue);
+        setAccount(formattedValue);
+    };
+
+    function handleChangeCep(e) {
+        setCep(e.target.value)
+    }
+
 
     return (
         <>
@@ -167,6 +228,38 @@ export default function EditProfile() {
                                             <span>Digite o email corretamente</span>
                                         </ContainerError>
                                     </div>
+                                    <div>
+                                        <Label>Conta bancaria</Label>
+                                        <CoupleInputs>
+                                            <div>
+                                                <span>Banco</span>
+                                                <input
+                                                    type="text"
+                                                    placeholder="0000"
+                                                    value={bank}
+                                                    onChange={handleBankChange}
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>Agência</span>
+                                                <input
+                                                    type="text"
+                                                    placeholder="0000"
+                                                    value={agency}
+                                                    onChange={handleAgencyChange}
+                                                />
+                                            </div>
+                                            <div>
+                                                <span>Conta</span>
+                                                <input
+                                                    type="text"
+                                                    placeholder="0000"
+                                                    value={account}
+                                                    onChange={handleAccountChange}
+                                                />
+                                            </div>
+                                        </CoupleInputs>
+                                    </div>
                                 </ContainerInputs>
                             </>
                         }
@@ -182,7 +275,7 @@ export default function EditProfile() {
                                             <input
                                                 type="text"
                                                 placeholder="Digite o CEP"
-                                                onChange={(e) => setCep(e.target.value)}
+                                                onChange={(e) => handleChangeCep(e)}
                                             ></input>
                                         </InputContainer>
                                         <ContainerError
@@ -193,12 +286,56 @@ export default function EditProfile() {
                                         </ContainerError>
                                     </div>
                                     <div>
+                                        <Label>Estado</Label>
+                                        <InputContainer
+                                            style={{ minWidth: '100%', height: '48px' }}
+                                            disabled={disabledAdressInputs}
+                                        >
+                                            <input
+                                                type="text"
+                                                placeholder="Digite o estado"
+                                                onChange={(e) => setState(e.target.value)}
+                                                disabled={disabledAdressInputs}
+                                            ></input>
+                                        </InputContainer>
+                                        <ContainerError
+                                            style={showStateError ? { display: 'flex' } : { display: 'none' }}
+                                        >
+                                            <img src={IconError} alt="Digite a número corretamente" />
+                                            <span>Digite o estado corretamente</span>
+                                        </ContainerError>
+                                    </div>
+                                    <div>
+                                        <Label>Cidade</Label>
+                                        <InputContainer
+                                            style={{ minWidth: '100%', height: '48px' }}
+                                            disabled={disabledAdressInputs}
+                                        >
+                                            <input
+                                                type="text"
+                                                placeholder="Digite a cidade"
+                                                onChange={(e) => setCity(e.target.value)}
+                                                disabled={disabledAdressInputs}
+                                            ></input>
+                                        </InputContainer>
+                                        <ContainerError
+                                            style={showCityError ? { display: 'flex' } : { display: 'none' }}
+                                        >
+                                            <img src={IconError} alt="Digite a cidade corretamente" />
+                                            <span>Digite a cidade corretamente</span>
+                                        </ContainerError>
+                                    </div>
+                                    <div>
                                         <Label>Rua</Label>
-                                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                                        <InputContainer
+                                            style={{ minWidth: '100%', height: '48px' }}
+                                            disabled={disabledAdressInputs} x
+                                        >
                                             <input
                                                 type="text"
                                                 placeholder="Digite a rua"
                                                 onChange={(e) => setRoad(e.target.value)}
+                                                disabled={disabledAdressInputs}
                                             ></input>
                                         </InputContainer>
                                         <ContainerError
@@ -206,6 +343,26 @@ export default function EditProfile() {
                                         >
                                             <img src={IconError} alt="Digite a rua corretamente" />
                                             <span>Digite a rua corretamente</span>
+                                        </ContainerError>
+                                    </div>
+                                    <div>
+                                        <Label>Bairro</Label>
+                                        <InputContainer
+                                            style={{ minWidth: '100%', height: '48px' }}
+                                            disabled={disabledAdressInputs}
+                                        >
+                                            <input
+                                                type="text"
+                                                placeholder="Digite o bairro"
+                                                onChange={(e) => setNeighborhood(e.target.value)}
+                                                disabled={disabledAdressInputs}
+                                            ></input>
+                                        </InputContainer>
+                                        <ContainerError
+                                            style={showNeighborhoodError ? { display: 'flex' } : { display: 'none' }}
+                                        >
+                                            <img src={IconError} alt="Digite o bairro corretamente" />
+                                            <span>Digite o bairro corretamente</span>
                                         </ContainerError>
                                     </div>
                                     <div>
@@ -222,22 +379,6 @@ export default function EditProfile() {
                                         >
                                             <img src={IconError} alt="Digite a número corretamente" />
                                             <span>Digite o número corretamente</span>
-                                        </ContainerError>
-                                    </div>
-                                    <div>
-                                        <Label>Bairro</Label>
-                                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
-                                            <input
-                                                type="text"
-                                                placeholder="Digite o bairro"
-                                                onChange={(e) => setNeighborhood(e.target.value)}
-                                            ></input>
-                                        </InputContainer>
-                                        <ContainerError
-                                            style={showNeighborhoodError ? { display: 'flex' } : { display: 'none' }}
-                                        >
-                                            <img src={IconError} alt="Digite o bairro corretamente" />
-                                            <span>Digite o bairro corretamente</span>
                                         </ContainerError>
                                     </div>
                                     <div>
