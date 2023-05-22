@@ -20,6 +20,7 @@ export const InputContainer = styled.div`
     padding: 0 15px;
     box-sizing: border-box;
     margin-top: 12px;
+    background-color: ${props => props.disabled ? "#ECECEC" : 'transparent'};
 
     input, select {
         width: 100%;
