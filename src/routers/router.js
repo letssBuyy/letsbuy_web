@@ -20,6 +20,7 @@ import Favoritos from '../pages/Favoritos';
 import EditProfile from '../pages/EditProfile';
 import SearchAd from '../pages/SearchAd';
 import Help from '../pages/Help';
+import MyAds from '../pages/MyAds';
 
 export default function Routers() {
     return (
@@ -44,6 +45,7 @@ export default function Routers() {
                 <Route path='/editar-perfil' element={<EditProfile />} />
                 <Route path='/buscar' element={<SearchAd />} />
                 <Route path='/disputa' element={<Help />} />
+                <Route path='/meus-anuncios' element={<MyAds />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
