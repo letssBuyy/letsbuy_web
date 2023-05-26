@@ -14,6 +14,7 @@ import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
+import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
 import MyShoppings from '../pages/MyShoppings';
 import Favoritos from '../pages/Favoritos';
@@ -28,6 +29,7 @@ export default function Routers() {
                 <Route path="/" element={<Home />} />
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastrar' element={<Register />} />
+                <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/recuperar-email' element={<RecoveryEmail />} />
                 <Route path='/recuperar-senha' element={<RecoveryPassword />} />
                 <Route path='/sobre-nos' element={<AboutUs />} />
