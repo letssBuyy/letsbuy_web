@@ -13,23 +13,59 @@ import {
     TextAreaContainer,
     Label
 } from '../assets/styles/components/InputStyle';
+import { containsNumbers, validateEmail } from "../utils/strings";
 
 export default function Help() {
-    const [nome, setNome] = useState('')
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [idAdvertise, setIdAdvertise] = useState('')
     const [description, setDescription] = useState('')
 
-    const [showNomeError, setShowNomeError] = useState(false)
+    const [showNameError, setShowNameError] = useState(false)
     const [showEmailError, setShowEmailError] = useState(false)
     const [showIdError, setShowIdError] = useState(false)
     const [showDescriptionError, setShowDescriptionError] = useState(false)
 
     function enviarDisputa() {
-        console.log(nome)
-        console.log(email)
-        console.log(idAdvertise)
-        console.log(description)
+        let isValidFields = validateFields()
+
+        if (isValidFields) {
+            alert("cadastrando disputa")
+        }
+    }
+
+    function validateFields() {
+        let isValidAllFields = true
+
+        if (name.length < 2 || name.length > 50 || containsNumbers(name)) {
+            isValidAllFields = false
+            setShowNameError(true)
+        } else {
+            setShowNameError(false)
+        }
+
+        if (!validateEmail(email)) {
+            isValidAllFields = false
+            setShowEmailError(true)
+        } else {
+            setShowEmailError(false)
+        }
+
+        if (idAdvertise.length <= 0) {
+            isValidAllFields = false
+            setShowIdError(true)
+        } else {
+            setShowIdError(false)
+        }
+
+        if (description.length <= 0) {
+            isValidAllFields = false
+            setShowDescriptionError(true)
+        } else {
+            setShowDescriptionError(false)
+        }
+
+        return isValidAllFields
     }
 
     return (
@@ -49,10 +85,10 @@ export default function Help() {
                         <input
                             type="text"
                             placeholder="Digite o nome"
-                            onChange={(e) => { setNome(e.target.value) }}
+                            onChange={(e) => { setName(e.target.value) }}
                         ></input>
                     </InputContainer>
-                    <ContainerError style={showNomeError ? { display: 'flex' } : { display: 'none' }}>
+                    <ContainerError style={showNameError ? { display: 'flex' } : { display: 'none' }}>
                         <img src={IconError} alt="Digite o nome corretamente" />
                         <span>Digite o nome corretamente</span>
                     </ContainerError>
