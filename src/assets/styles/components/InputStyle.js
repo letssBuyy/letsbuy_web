@@ -151,6 +151,13 @@ export const ImagemSelecionada = styled.img`
     background-color: aliceblue;
 `;
 
+export const ImagemSelecionadaRedonda = styled.img`
+    width: 100%;
+    height: 100%;
+    background-color: aliceblue;
+    border-radius: 100px;
+`;
+
 export const ContainerError = styled.div`   
     display: flex;
     justify-content: left;
