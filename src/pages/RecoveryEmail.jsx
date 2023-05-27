@@ -4,19 +4,19 @@ import { Container, SignIn, Title } from '../assets/styles/loginStyle';
 import { Description } from "../assets/styles/recoveryStyle";
 import IconError from '../assets/images/icon-error.svg';
 import Navbar from "../components/Navbar";
+import { validateEmail } from "../utils/strings"
 
 export default function Recovery() {
     const [showEmailError, setShowEmailError] = useState(false);
     const [email, setEmail] = useState('');
 
-    function handleEmailChange(event) {
-        setEmail(event.target.value);
-    }
-
     function enviar(){
-        console.log('enviando')
-        setShowEmailError(false)
-        console.log(email)
+        if (!validateEmail(email)) {
+            setShowEmailError(true)
+        } else {
+            setShowEmailError(false)
+            alert("ok")
+        }
     }
 
     return (
@@ -25,12 +25,7 @@ export default function Recovery() {
                 isAuthenticated={false}
                 showBackButton={true} 
             />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <div>
                 <Container>
                     <Title>Não consegue acessar sua conta?</Title>
                     <Description>Insira o seu endereço de e-mail abaixo e enviaremos as instruções necessárias para redefinir a sua senha.</Description>
@@ -40,7 +35,7 @@ export default function Recovery() {
                             <input
                                 type="text"
                                 placeholder="Digite o email"
-                                onChange={handleEmailChange}
+                                onChange={(event) => setEmail(event.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError
