@@ -16,6 +16,7 @@ import Navbar from "../components/Navbar";
 import Carrousel from '../components/Carrousel';
 import CarouselCategory from "../components/CarrouselCategorys";
 import CarrouselCards from "../components/CarrouselCards";
+import Loading from "../components/Loading";
 
 export default function Home() {
     // const [resultSearch, setResultSearch] = useState(["Tênis", "Tênis Nike"])
@@ -149,6 +150,7 @@ export default function Home() {
 
     return (
         <>
+            <Loading isEnabled={false} />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
                 <Padding>
