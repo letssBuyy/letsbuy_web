@@ -1,17 +1,17 @@
+import { keyframes } from "styled-components";
 import styled from "styled-components";
 import { colors } from "../../utils/colors";
 import { fonts } from "../../utils/fonts";
 
 export const Container = styled.div`
-    width: calc(100% - 200px);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
-    padding: 50px 100px;
+    padding: 20px 100px;
 
     @media screen and (max-width: 900px) {
         padding: 50px 20px;
+        align-items: center;
     }
 `;
 
@@ -20,12 +20,30 @@ export const Title = styled.p`
   font-family: '${fonts.semiBold}';
   font-size: 20px;
   margin-bottom: 40px;
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+    margin-left: 20px;
+  }
 `
 
 export const TabBar = styled.div`
     width: 100%;
     display: flex;
     border-bottom: 1px solid ${colors.gray};
+
+    @media screen and (max-width: 600px) {
+        display: none;
+    }
+`;
+
+export const TabbarMobile = styled.div`
+    display: none;
+
+    @media screen and (max-width: 600px) {
+        display: flex;
+        width: 100%;
+    }
 `;
 
 export const ItemTabBar = styled.div`
@@ -39,6 +57,12 @@ export const ItemTabBar = styled.div`
     font-size: 16px;
     color: ${colors.grayMedium};
     border-bottom: 1px solid transparent;
-    border-color: ${background => background};
     cursor: pointer;
+`;
+
+export const ContainerCards = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 50px 0;
 `;
