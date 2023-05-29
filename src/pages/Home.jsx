@@ -151,7 +151,7 @@ export default function Home() {
     return (
         <>
             <Loading isEnabled={false} />
-            <Navbar type='principal' isAuthenticated={false} />
+            <Navbar type='principal' isAuthenticated={true} />
             <Container>
                 <Padding>
                     <IndexSection>
