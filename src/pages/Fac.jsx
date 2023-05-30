@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Title, P, DivAccordin ,H1Accordin} from "../assets/styles/FacStyle";
 import Navbar from "../components/Navbar";
 import Accordion from "../components/Accordion";
@@ -6,22 +6,13 @@ import Accordion from "../components/Accordion";
 
 export default function Exibir() {
 
-    // function handlePasswordChange(event) {
-    //     setPassword(event.target.value);
-    // }
-
     return (
         <>
             <Navbar type='basic'
                 isAuthenticated={false}
                 showBackButton={true}
             />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <div>
                 <Container>
                     <div>
                         <Title>Olá! Bem-vindo(a) à nossa página de Perguntas Frequentes (FAQ)!</Title>

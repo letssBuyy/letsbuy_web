@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import iconPeopleDash from "../assets/images/iconPeoplesDash.svg"
 import iconFinalizados from "../assets/images/iconFinalizados.svg"
@@ -9,24 +9,12 @@ import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Lege
 
 export default function Exibir() {
 
-    // function handlePasswordChange(event) {
-    //     setPassword(event.target.value);
-    // }
-
     return (
         <>
             <Navbar type='basic'
                 isAuthenticated={false}
                 showBackButton={true}
             />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-            </div>
-
             <Limitador>
                 <CaixaKpi>
                     <CaixasFilhas>

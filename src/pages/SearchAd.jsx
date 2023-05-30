@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconClose from "../assets/images/icon-close.svg";
 import IconFilter from "../assets/images/icon-filter.svg";
 import IconSearch from "../assets/images/icon-search.svg";
@@ -26,7 +26,7 @@ import { NumericFormat } from 'react-number-format';
 import iconLocation from "../assets/images/icon-location.svg"
 
 export default function SearchAd() {
-    const [cardList, setCardList] = useState([1, 2, 3, 4, 5]);
+    const [cardList, setCardList] = useState([]);
     const [color, setColor] = useState('');
     const [category, setCategory] = useState('');
     const [newQuality, setNewQuality] = useState(false);
@@ -110,6 +110,10 @@ export default function SearchAd() {
         setContentLocationResult([])
     }
 
+    useEffect(() => {
+        setCardList([1,2,3,4,5])
+    }, [])
+
 
     return (
         <>
@@ -124,7 +128,7 @@ export default function SearchAd() {
                     <OrdinationMobile>
                         <Label>Ordenar por:</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={(e) => { setOrdination(e.target.value) }}>
+                            <select id="color-select" value={ordination} onChange={(e) => { setOrdination(e.target.value) }}>
                                 <option>Mais recentes</option>
                                 <option>Menor preço</option>
                                 <option>Maior preço</option>
@@ -233,7 +237,7 @@ export default function SearchAd() {
                     <div>
                         <Label>Categoria</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={(e) => { setCategory(e.target.value) }}>
+                            <select id="color-select" value={category} onChange={(e) => { setCategory(e.target.value) }}>
                                 {categoryOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}

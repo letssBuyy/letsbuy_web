@@ -39,7 +39,6 @@ export default function PublishAd() {
     const [imageFive, setImageFive] = useState('');
 
     const [showTituloError, setShowTituloError] = useState(false);
-    const [showDescriptionError, setShowDescriptionError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
     const [showCategoryError, setShowCategoryError] = useState(false);
     const [showQualityError, setShowQualityError] = useState(false);
@@ -119,21 +118,21 @@ export default function PublishAd() {
             setShowPriceError(false)
         }
 
-        if (color == null || color == undefined || color == "") {
+        if (color === null || color === undefined || color === "") {
             isValidAllFields = false
             setShowColorError(true)
         } else {
             setShowColorError(false)
         }
 
-        if (category == null || category == undefined || category == "") {
+        if (category === null || category === undefined || category === "") {
             isValidAllFields = false
             setShowCategoryError(true)
         } else {
             setShowCategoryError(false)
         }
 
-        if (quality == null || quality == undefined || quality == "") {
+        if (quality === null || quality === undefined || quality === "") {
             isValidAllFields = false
             setShowQualityError(true)
         } else {
@@ -141,11 +140,11 @@ export default function PublishAd() {
         }
 
         if (
-            imageOne == null || imageOne == undefined || imageOne == "" ||
-            imageTwo == null || imageTwo == undefined || imageTwo == "" ||
-            imageThree == null || imageThree == undefined || imageThree == "" ||
-            imageFour == null || imageFour == undefined || imageFour == "" ||
-            imageFive == null || imageFive == undefined || imageFive == ""
+            imageOne === null || imageOne === undefined || imageOne === "" ||
+            imageTwo === null || imageTwo === undefined || imageTwo === "" ||
+            imageThree === null || imageThree === undefined || imageThree === "" ||
+            imageFour === null || imageFour === undefined || imageFour === "" ||
+            imageFive === null || imageFive === undefined || imageFive === ""
         ) {
             isValidAllFields = false
             setShowImagesError(true)

@@ -64,7 +64,7 @@ export default function EditProfile() {
     }
 
     const formatBankNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const formattedValue = value.replace(/\D/g, '');
 
         if (formattedValue.length > 3) {
             return `${formattedValue.slice(0, 3)}-${formattedValue.slice(3)}`;
@@ -74,7 +74,7 @@ export default function EditProfile() {
     };
 
     const formatAgencyNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const formattedValue = value.replace(/\D/g, '');
 
         if (formattedValue.length > 4) {
             return `${formattedValue.slice(0, 4)}-${formattedValue.slice(4)}`;
@@ -84,7 +84,7 @@ export default function EditProfile() {
     };
 
     const formatAccountNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const formattedValue = value.replace(/\D/g, '');
 
         if (formattedValue.length > 5) {
             return `${formattedValue.slice(0, 5)}-${formattedValue.slice(5)}`;
@@ -113,7 +113,7 @@ export default function EditProfile() {
 
     async function buscarPorCep(cep) {
         if (cep) {
-            if (cep.length == 8) {
+            if (cep.length === 8) {
          try {
             const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
             if (!response.data.erro) {
@@ -149,7 +149,7 @@ export default function EditProfile() {
             setShowNameError(false)
         }
 
-        if (cpf.length != 14) {
+        if (cpf.length !== 14) {
             isValidAllFields = false
             setShowCpfError(true)
         } else {
@@ -163,7 +163,7 @@ export default function EditProfile() {
             setShowDateOfBirthError(false)
         }
 
-        if (phoneNumber.length != 15) {
+        if (phoneNumber.length !== 15) {
             isValidAllFields = false
             setShowPhoneNumberError(true)
         } else {
@@ -179,6 +179,7 @@ export default function EditProfile() {
 
         if (phoneNumber) {
             setShowPhoneNumberError(true)
+            setTextPhoneError("Telefone já cadastrado!")
         }
 
         if (email) {
@@ -191,6 +192,8 @@ export default function EditProfile() {
 
         return isValidAllFields
     }
+
+    console.log(cep, number, complement)
 
     return (
         <>
