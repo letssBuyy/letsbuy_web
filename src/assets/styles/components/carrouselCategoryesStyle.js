@@ -22,6 +22,7 @@ export const Item = styled.div`
         background-color: ${colors.whiteGrayTwo};
         margin:  0  0 22px 0;
         transition: background-color 0.5s ease;
+        overflow: hidden;
     }
 
     div:hover {

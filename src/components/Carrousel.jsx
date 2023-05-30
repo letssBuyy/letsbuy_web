@@ -40,7 +40,7 @@ export default function Carrousel(props) {
             <Slider {...settings}>
                 {items.map((item, index) => (
                     <Item key={index}>
-                        <p>{item}</p>
+                        <p>{item.title}</p>
                     </Item>
                 ))}
             </Slider>
