@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
-import User from '../assets/images/icon-user.svg';
 import Menu from '../assets/images/icon-menu-black.svg';
 import {
     ContainerBasic,

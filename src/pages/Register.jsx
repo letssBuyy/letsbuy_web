@@ -54,7 +54,7 @@ export default function Register() {
             setShowNameError(false)
         }
 
-        if (cpf.length != 14) {
+        if (cpf.length !== 14) {
             isValidAllFields = false
             setShowCpfError(true)
         } else {
@@ -68,7 +68,7 @@ export default function Register() {
             setShowDateOfBirthError(false)
         }
 
-        if (phoneNumber.length != 15) {
+        if (phoneNumber.length !== 15) {
             isValidAllFields = false
             setShowPhoneNumberError(true)
         } else {

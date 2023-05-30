@@ -3,15 +3,6 @@ import styled, { css, keyframes } from "styled-components";
 import { fonts } from "../utils/fonts";
 import { colors } from "../utils/colors";
 
-const rotateArrow = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(180deg);
-  }
-`;
-
 const fadeIn = keyframes`
   0% {
     opacity: 0;
@@ -85,10 +76,10 @@ const CustomDropdown = ({ optionSelected }) => {
         {option}
       </ToggleButton>
       <Content isOpen={isOpen}>
-        <div style={option == 'Publicados' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Publicados')}>Publicados</div>
-        <div style={option == 'Vendidos' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Vendidos')}>Vendidos</div>
-        <div style={option == 'Inativos' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Inativos')}>Inativos</div>
-        <div style={option == 'Desativados' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Desativados')}>Desativados</div>
+        <div style={option === 'Publicados' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Publicados')}>Publicados</div>
+        <div style={option === 'Vendidos' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Vendidos')}>Vendidos</div>
+        <div style={option === 'Inativos' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Inativos')}>Inativos</div>
+        <div style={option === 'Desativados' ? {display: 'none'} : {display: 'flex'}} onClick={() => handleOption('Desativados')}>Desativados</div>
       </Content>
     </Container>
   );

@@ -41,10 +41,10 @@ export default function MyAds() {
         setAds([1, 2, 3, 4, 5])
     }
 
-    function deleteAd(id) { }
-    function editAd(id) { }
-    function enableAd(id) { }
-    function orderDispatch(id) { }
+    // function deleteAd(id) { }
+    // function editAd(id) { }
+    // function enableAd(id) { }
+    // function orderDispatch(id) { }
 
     function selectedMobile(data) {
         switch (data) {

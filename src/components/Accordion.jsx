@@ -14,7 +14,7 @@ export default function Accordion(props) {
         <AccordionWrapper>
             <AccordionHeader onClick={() => setIsOpen(!isOpen)}>
                 {
-                    props.headerHTML == null || props.headerHTML == undefined ?
+                    props.headerHTML === null || props.headerHTML === undefined ?
                         <div>
                             <h1>{props.header}</h1>
                         </div>
