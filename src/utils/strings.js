@@ -15,3 +15,9 @@ export function validateAge(birthdate) {
     const age = today.diff(birthdate, 'years');
     return age >= 18;
 };
+
+export function toUppercasedString(string) {
+    let minhaString = string;
+    let minhaStringMaiuscula = minhaString.toUpperCase();
+    return minhaStringMaiuscula
+}
