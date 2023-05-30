@@ -7,17 +7,12 @@ import {
     ContainerCheckout
 } from "../assets/styles/components/accordionShoppingStyle"
 import Checkout from "./checkoutPayment";
+import { toUppercasedString } from "../utils/strings"
 
 export default function AccordionMyShoppings(props) {
     const [isOpen, setIsOpen] = useState(false);
     const contentRef = React.useRef(null);
     const height = isOpen ? contentRef.current.scrollHeight : 0;
-
-    function toUppercase(string) {
-        let minhaString = string;
-        let minhaStringMaiuscula = minhaString.toUpperCase();
-        return minhaStringMaiuscula
-    }
 
     function confirm() {
         alert("confirmou")
@@ -49,7 +44,7 @@ export default function AccordionMyShoppings(props) {
                 >
                     <div>
                         <p>Informações do pedido</p>
-                        <span>Vendido por: {toUppercase(props.sellerName)}
+                        <span>Vendido por: {toUppercasedString(props.sellerName)}
                             CPF: {props.cpf.substring(0, 3)}.***.***-**</span>
                         <span>{props.date}</span>
                         <span>ID do anúncio: {props.id}</span>

@@ -131,24 +131,36 @@ export const ImagesContainer = styled.div`
         }
 
         >div div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 45%;
-        height: 100px;
-        margin: 10px 0;
-        border: 1px dashed ${colors.gray};
-        border-radius: 5px;
-        position: relative;
-    }
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45%;
+            height: 100px;
+            margin: 10px 0;
+            border: 1px dashed ${colors.gray};
+            border-radius: 5px;
+            position: relative;
+        }
     }
 `;
 
 export const ImagemSelecionada = styled.img`
     width: 100%;
     height: 100%;
-    background-color: aliceblue;
+    position: relative;
+`;
+
+export const DeleteImage = styled.p`
+    right: 10px;
+    top: 10px;
+    border: 0 none;
+    z-index: 2;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    font-family: ${fonts.bold};
+    font-size: 20px;
+    color: ${colors.white};
 `;
 
 export const ImagemSelecionadaRedonda = styled.img`
