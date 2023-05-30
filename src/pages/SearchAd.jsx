@@ -15,7 +15,9 @@ import {
     Input,
     OrdinationMobile,
     SelectOrdenation,
-    SideBar
+    SideBar,
+    ResultSearch,
+    ContainerSarchAndInput
 } from "../assets/styles/searchAdStyle";
 import Card from "../components/Card";
 import Navbar from "../components/Navbar";
@@ -24,24 +26,25 @@ import { NumericFormat } from 'react-number-format';
 import iconLocation from "../assets/images/icon-location.svg"
 
 export default function SearchAd() {
-    const [cardList, setCardList] = useState([1, 2, 3, 4, 5])
+    const [cardList, setCardList] = useState([1, 2, 3, 4, 5]);
+    const [color, setColor] = useState('');
+    const [category, setCategory] = useState('');
+    const [newQuality, setNewQuality] = useState(false);
+    const [semiNewQuality, setSemiNewQuality] = useState(false);
+    const [usedQuality, setUsedQuality] = useState(false);
+    const [deffectiveQuality, setDeffectiveQuality] = useState(false);
+    const [mobileSideBar, setMobileSideBar] = useState(false);
+    const [maxValue, setMaxValue] = useState('');
+    const [minValue, setMinValue] = useState('');
+    const [ordination, setOrdination] = useState('');
+
+    const [search, setSearch] = useState('');
+    const [showResult, setShowResult] = useState(false);
+    const [contentResult, setContentResult] = useState([]);
+
     const [localization, setLocalization] = useState('')
-    const [color, setColor] = useState('')
-    const [newQuality, setNewQuality] = useState(false)
-    const [semiNewQuality, setSemiNewQuality] = useState(false)
-    const [usedQuality, setUsedQuality] = useState(false)
-    const [deffectiveQuality, setDeffectiveQuality] = useState(false)
-    const [mobileSideBar, setMobileSideBar] = useState(false)
-    const [maxValue, setMaxValue] = useState('')
-    const [minValue, setMinValue] = useState('')
-
-    function handleChangeMaxValue(event) {
-        setMaxValue(event.target.value);
-    }
-
-    function handleChangeMinValue(event) {
-        setMinValue(event.target.value);
-    }
+    const [showLocation, setShowLocation] = useState('');
+    const [contentLocationResult, setContentLocationResult] = useState('');
 
     function handleClickSeller() {
         console.log('clicou no vendedor')
@@ -54,18 +57,6 @@ export default function SearchAd() {
     const [isSelectedHeart, setIsSelectedHeart] = useState(false)
     function handleClickHeart() {
         setIsSelectedHeart(!isSelectedHeart)
-    }
-
-    function loadCards() {
-        setCardList([1, 2, 3, 4, 5])
-    }
-
-    function handleLocalizationHandle(event) {
-        setLocalization(event.target.value);
-    }
-
-    function handleColorChange(event) {
-        setColor(event.target.value);
     }
 
     function handleChangeNewQuality() {
@@ -88,6 +79,38 @@ export default function SearchAd() {
         setMobileSideBar(!mobileSideBar)
     }
 
+    function handleSearch(e) {
+        setSearch(e.target.value)
+
+
+        if (search.length > 2) {
+            setShowResult(true)
+            searchResults()
+        } else {
+            setShowResult(false)
+        }
+    }
+
+    function searchResults() {
+        setContentResult([])
+    }
+
+    function handleLocation(e) {
+        setLocalization(e.target.value)
+        
+        if (localization.length > 2) {
+            setShowLocation(true)
+            searchLocation()
+        } else {
+            setShowLocation(false)
+        }
+    }
+
+    function searchLocation() {
+        setContentLocationResult([])
+    }
+
+
     return (
         <>
             <Navbar type='principal' isAuthenticated={false} />
@@ -101,7 +124,7 @@ export default function SearchAd() {
                     <OrdinationMobile>
                         <Label>Ordenar por:</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={handleColorChange}>
+                            <select id="color-select" value={color} onChange={(e) => { setOrdination(e.target.value) }}>
                                 <option>Mais recentes</option>
                                 <option>Menor preço</option>
                                 <option>Maior preço</option>
@@ -111,15 +134,33 @@ export default function SearchAd() {
                     <div>
                         <br />
                         <Label>Localização</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
-                            <input
-                                type="text"
-                                placeholder="Digite seu estado ou cidade"
-                                onChange={handleLocalizationHandle}
-                            ></input>
-                            <img src={iconLocation} alt="Digite a localização"
-                            />
-                        </InputContainer>
+                        <ContainerSarchAndInput>
+                            <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                                <input
+                                    type="text"
+                                    placeholder="Digite seu estado ou cidade"
+                                    onChange={(e) => handleLocation(e)}
+                                ></input>
+                                <img src={iconLocation} alt="Digite a localização"
+                                />
+                            </InputContainer>
+                            <ResultSearch style={showLocation ? { display: 'flex' } : { display: 'none' }}>
+                                {
+                                    contentLocationResult.length > 0 ?
+                                        contentLocationResult.map((item) => (
+                                            <div>
+                                                <p>{item.title}</p>
+                                            </div>
+                                        ))
+                                        :
+                                        <>
+                                            <div>
+                                                <p>Sem resultados para essa busca</p>
+                                            </div>
+                                        </>
+                                }
+                            </ResultSearch>
+                        </ContainerSarchAndInput>
                     </div>
                     <div>
                         <Label>Preço</Label>
@@ -128,7 +169,7 @@ export default function SearchAd() {
                                 <span>Min:</span>
                                 <NumericFormat
                                     value={minValue}
-                                    onChange={handleChangeMinValue}
+                                    onChange={(e) => { setMinValue(e.target.value) }}
                                     decimalSeparator=","
                                     thousandSeparator="."
                                     prefix="R$ "
@@ -141,7 +182,7 @@ export default function SearchAd() {
                                 <span>Max:</span>
                                 <NumericFormat
                                     value={maxValue}
-                                    onChange={handleChangeMaxValue}
+                                    onChange={(e) => { setMaxValue(e.target.value) }}
                                     decimalSeparator=","
                                     thousandSeparator="."
                                     prefix="R$ "
@@ -192,7 +233,7 @@ export default function SearchAd() {
                     <div>
                         <Label>Categoria</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={handleColorChange}>
+                            <select id="color-select" value={color} onChange={(e) => { setCategory(e.target.value) }}>
                                 {categoryOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -205,7 +246,7 @@ export default function SearchAd() {
                     <div>
                         <Label>Cor</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={handleColorChange}>
+                            <select id="color-select" value={color} onChange={(e) => { setColor(e.target.value) }}>
                                 {colorOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -217,10 +258,32 @@ export default function SearchAd() {
                 </SideBar>
                 <div>
                     <Header>
-                        <Input>
-                            <input placeholder="O que você gostaria de encontrar hoje?" />
-                            <img src={IconSearch} alt="Pesquise por anuncios" />
-                        </Input>
+                        <ContainerSarchAndInput>
+                            <Input>
+                                <input
+                                    onChange={(e) => handleSearch(e)}
+                                    placeholder="O que você gostaria de encontrar hoje?"
+                                />
+                                <img src={IconSearch} alt="Pesquise por anuncios" />
+                            </Input>
+                            <ResultSearch style={showResult ? { display: 'flex' } : { display: 'none' }}>
+                                {
+                                    contentResult.length > 0 ?
+                                        contentResult.map((item) => (
+                                            <div>
+                                                <p>{item.title}</p>
+                                            </div>
+                                        ))
+                                        :
+                                        <>
+                                            <div>
+                                                <p>Sem resultados para essa busca</p>
+                                            </div>
+                                        </>
+                                }
+                            </ResultSearch>
+                        </ContainerSarchAndInput>
+
 
                         <SelectOrdenation>
                             <img src={IconFilter} alt="Ordenar" />

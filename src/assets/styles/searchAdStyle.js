@@ -196,3 +196,39 @@ export const ContainerCheckbox = styled.div`
         color: ${colors.grayMedium};
     }
 `;
+
+export const ResultSearch = styled.div`
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  top: 58px;
+  z-index: 1;
+  background-color: white;
+  border: 1px solid ${colors.gray};
+  border-radius: 5px;
+  filter: drop-shadow(1px 2px 5px rgba(122, 122, 122, 0.25));
+
+  div {
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  div:hover {
+    background-color: #FBFBFB;
+  }
+
+  p {
+    font-family: ${fonts.regular};
+    color: ${colors.grayMedium};
+    font-size: 14px;
+    padding: 0;
+    margin: 0 0 0 20px;
+  }
+`;
+
+export const ContainerSarchAndInput = styled.div`
+  position: relative;
+`;
