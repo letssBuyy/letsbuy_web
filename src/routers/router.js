@@ -22,6 +22,7 @@ import EditProfile from '../pages/EditProfile';
 import SearchAd from '../pages/SearchAd';
 import Help from '../pages/Help';
 import MyAds from '../pages/MyAds';
+import DetailsAd from '../pages/DetailsAd';
 
 export default function Routers() {
     return (
@@ -40,7 +41,7 @@ export default function Routers() {
                 <Route path='/fac' element={<Fac />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
-                <Route path='/chat' element={<Chat/>} />
+                <Route path='/chat' element={<Chat />} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/favoritos' element={<Favoritos />} />
@@ -48,6 +49,7 @@ export default function Routers() {
                 <Route path='/buscar' element={<SearchAd />} />
                 <Route path='/disputa' element={<Help />} />
                 <Route path='/meus-anuncios' element={<MyAds />} />
+                <Route path='/detalhe' element={<DetailsAd />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
