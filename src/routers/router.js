@@ -13,7 +13,7 @@ import SuccessfulPayment from '../pages/SuccessfulPayment';
 import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
-import Fac from '../pages/Fac';
+import Faq from '../pages/Faq';
 import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
 import MyShoppings from '../pages/MyShoppings';
@@ -31,25 +31,26 @@ export default function Routers() {
                 <Route path="/" element={<Home />} />
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastrar' element={<Register />} />
-                <Route path='/dashboard' element={<Dashboard />} />
-                <Route path='/recuperar-email' element={<RecoveryEmail />} />
-                <Route path='/recuperar-senha' element={<RecoveryPassword />} />
+                <Route path='/recuperar-senha' element={<RecoveryEmail />} />
+                <Route path='/alterar-senha' element={<RecoveryPassword />} />
                 <Route path='/sobre-nos' element={<AboutUs />} />
+                <Route path='/perguntas-frequentes' element={<Faq />} />
+                <Route path='/buscar-anuncios' element={<SearchAd />} />
+                <Route path='/anuncio' element={<DetailsAd />} />
+
                 <Route path='/perfil' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
-                <Route path='/checkout' element={<Checkout />} />
-                <Route path='/fac' element={<Fac />} />
+                <Route path='/checkout-pagamento' element={<Checkout />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
-                <Route path='/chat' element={<Chat />} />
                 <Route path='/favoritos' element={<Favoritos />} />
                 <Route path='/editar-perfil' element={<EditProfile />} />
-                <Route path='/buscar' element={<SearchAd />} />
                 <Route path='/disputa' element={<Help />} />
                 <Route path='/meus-anuncios' element={<MyAds />} />
-                <Route path='/detalhe' element={<DetailsAd />} />
+                <Route path='/dashboard' element={<Dashboard />} />
+                
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

@@ -2,19 +2,6 @@ import React, { useState } from "react";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
 import Menu from '../assets/images/icon-menu-black.svg';
-import {
-    ContainerBasic,
-    LogoBasic,
-    ImageBackButton,
-    ContainerPrincipal,
-    NavbarMobile,
-    BackgroundOffCanvas,
-    
-    ContainerNavbarIsAuthenticated,
-    ContainerMyAccount,
-    ItensContainerNavbarIsAuthenticated
-} from '../assets/styles/components/navbarStyle';
-
 import MenuWhite from "../assets/images/icon-menu-white.svg"
 import ArrowBack from "../assets/images/icon-arrow-back-pink.svg";
 import ImageDefault from '../assets/images/image-default.png';
@@ -23,8 +10,21 @@ import Chat from "../assets/images/icon-chat-black.svg";
 import Edit from "../assets/images/icon-edit-black.svg";
 import Favorite from "../assets/images/icon-favorite-black.svg";
 import Grid from "../assets/images/icon-grid-black.svg";
-import Logout from "../assets/images/icon-log-out.svg";
+import iconLogout from "../assets/images/icon-log-out.svg";
+import { useNavigate } from 'react-router-dom';
 
+import {
+    ContainerBasic,
+    LogoBasic,
+    ImageBackButton,
+    ContainerPrincipal,
+    NavbarMobile,
+    BackgroundOffCanvas,
+
+    ContainerNavbarIsAuthenticated,
+    ContainerMyAccount,
+    ItensContainerNavbarIsAuthenticated
+} from '../assets/styles/components/navbarStyle';
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
@@ -33,17 +33,28 @@ export default function Navbar(props) {
     var userName = localStorage.getItem("USER_NAME") ? localStorage.getItem("USER_NAME") : 'Maria'
 
     const [visible, setVisible] = useState(false);
+    let navigate = useNavigate();
+
+    function logout() { }
 
     switch (type) {
         case "basic":
             return (
                 <ContainerBasic>
                     {showBackButton ?
-                        <ImageBackButton src={BackButton} alt="Voltar" />
+                        <ImageBackButton
+                            src={BackButton}
+                            alt="Voltar"
+                            onClick={() => navigate(-1)}
+                        />
                         :
                         <></>
                     }
-                    <LogoBasic src={Logo} alt="LetsBuy" />
+                    <LogoBasic
+                        src={Logo}
+                        alt="LetsBuy"
+                        onClick={() => navigate("/")}
+                    />
                 </ContainerBasic>
             )
         case "principal":
@@ -51,13 +62,17 @@ export default function Navbar(props) {
                 <>
                     <ContainerPrincipal>
                         <div>
-                            <img src={Logo} alt="LetsBuy" />
+                            <img
+                                src={Logo}
+                                alt="LetsBuy"
+                                onClick={() => navigate("/")}
+                            />
                         </div>
                         <div>
-                            <p>Sobre nós</p>
-                            <p>Comprar</p>
-                            <p>Anúnciar</p>
-                            <p>Perguntas frequêntes</p>
+                            <p onClick={() => navigate("/sobre-nos")}>Sobre nós</p>
+                            <p onClick={() => navigate("/buscar-anuncios")}>Comprar</p>
+                            <p onClick={() => navigate("/publicar-anuncio")}>Anúnciar</p>
+                            <p onClick={() => navigate("/perguntas-frequentes")}>Perguntas frequêntes</p>
 
                             {
                                 isAuthenticated ?
@@ -66,7 +81,7 @@ export default function Navbar(props) {
                                         <img src={MenuWhite} alt="Abrir navegação lateral" />
                                     </button>
                                     :
-                                    <button>Entrar</button>
+                                    <button onClick={() => navigate("/entrar")}>Entrar</button>
                             }
 
                             <button onClick={() => visible ? setVisible(false) : setVisible(true)} className="btn-mobile">
@@ -78,18 +93,16 @@ export default function Navbar(props) {
                         {
                             !isAuthenticated ?
                                 <>
-                                    <p>Sobre nós</p>
-                                    <p>Comprar</p>
-                                    <p>Anúnciar</p>
-                                    <p>Perguntas frequêntes</p>
-
-
-                                    <button>Entrar</button>
+                                    <p onClick={() => navigate("/sobre-nos")}>Sobre nós</p>
+                                    <p onClick={() => navigate("/buscar-anuncios")}>Comprar</p>
+                                    <p onClick={() => navigate("/publicar-anuncio")}>Anúnciar</p>
+                                    <p onClick={() => navigate("/perguntas-frequentes")}>Perguntas frequêntes</p>
+                                    <button onClick={() => navigate("/entrar")}>Entrar</button>
                                 </>
                                 :
                                 <>
                                     <ContainerNavbarIsAuthenticated>
-                                        <ContainerMyAccount>
+                                        <ContainerMyAccount onClick={() => navigate("/editar-perfil")}>
                                             <div>
                                                 <img src={ImageDefault} alt="Icone de perfil" />
                                                 <div>
@@ -101,7 +114,7 @@ export default function Navbar(props) {
                                                 <img src={ArrowBack} alt="Ir para minhas compras" />
                                             </div>
                                         </ContainerMyAccount>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/chat")}>
                                             <div>
                                                 <img src={Chat} alt="Chat" />
                                             </div>
@@ -109,7 +122,7 @@ export default function Navbar(props) {
                                                 <p>Chat</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/meus-anuncios")}>
                                             <div>
                                                 <img src={Grid} alt="Meus anúncios" />
                                             </div>
@@ -117,7 +130,7 @@ export default function Navbar(props) {
                                                 <p>Meus anúncios</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/publicar-anuncio")}>
                                             <div>
                                                 <img src={Edit} alt="Publicar anúncios" />
                                             </div>
@@ -125,7 +138,7 @@ export default function Navbar(props) {
                                                 <p>Publicar anúncio</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/favoritos")}>
                                             <div>
                                                 <img src={Favorite} alt="Favoritos" />
                                             </div>
@@ -133,7 +146,7 @@ export default function Navbar(props) {
                                                 <p>Favoritos</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/minhas-compras")}>
                                             <div>
                                                 <img src={Cart} alt="Minhas compras" />
                                             </div>
@@ -141,9 +154,9 @@ export default function Navbar(props) {
                                                 <p>Minhas compras</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => logout()}>
                                             <div>
-                                                <img src={Logout} alt="Sair" />
+                                                <img src={iconLogout} alt="Sair" />
                                             </div>
                                             <div>
                                                 <p>Sair</p>

@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import ImageDefault from '../assets/images/image-default.png';
 import {
     Container
-} from "../assets/styles/FavoritosStyle"
+} from "../assets/styles/favoritosStyle"
 export default function Favoritos() {
     const [cardList, setCardList] = useState([])
 

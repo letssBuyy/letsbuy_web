@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Title, P, DivAccordin ,H1Accordin} from "../assets/styles/FacStyle";
+import { Container, Title, P, DivAccordin ,H1Accordin} from "../assets/styles/faqStyle";
 import Navbar from "../components/Navbar";
 import Accordion from "../components/Accordion";
 
