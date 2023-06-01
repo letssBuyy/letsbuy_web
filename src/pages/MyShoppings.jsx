@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar"
 import {
     Container
@@ -7,7 +7,11 @@ import Accordion from "../components/AccordionMyShoppings";
 import Helpdesk from "../components/helpdesk";
 
 export default function MyShoppings() {
-    const [shoppings, setShoppings] = useState([1, 2])
+    const [shoppings, setShoppings] = useState([])
+
+    useEffect(() => {
+        setShoppings([1,2,3,4,5])
+    },[])
 
     return (
         <>

@@ -7,6 +7,9 @@ import { Container, SignIn, SignUp, Title } from '../assets/styles/loginStyle';
 import { Checkbox, ContainerCheckbox } from '../assets/styles/registerStyle';
 import Navbar from "../components/Navbar";
 
+import { containsNumbers, validateEmail, validateAge } from "../utils/strings"
+import InputMask from 'react-input-mask';
+
 export default function Register() {
     const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
@@ -16,7 +19,7 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [terms, setTerms] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    
+
     const [showNameError, setShowNameError] = useState(false);
     const [showCpfError, setShowCpfError] = useState(false);
     const [showDateOfBirthError, setShowDateOfBirthError] = useState(false);
@@ -25,49 +28,87 @@ export default function Register() {
     const [showPasswordError, setShowPasswordError] = useState(false);
     const [showTermsError, setShowTermsError] = useState(false);
 
-    function handleNameChange(event) {
-        setName(event.target.value);
-    }
-
-    function handleCpfChange(event) {
-        setCpf(event.target.value);
-    }
-
-    function handleDateOfBirthChange(event) {
-        setDateOfBirth(event.target.value);
-    }
-
-    function handlePhoneNumberChange(event) {
-        setPhoneNumber(event.target.value);
-    }
-
-    function handleEmailChange(event) {
-        setEmail(event.target.value);
-    }
-
-    function handlePasswordChange(event) {
-        setPassword(event.target.value);
-    }
-
-    const handleChangeTerms = () => {
-        setTerms(!terms);
-    };
+    const [textCpfError, setTextCpfError] = useState("CPF inválido");
+    const [textPhoneError, setTextPhoneError] = useState("Telefone inválido");
+    const [textEmailError, setTextEmailError] = useState("E-mail inválido");
 
     function cadastrar() {
-        console.log(name)
-        console.log(cpf)
-        console.log(dateOfBirth)
-        console.log(phoneNumber)
-        console.log(email)
-        console.log(password)
+        let isValidFields = validateFields()
 
-        setShowNameError(false)
-        setShowCpfError(false)
-        setShowDateOfBirthError(false)
-        setShowPhoneNumberError(false)
-        setShowEmailError(false)
-        setShowPasswordError(false)
-        setShowTermsError(false)
+        if (isValidFields) {
+            console.log("todos os campos estão validos")
+        }
+    }
+
+    function haveAccount() {
+        console.log('ja tenho conta')
+    }
+
+    function validateFields() {
+        let isValidAllFields = true
+
+        if (name.length < 2 || name.length > 50 || containsNumbers(name)) {
+            isValidAllFields = false
+            setShowNameError(true)
+        } else {
+            setShowNameError(false)
+        }
+
+        if (cpf.length !== 14) {
+            isValidAllFields = false
+            setShowCpfError(true)
+        } else {
+            setShowCpfError(false)
+        }
+
+        if (!validateAge(dateOfBirth)) {
+            isValidAllFields = false
+            setShowDateOfBirthError(true)
+        } else {
+            setShowDateOfBirthError(false)
+        }
+
+        if (phoneNumber.length !== 15) {
+            isValidAllFields = false
+            setShowPhoneNumberError(true)
+        } else {
+            setShowPhoneNumberError(false)
+        }
+
+        if (!validateEmail(email)) {
+            isValidAllFields = false
+            setShowEmailError(true)
+        } else {
+            setShowEmailError(false)
+        }
+
+        if (password.length < 6 || password.length > 50) {
+            isValidAllFields = false
+            setShowPasswordError(true)
+        } else {
+            setShowPasswordError(false)
+        }
+
+        if (!terms) {
+            isValidAllFields = false
+            setShowTermsError(true)
+        } else {
+            setShowTermsError(false)
+        }
+
+        if (phoneNumber) {
+            setTextPhoneError("Celular já cadastrado!")
+        }
+
+        if (email) {
+            setTextEmailError("E-mail já cadastrado!")
+        }
+
+        if (cpf) {
+            setTextCpfError("CPF já cadastrado!")
+        }
+
+        return isValidAllFields
     }
 
     return (
@@ -77,95 +118,90 @@ export default function Register() {
                 isAuthenticated={false}
                 showBackButton={true}
             />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: '30px'
-            }}>
+            <div>
                 <Container>
                     <Title>Crie sua conta</Title>
 
                     <div>
                         <Label>Nome</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                        <InputContainer>
                             <input
                                 type="text"
                                 placeholder="Digite o nome"
-                                onChange={handleNameChange}
+                                onChange={(e) => setName(e.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError style={showNameError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite o nome corretamente" />
-                            <span>Digite o nome corretamente</span>
+                            <span>Nome inválido (Precisa ter no mínimo 2 caracteres)</span>
                         </ContainerError>
                     </div>
                     <div>
                         <Label>CPF</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
-                            <input
-                                type="text"
+                        <InputContainer>
+                            <InputMask
+                                mask="999.999.999-99"
                                 placeholder="000.000.000-00"
-                                onChange={handleCpfChange}
-                            ></input>
+                                onChange={(e) => setCpf(e.target.value)}
+                            ></InputMask>
                         </InputContainer>
                         <ContainerError style={showCpfError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite o CPF corretamente" />
-                            <span>Digite o CPF corretamente</span>
+                            <span>{textCpfError}</span>
                         </ContainerError>
                     </div>
                     <div>
                         <Label>Data de nascimento</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                        <InputContainer>
                             <input
-                                type="text"
+                                type="date"
                                 placeholder="00/00/0000"
-                                onChange={handleDateOfBirthChange}
+                                onChange={(e) => setDateOfBirth(e.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError style={showDateOfBirthError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite a data de nascimento corretamente" />
-                            <span>Digite a data de nascimento corretamente</span>
+                            <span>Data de nascimento inválida (Usuário precisa ter no minímo 18 anos)</span>
                         </ContainerError>
                     </div>
                     <div>
                         <Label>Número de celular</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
-                            <input
-                                type="text"
-                                placeholder="(00) 0 0000-0000"
-                                onChange={handlePhoneNumberChange}
-                            ></input>
+                        <InputContainer>
+                            <InputMask
+                                mask="(99) 99999-9999"
+                                placeholder="(00) 00000-0000"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
                         </InputContainer>
                         <ContainerError style={showPhoneNumberError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite telefone corretamente" />
-                            <span>Digite telefone corretamente</span>
+                            <span>{textPhoneError}</span>
                         </ContainerError>
                     </div>
                     <div>
                         <Label>Email</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                        <InputContainer>
                             <input
                                 type="text"
                                 placeholder="Digite o email"
-                                onChange={handleEmailChange}
+                                onChange={(e) => setEmail(e.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError
                             style={showEmailError ? { display: 'flex' } : { display: 'none' }}
                         >
                             <img src={IconError} alt="Digite o email corretamente" />
-                            <span>Digite o email corretamente</span>
+                            <span>{textEmailError}</span>
                         </ContainerError>
                     </div>
                     <div>
                         <Label>Senha</Label>
-                        <InputContainer style={{ minWidth: '100%', height: '48px' }}>
+                        <InputContainer>
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Digite a senha"
-                                onChange={handlePasswordChange}
+                                onChange={(e) => setPassword(e.target.value)}
                             ></input>
                             {
                                 showPassword ?
@@ -184,25 +220,25 @@ export default function Register() {
                         </InputContainer>
                         <ContainerError style={showPasswordError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite a senha corretamente" />
-                            <span>Digite a senha corretamente</span>
+                            <span>senha inválida (Minímo 6 digitos)</span>
                         </ContainerError>
                     </div>
                     <ContainerCheckbox>
                         <Checkbox
                             type="checkbox"
                             checked={terms}
-                            onChange={handleChangeTerms}
+                            onChange={() => setTerms(!terms)}
                         />
                         <p>Estou de acordo com os <span>termos de serviço</span> e a <span>política de privacidade</span></p>
                     </ContainerCheckbox>
                     <ContainerError
-                            style={showTermsError ? { display: 'flex', margin: 0 } : { display: 'none', margin: 0 }}
-                        >
-                            <img src={IconError} alt="Aceite os termos de serviço" />
-                            <span>Aceite os termos de serviço</span>
-                        </ContainerError>
+                        style={showTermsError ? { display: 'flex', margin: 0 } : { display: 'none', margin: 0 }}
+                    >
+                        <img src={IconError} alt="Aceite os termos de serviço" />
+                        <span>Aceite os termos de serviço</span>
+                    </ContainerError>
                     <SignIn onClick={() => cadastrar()}>Cadastrar</SignIn>
-                    <SignUp>Já tenho conta</SignUp>
+                    <SignUp onClick={() => haveAccount()}>Já tenho conta</SignUp>
                 </Container>
             </div>
         </>

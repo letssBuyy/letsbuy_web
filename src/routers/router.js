@@ -14,12 +14,15 @@ import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
 import Fac from '../pages/Fac';
+import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
 import MyShoppings from '../pages/MyShoppings';
 import Favoritos from '../pages/Favoritos';
 import EditProfile from '../pages/EditProfile';
 import SearchAd from '../pages/SearchAd';
 import Help from '../pages/Help';
+import MyAds from '../pages/MyAds';
+import DetailsAd from '../pages/DetailsAd';
 
 export default function Routers() {
     return (
@@ -28,6 +31,7 @@ export default function Routers() {
                 <Route path="/" element={<Home />} />
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastrar' element={<Register />} />
+                <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/recuperar-email' element={<RecoveryEmail />} />
                 <Route path='/recuperar-senha' element={<RecoveryPassword />} />
                 <Route path='/sobre-nos' element={<AboutUs />} />
@@ -37,13 +41,15 @@ export default function Routers() {
                 <Route path='/fac' element={<Fac />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
-                <Route path='/chat' element={<Chat/>} />
+                <Route path='/chat' element={<Chat />} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/favoritos' element={<Favoritos />} />
                 <Route path='/editar-perfil' element={<EditProfile />} />
                 <Route path='/buscar' element={<SearchAd />} />
                 <Route path='/disputa' element={<Help />} />
+                <Route path='/meus-anuncios' element={<MyAds />} />
+                <Route path='/detalhe' element={<DetailsAd />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

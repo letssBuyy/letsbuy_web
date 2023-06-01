@@ -175,7 +175,7 @@ export const NavbarMobile = styled.div`
 `
 
 export const BackgroundOffCanvas = styled.div`
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     position: absolute;
     top: 79px;
@@ -184,4 +184,73 @@ export const BackgroundOffCanvas = styled.div`
     bottom: 0;
     background-color: rgb(48, 48, 48, 50%);
     z-index: 1;
+`;
+
+
+
+
+
+
+
+export const ContainerNavbarIsAuthenticated = styled.div`
+
+`;
+
+export const ItensContainerNavbarIsAuthenticated = styled.div`
+    display: flex;
+    align-items: center;
+    height: 50px;
+
+    img {
+            width: 24px;
+            height: 24px;
+    }
+
+    p {
+        margin-left: 25px;
+        padding: 0;
+        font-family: ${fonts.regular};
+        font-size: 16px;
+        color: ${colors.black};
+    }
+`;
+
+export const ContainerMyAccount = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+
+    div:first-child {
+        display: flex;
+        align-items: center;
+    }
+
+    p {
+        font-family: ${fonts.regular};
+        font-size: 16px;
+        color: ${colors.black};
+        padding: 0;
+    }
+
+    span {
+        font-family: ${fonts.medium};
+        font-size: 14px;
+        color: ${colors.pink};
+    }
+
+    div:last-child {
+        margin-left: 15px;
+    }
+
+    div:first-child img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+    }
+
+    div:last-child img {
+        width: 24px;
+        height: 24px;
+    }
 `;

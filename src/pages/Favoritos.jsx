@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import ImageDefault from '../assets/images/image-default.png';
@@ -6,7 +6,7 @@ import {
     Container
 } from "../assets/styles/FavoritosStyle"
 export default function Favoritos() {
-    const [cardList, setCardList] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    const [cardList, setCardList] = useState([])
 
     function handleClickSeller() {
         console.log('clicou no vendedor')
@@ -16,10 +16,18 @@ export default function Favoritos() {
         console.log('clicou no card')
     }
 
+    function loadFavorites() {
+        setCardList([1,2,3,4,5,6,7,8,9,10])
+    }
+
     const [isSelectedHeart, setIsSelectedHeart] = useState(false)
     function handleClickHeart() {
         setIsSelectedHeart(!isSelectedHeart)
     }
+
+    useEffect(() => {
+        loadFavorites()
+    }, [])
 
     return (
         <>

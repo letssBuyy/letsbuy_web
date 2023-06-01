@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Search from "../assets/images/icon-search.svg";
 import {
     CardsSection,
@@ -7,7 +7,9 @@ import {
     IndexSection,
     Input,
     Padding,
-    TitleSection
+    TitleSection,
+    ResultSearch,
+    ContainerSarchAndInput
 } from "../assets/styles/homeStyle";
 import Banner from "../components/Banner";
 import Cookies from "../components/Cookies";
@@ -16,21 +18,13 @@ import Navbar from "../components/Navbar";
 import Carrousel from '../components/Carrousel';
 import CarouselCategory from "../components/CarrouselCategorys";
 import CarrouselCards from "../components/CarrouselCards";
+import Loading from "../components/Loading";
+import { categorys } from "../utils/enums";
 
 export default function Home() {
-    // const [resultSearch, setResultSearch] = useState(["Tênis", "Tênis Nike"])
-    const categorys = [
-        "Eletrônicos",
-        "Moda e Acessórios",
-        "Casa e Decoração",
-        "Livros",
-        "Filmes",
-        "Hobbies",
-        "Esporte e lazer",
-        "Infantil",
-        "Pets",
-        "Esporte e lazer"
-    ];
+    const [search, setSearch] = useState('');
+    const [showResult, setShowResult] = useState(false);
+    const [contentResult, setContentResult] = useState([]);
 
     const advertise = [
         {
@@ -147,18 +141,56 @@ export default function Home() {
         },
     ]
 
+    function handleSearch(e) {
+        setSearch(e.target.value)
+
+
+        if (search.length > 2) {
+            setShowResult(true)
+            searchResults()
+        } else {
+            setShowResult(false)
+        }
+    }
+
+    function searchResults() {
+        setContentResult([])
+    }
+
     return (
         <>
-            <Navbar type='principal' isAuthenticated={false} />
+            <Loading isEnabled={false} />
+            <Navbar type='principal' isAuthenticated={true} />
             <Container>
                 <Padding>
                     <IndexSection>
                         <div>
                             <p>Desapegar nunca foi tão <span>fácil!</span></p>
-                            <Input>
-                                <input placeholder="O que você gostaria de encontrar hoje?" />
-                                <img src={Search} alt="Buscar" />
-                            </Input>
+                            <ContainerSarchAndInput>
+                                <Input>
+                                    <input
+                                        onChange={(e) => handleSearch(e)}
+                                        placeholder="O que você gostaria de encontrar hoje?"
+                                    />
+                                    <img src={Search} alt="Buscar" />
+                                </Input>
+                                <ResultSearch style={showResult ? { display: 'flex' } : { display: 'none' }}>
+                                    {
+                                        contentResult.length > 0 ?
+                                            contentResult.map((item) => (
+                                                <div>
+                                                    <p>{item.title}</p>
+                                                </div>
+                                            ))
+                                            :
+                                            <>
+                                                <div>
+                                                    <p>Sem resultados para essa busca</p>
+                                                </div>
+                                            </>
+                                    }
+                                </ResultSearch>
+                            </ContainerSarchAndInput>
                             <Carrousel items={categorys} />
                         </div>
                         <Banner />

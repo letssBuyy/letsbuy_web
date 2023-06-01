@@ -30,7 +30,7 @@ export default function PublishAd() {
     const [color, setColor] = useState('');
     const [category, setCategory] = useState('');
     const [quality, setQuality] = useState('');
-    const [price, setPrice] = useState('');
+    const [price, setPrice] = useState('0');
 
     const [imageOne, setImageOne] = useState('');
     const [imageTwo, setImageTwo] = useState('');
@@ -39,36 +39,11 @@ export default function PublishAd() {
     const [imageFive, setImageFive] = useState('');
 
     const [showTituloError, setShowTituloError] = useState(false);
-    const [showDescriptionError, setShowDescriptionError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
     const [showCategoryError, setShowCategoryError] = useState(false);
     const [showQualityError, setShowQualityError] = useState(false);
     const [showPriceError, setShowPriceError] = useState(false);
     const [showImagesError, setShowImagesError] = useState(false);
-
-    function handleTituloChange(event) {
-        setTitle(event.target.value);
-    }
-
-    function handleDescriptionChange(event) {
-        setDescription(event.target.value);
-    }
-
-    function handleColorChange(event) {
-        setColor(event.target.value);
-    }
-
-    function handleQualityChange(event) {
-        setQuality(event.target.value);
-    }
-
-    function handleCategoryChange(event) {
-        setCategory(event.target.value);
-    }
-
-    function handlePriceChange(event) {
-        setPrice(event.target.value);
-    }
 
     function handleImageOneChange(event) {
         const file = event.target.files[0];
@@ -116,21 +91,68 @@ export default function PublishAd() {
     }
 
     function atualizar() {
-        console.log(title)
-        console.log(description)
-        console.log(color)
-        console.log(category)
-        console.log(quality)
-        console.log(price)
-        console.log(imageOne)
+        let isValidFields = validateFields()
+        
+        if (isValidFields) {
+            console.log('todos os campos estão validos')
+        }
+    }
 
-        setShowTituloError(false)
-        setShowDescriptionError(false)
-        setShowColorError(false)
-        setShowCategoryError(false)
-        setShowQualityError(false)
-        setShowPriceError(false)
-        setShowImagesError(false)
+    function validateFields() {
+        let isValidAllFields = true
+
+        if (title.length < 2 || title.length > 50) {
+            isValidAllFields = false
+            setShowTituloError(true)
+        } else {
+            setShowTituloError(false)
+        }
+
+        const formattedPrice = price.replace(/[R$,]/g, '');
+        const parsedPrice = parseFloat(formattedPrice);
+
+        if (parsedPrice <= 100) {
+            isValidAllFields = false
+            setShowPriceError(true)
+        } else {
+            setShowPriceError(false)
+        }
+
+        if (color === null || color === undefined || color === "") {
+            isValidAllFields = false
+            setShowColorError(true)
+        } else {
+            setShowColorError(false)
+        }
+
+        if (category === null || category === undefined || category === "") {
+            isValidAllFields = false
+            setShowCategoryError(true)
+        } else {
+            setShowCategoryError(false)
+        }
+
+        if (quality === null || quality === undefined || quality === "") {
+            isValidAllFields = false
+            setShowQualityError(true)
+        } else {
+            setShowQualityError(false)
+        }
+
+        if (
+            imageOne === null || imageOne === undefined || imageOne === "" ||
+            imageTwo === null || imageTwo === undefined || imageTwo === "" ||
+            imageThree === null || imageThree === undefined || imageThree === "" ||
+            imageFour === null || imageFour === undefined || imageFour === "" ||
+            imageFive === null || imageFive === undefined || imageFive === ""
+        ) {
+            isValidAllFields = false
+            setShowImagesError(true)
+        } else {
+            setShowImagesError(false)
+        }
+
+        return isValidAllFields
     }
 
     return (
@@ -140,12 +162,7 @@ export default function PublishAd() {
                 isAuthenticated={false}
                 showBackButton={true}
             />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <div>
                 <Container>
                     <Title>Publique seu anúncio</Title>
                     <SubTitle>capriche nas fotos e na descrição do seu produto</SubTitle>
@@ -156,12 +173,12 @@ export default function PublishAd() {
                             <input
                                 type="text"
                                 placeholder="Digite o titulo"
-                                onChange={handleTituloChange}
+                                onChange={(event) => setTitle(event.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError style={showTituloError ? { display: 'flex' } : { display: 'none' }}>
                             <img src={IconError} alt="Digite o titulo corretamente" />
-                            <span>Digite o titulo corretamente</span>
+                            <span>Digite o titulo</span>
                         </ContainerError>
                     </div>
 
@@ -170,21 +187,17 @@ export default function PublishAd() {
                         <TextAreaContainer>
                             <textarea
                                 placeholder="Digite a descrição"
-                                onChange={handleDescriptionChange}
+                                onChange={(event) => setDescription(event.target.value)}
                                 maxLength={500}
                             />
                             <span>{description.length}/500</span>
                         </TextAreaContainer>
-                        <ContainerError style={showDescriptionError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Digite a descrição" />
-                            <span>Digite a descrição</span>
-                        </ContainerError>
                     </div>
 
                     <div>
                         <Label>Cor</Label>
                         <InputContainer>
-                            <select id="color-select" value={color} onChange={handleColorChange}>
+                            <select id="color-select" value={color} onChange={(event) => setColor(event.target.value)}>
                                 {colorOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -202,7 +215,7 @@ export default function PublishAd() {
                     <div>
                         <Label>Categoria</Label>
                         <InputContainer>
-                            <select id="color-select" value={category} onChange={handleCategoryChange}>
+                            <select id="color-select" value={category} onChange={(event) => setCategory(event.target.value)}>
                                 {categoryOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -219,7 +232,7 @@ export default function PublishAd() {
                     <div>
                         <Label>Qualidade do produto</Label>
                         <InputContainer>
-                            <select id="color-select" value={quality} onChange={handleQualityChange}>
+                            <select id="color-select" value={quality} onChange={(event) => setQuality(event.target.value)}>
                                 {qualityOptions.map((option) => (
                                     <option key={option.value} value={option.value}>
                                         {option.label}
@@ -228,8 +241,8 @@ export default function PublishAd() {
                             </select>
                         </InputContainer>
                         <ContainerError style={showQualityError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Escolha a categoria" />
-                            <span>Escolha a categoria</span>
+                            <img src={IconError} alt="Escolha a qualidade do seu produto" />
+                            <span>Escolha a qualidade do seu produto</span>
                         </ContainerError>
                     </div>
 
@@ -238,7 +251,7 @@ export default function PublishAd() {
                         <InputContainer>
                             <NumericFormat
                                 value={price}
-                                onChange={handlePriceChange}
+                                onChange={(event) => setPrice(event.target.value)}
                                 decimalSeparator=","
                                 thousandSeparator="."
                                 prefix="R$ "
@@ -248,8 +261,8 @@ export default function PublishAd() {
                             />
                         </InputContainer>
                         <ContainerError style={showPriceError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Digite o preço" />
-                            <span>Digite o preço</span>
+                            <img src={IconError} alt="Preço inválido" />
+                            <span>Preço inválido</span>
                         </ContainerError>
                     </div>
                     <div>
@@ -310,8 +323,8 @@ export default function PublishAd() {
 
                         </ImagesContainer>
                         <ContainerError style={showImagesError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Digite o preço" />
-                            <span>Digite o preço</span>
+                            <img src={IconError} alt="Fotos obrigatórias (Insira todas as imagens)" />
+                            <span>Fotos obrigatórias (Insira todas as imagens)</span>
                         </ContainerError>
                     </div>
 

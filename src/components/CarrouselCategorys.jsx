@@ -41,9 +41,9 @@ export default function CarouselCategory(props) {
                 {items.map((item, index) => (
                     <Item key={index}>
                         <div>
-                            <img src="https://i.imgur.com/Y6rTMfq.png" alt="categoria x"/>
+                            <img src={item.image} alt={item.title}/>
                         </div>
-                        <p>{item}</p>
+                        <p>{item.title}</p>
                     </Item>
                 ))}
             </Slider>

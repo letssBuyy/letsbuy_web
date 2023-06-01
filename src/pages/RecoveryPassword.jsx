@@ -17,9 +17,14 @@ export default function Recovery() {
     }
 
     function enviar(){
-        console.log(password)
-        setShowPasswordError(false)
+        if (password.length < 6 || password.length > 50) {
+            setShowPasswordError(true)
+        } else {
+            setShowPasswordError(false)
+            alert("senha ok")
+        }
     }
+
 
     return (
         <>
