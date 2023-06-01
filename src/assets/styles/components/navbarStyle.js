@@ -15,6 +15,7 @@ export const ContainerBasic = styled.div`
 export const LogoBasic = styled.img`
     width: 104px;
     height: 42px;
+    cursor: pointer;
 `
 
 export const ImageBackButton = styled.img`
@@ -23,6 +24,10 @@ export const ImageBackButton = styled.img`
     width: 17.5px;
     height: 17.5px;
     cursor: pointer;
+
+    @media screen and (max-width: 500px) {
+        left: 30px;
+    }
 `
 
 export const ContainerPrincipal = styled.div`
@@ -43,6 +48,7 @@ export const ContainerPrincipal = styled.div`
     div img {
         width: 104px;
         height: 42px;
+        cursor: pointer;
     }
 
     div p {
@@ -185,12 +191,6 @@ export const BackgroundOffCanvas = styled.div`
     background-color: rgb(48, 48, 48, 50%);
     z-index: 1;
 `;
-
-
-
-
-
-
 
 export const ContainerNavbarIsAuthenticated = styled.div`
 
