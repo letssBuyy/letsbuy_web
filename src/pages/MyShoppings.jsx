@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar"
 import {
     Container
-} from "../assets/styles/MyShoppingsStyle"
+} from "../assets/styles/myShoppingsStyle"
 import Accordion from "../components/AccordionMyShoppings";
 import Helpdesk from "../components/helpdesk";
 

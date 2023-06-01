@@ -13,7 +13,7 @@ import SuccessfulPayment from '../pages/SuccessfulPayment';
 import Checkout from '../pages/checkout';
 import EditAd from '../pages/EditAd';
 import PublishAd from '../pages/PublishAd';
-import Fac from '../pages/Fac';
+import Faq from '../pages/Faq';
 import Dashboard from '../pages/Dashboard';
 import Chat from '../pages/Chat';
 import MyShoppings from '../pages/MyShoppings';
@@ -34,7 +34,7 @@ export default function Routers() {
                 <Route path='/recuperar-senha' element={<RecoveryEmail />} />
                 <Route path='/alterar-senha' element={<RecoveryPassword />} />
                 <Route path='/sobre-nos' element={<AboutUs />} />
-                <Route path='/perguntas-frequentes' element={<Fac />} />
+                <Route path='/perguntas-frequentes' element={<Faq />} />
                 <Route path='/buscar-anuncios' element={<SearchAd />} />
                 <Route path='/anuncio' element={<DetailsAd />} />
 

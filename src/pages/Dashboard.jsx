@@ -4,7 +4,7 @@ import iconPeopleDash from "../assets/images/iconPeoplesDash.svg"
 import iconFinalizados from "../assets/images/iconFinalizados.svg"
 import iconTaxa from "../assets/images/iconTaxas.svg"
 import iconPubli from "../assets/images/iconsPublicados.svg"
-import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Legendas, Limitador, Quantidades, Titulos } from "../assets/styles/DashboardStyle";
+import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Legendas, Limitador, Quantidades, Titulos } from "../assets/styles/dashboardStyle";
 
 
 export default function Exibir() {

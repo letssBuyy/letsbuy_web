@@ -1,6 +1,6 @@
 import React from "react";
 import ImageAboutUs from '../assets/images/AboutUs.svg';
-import { Container, Title, P, Image } from "../assets/styles/AboutUsStyle";
+import { Container, Title, P, Image } from "../assets/styles/aboutUsStyle";
 import Navbar from "../components/Navbar";
 
 export default function AboutUs() {

@@ -16,7 +16,7 @@ import {
     BottomBar,
     SubContainer,
     ModalMoreOptions
-} from "../assets/styles/ChatStyle";
+} from "../assets/styles/chatStyle";
 
 export default function Chat() {
     const [message, setMessage] = useState('');
