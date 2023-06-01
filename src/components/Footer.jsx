@@ -1,16 +1,19 @@
 import React from "react";
-import Logo from "../assets/images/logo-black-pink.svg"
-import Instagram from "../assets/images/icon-instagram.svg"
-import Facebook from "../assets/images/icon-facebook.svg"
-import Twitter from "../assets/images/icon-twitter.svg"
+import Logo from "../assets/images/logo-black-pink.svg";
+import Instagram from "../assets/images/icon-instagram.svg";
+import Facebook from "../assets/images/icon-facebook.svg";
+import Twitter from "../assets/images/icon-twitter.svg";
 import {
     Container,
     BaseFooter,
     SpeedLinks,
     Presentation
-} from "../assets/styles/components/footerStyle"
+} from "../assets/styles/components/footerStyle";
+import { useNavigate } from 'react-router-dom';
 
 export default function Footer() {
+    let navigate = useNavigate();
+
     return (
         <>
             <Container>
@@ -38,25 +41,25 @@ export default function Footer() {
                     <div>
                         <span>Links rápidos</span>
                         <ul>
-                            <li>Login</li>
-                            <li>Minha conta</li>
-                            <li>Buscar anúncios</li>
+                            <li onClick={() => navigate("/entrar")}>Login</li>
+                            <li onClick={() => navigate("/minhas-compras")}>Minhas compras</li>
+                            <li onClick={() => navigate("/buscar-anuncios")}>Buscar anúncios</li>
                         </ul>
                     </div>
                     <div>
                         <span>Utilidades</span>
                         <ul>
-                            <li>Como comprar</li>
-                            <li>Como vender</li>
-                            <li>Tarifas</li>
+                            <li onClick={() => navigate("/perguntas-frequentes")}>Como comprar</li>
+                            <li onClick={() => navigate("/perguntas-frequentes")}>Como vender</li>
+                            <li onClick={() => navigate("/perguntas-frequentes")}>Tarifas</li>
                         </ul>
                     </div>
                     <div>
                         <span>Suporte</span>
                         <ul>
                             <li>letsBuy@suporte.com</li>
-                            <li>Termos e condições</li>
-                            <li>Politica de privacidade</li>
+                            <li onClick={() => navigate("/perguntas-frequentes")}>Termos e condições</li>
+                            <li onClick={() => navigate("/perguntas-frequentes")}>Politica de privacidade</li>
                         </ul>
                     </div>
                 </SpeedLinks>
