@@ -2,7 +2,7 @@ import 'sweetalert2/dist/sweetalert2.css';
 import './sweetalert2-custom.css';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-export const success = (description) => {
+export const successAlert = (description) => {
     Swal.fire({
         title: 'OK!',
         text: description,
@@ -10,7 +10,7 @@ export const success = (description) => {
     });
 };
 
-export const error = (description) => {
+export const errorAlert = (description) => {
     Swal.fire({
         title: 'OOPS!',
         text: description,
