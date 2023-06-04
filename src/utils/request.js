@@ -1,1 +1,1 @@
-export const url = "url do site";
+export const url = "https://letsbuy-api.azurewebsites.net";
