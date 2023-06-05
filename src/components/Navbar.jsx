@@ -1,4 +1,4 @@
-import React, { useState, useContext  } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
@@ -13,7 +13,6 @@ import Favorite from "../assets/images/icon-favorite-black.svg";
 import Grid from "../assets/images/icon-grid-black.svg";
 import iconLogout from "../assets/images/icon-log-out.svg";
 import { useNavigate } from 'react-router-dom';
-
 import {
     ContainerBasic,
     LogoBasic,
@@ -26,7 +25,6 @@ import {
     ContainerMyAccount,
     ItensContainerNavbarIsAuthenticated
 } from '../assets/styles/components/navbarStyle';
-import { useEffect } from "react";
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
