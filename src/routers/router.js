@@ -32,13 +32,13 @@ export default function Routers() {
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastrar' element={<Register />} />
                 <Route path='/recuperar-senha' element={<RecoveryEmail />} />
-                <Route path='/alterar-senha' element={<RecoveryPassword />} />
-                <Route path='/sobre-nos' element={<AboutUs />} />
                 <Route path='/perguntas-frequentes' element={<Faq />} />
                 <Route path='/buscar-anuncios' element={<SearchAd />} />
-                <Route path='/anuncio' element={<DetailsAd />} />
+                <Route path='/sobre-nos' element={<AboutUs />} />
+                <Route path='/alterar-senha/:id' element={<RecoveryPassword />} />
+                <Route path='/anuncio/:id' element={<DetailsAd />} />
 
-                <Route path='/perfil' element={<Profile />} />
+                <Route path='/perfil/:id' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
                 <Route path='/checkout-pagamento' element={<Checkout />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />

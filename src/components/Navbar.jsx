@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext  } from "react";
+import { AuthContext } from "../utils/AuthContext";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
 import Menu from '../assets/images/icon-menu-black.svg';
@@ -25,17 +26,24 @@ import {
     ContainerMyAccount,
     ItensContainerNavbarIsAuthenticated
 } from '../assets/styles/components/navbarStyle';
+import { useEffect } from "react";
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
-    var isAuthenticated = props.isAuthenticated ? props.isAuthenticated : false
-    var userName = localStorage.getItem("USER_NAME") ? localStorage.getItem("USER_NAME") : 'Maria'
+
+    const [userName, setUserName] = useState('');
+    
+    const { user, isAuthenticated, authlogout } = useContext(AuthContext);
 
     const [visible, setVisible] = useState(false);
     let navigate = useNavigate();
 
-    function logout() { }
+    useEffect(() => {
+        if (user !== null && user !== undefined) {
+            setUserName(user.name)
+        }
+    }, [])
 
     switch (type) {
         case "basic":
@@ -154,7 +162,7 @@ export default function Navbar(props) {
                                                 <p>Minhas compras</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated onClick={() => logout()}>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => authlogout()}>
                                             <div>
                                                 <img src={iconLogout} alt="Sair" />
                                             </div>
