@@ -33,9 +33,9 @@ export default function Footer() {
                     <div>
                         <span>Categorias</span>
                         <ul>
-                            <li>Moda e acessórios</li>
-                            <li>Eletrônicos</li>
-                            <li>Casa e decoração</li>
+                            <li onClick={() => navigate(`/buscar-anuncios?category=FASHION_ACESSORIES`)}>Moda e acessórios</li>
+                            <li onClick={() => navigate(`/buscar-anuncios?category=ELECTRONICS`)}>Eletrônicos</li>
+                            <li onClick={() => navigate(`/buscar-anuncios?category=HOUSE_DECORATION`)}>Casa e decoração</li>
                         </ul>
                     </div>
                     <div>

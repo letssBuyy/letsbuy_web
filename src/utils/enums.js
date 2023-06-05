@@ -12,9 +12,21 @@ import Hobbie from "../assets/images/categorys/hobbie.png";
 
 export const colorOptions = [
     { value: '', label: 'Selecione uma cor' },
-    { value: 'red', label: 'Vermelho' },
-    { value: 'green', label: 'Verde' },
-    { value: 'blue', label: 'Azul' },
+    { value: 'RED', label: 'Vermelho' },
+    { value: 'GREEN', label: 'Verde' },
+    { value: 'BLUE', label: 'Azul' },
+    { value: 'YELLOW', label: 'Amarelo' },
+    { value: 'ORANGE', label: 'Laranja' },
+    { value: 'PURPLE', label: 'Roxo' },
+    { value: 'PINK', label: 'Rosa' },
+    { value: 'BLACK', label: 'Preto' },
+    { value: 'WHITE', label: 'Branco' },
+    { value: 'GRAY', label: 'Cinza' },
+    { value: 'BROWN', label: 'Marrom' },
+    { value: 'SILVER', label: 'Prata' },
+    { value: 'GOLD', label: 'Dourado' },
+    { value: 'NAVY', label: 'Azul marinho' },
+    { value: 'TEAL', label: 'Verde azulado' },
 ];
 
 export const categoryOptions = [
@@ -35,47 +47,58 @@ export const categoryOptions = [
 export const categorys = [
     {
         title: "Veículos",
-        image: Car
+        image: Car,
+        value: "VEHICLES"
     },
     {
         title: "Eletrônicos",
-        image: Eletronics
+        image: Eletronics,
+        value: "ELECTRONICS"
     },
     {
         title: "Acessorios",
-        image: Fashion
+        image: Fashion,
+        value: "FASHION_ACESSORIES"
     },
     {
         title: "Casa e decoração",
-        image: Home
+        image: Home,
+        value: "HOUSE_DECORATION"
     },
     {
         title: "Livros",
-        image: Book
+        image: Book,
+        value: "BOOKS"
     },
     {
         title: "Filmes",
-        image: Films
+        image: Films,
+        value: "FILMS"
     },
     {
         title: "Hobbies",
-        image: Hobbie
+        image: Hobbie,
+        value: "HOBBIES"
     },
     {
         title: "Auto peças",
-        image: Auto
+        image: Auto,
+        value: "AUTO_PARTS"
     },
     {
         title: "Esporte e lazer",
-        image: Sport
+        image: Sport,
+        value: "SPORTS_LEISURE"
     },
     {
         title: "Pets",
-        image: Pets
+        image: Pets,
+        value: "PETS"
     },
     {
         title: "Bebês e crianças",
-        image: Baby
+        image: Baby,
+        value: "CHILDREN"
     }
 ];
 
