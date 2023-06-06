@@ -6,7 +6,9 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    id: 0
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const authlogin = async ({ email, password }) => {
@@ -15,17 +17,16 @@ const AuthProvider = ({ children }) => {
         email: email,
         password: password
       });
-  
-      console.log(response);
-  
+
       if (response.status !== 200) {
         return Promise.resolve(401);
       }
-  
-      const data = response.data;
-      setToken(data.token);
-      setIsAuthenticated(true);
-  
+
+      const data = response.data
+      setToken(data.token)
+      setUser(data.user)
+      setIsAuthenticated(true)
+
       return Promise.resolve(200);
     } catch (error) {
       console.log(error);

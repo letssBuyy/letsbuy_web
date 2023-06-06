@@ -33,7 +33,7 @@ export const categoryOptions = [
     { value: '', label: 'Selecione uma categoria' },
     { value: 'VEHICLES', label: 'Veículos' },
     { value: 'ELECTRONICS', label: 'Eletrônicos' },
-    { value: 'FASHION_ACESSORIES', label: 'Acessorios' },
+    { value: 'FASHION_ACESSORIES', label: 'Acessórios' },
     { value: 'HOUSE_DECORATION', label: 'Casa e decoração' },
     { value: 'BOOKS', label: 'Livros' },
     { value: 'FILMS', label: 'Filmes' },
@@ -42,6 +42,14 @@ export const categoryOptions = [
     { value: 'SPORTS_LEISURE', label: 'Esporte e lazer' },
     { value: 'PETS', label: 'Pets' },
     { value: 'CHILDREN', label: 'Bebês e crianças' },
+];
+
+export const qualityOptions = [
+    { value: '', label: 'Selecione a qualidade' },
+    { value: 'NEW', label: 'Novo' },
+    { value: 'SEMI_NEW', label: 'Semi Novo' },
+    { value: 'USED', label: 'Usado' },
+    { value: 'DEFECTIVE', label: 'Defeituoso' },
 ];
 
 export const categorys = [
@@ -56,7 +64,7 @@ export const categorys = [
         value: "ELECTRONICS"
     },
     {
-        title: "Acessorios",
+        title: "Acessórios",
         image: Fashion,
         value: "FASHION_ACESSORIES"
     },
@@ -102,10 +110,83 @@ export const categorys = [
     }
 ];
 
-export const qualityOptions = [
-    { value: '', label: 'Selecione a qualidade' },
-    { value: 'NEW', label: 'Novo' },
-    { value: 'SEMI_NEW', label: 'Semi Novo' },
-    { value: 'USED', label: 'Usado' },
-    { value: 'DEFECTIVE', label: 'Defeituoso' },
-];
+export function findByCategory(category) {
+    switch (category) {
+        case "VEHICLES":
+            return "Veículos"
+        case "ELECTRONICS":
+            return "Eletrônicos"
+        case "FASHION_ACESSORIES":
+            return "Acessórios"
+        case "HOUSE_DECORATION":
+            return "Casa e decoração"
+        case "BOOKS":
+            return "Livros"
+        case "FILMS":
+            return "Filmes"
+        case "HOBBIES":
+            return "Hobbies"
+        case "AUTO_PARTS":
+            return "Auto peças"
+        case "SPORTS_LEISURE":
+            return "Esporte e lazer"
+        case "PETS":
+            return "Pets"
+        case "CHILDREN":
+            return "Bebês e crianças"
+        default:
+            break;
+    }
+}
+
+export function findByQuality(quality) {
+    switch (quality) {
+        case "NEW":
+            return "Novo"
+        case "SEMI_NEW":
+            return "Semi Novo"
+        case "USED":
+            return "Usado"
+        case "DEFECTIVE":
+            return "Defeituoso"
+        default:
+            break;
+    }
+}
+
+export function findByColor(color) {
+    switch (color) {
+        case 'RED':
+            return 'Vermelho';
+        case 'GREEN':
+            return 'Verde';
+        case 'BLUE':
+            return 'Azul';
+        case 'YELLOW':
+            return 'Amarelo';
+        case 'ORANGE':
+            return 'Laranja';
+        case 'PURPLE':
+            return 'Roxo';
+        case 'PINK':
+            return 'Rosa';
+        case 'BLACK':
+            return 'Preto';
+        case 'WHITE':
+            return 'Branco';
+        case 'GRAY':
+            return 'Cinza';
+        case 'BROWN':
+            return 'Marrom';
+        case 'SILVER':
+            return 'Prata';
+        case 'GOLD':
+            return 'Dourado';
+        case 'NAVY':
+            return 'Azul marinho';
+        case 'TEAL':
+            return 'Verde azulado';
+        default:
+            break;
+    }
+}
