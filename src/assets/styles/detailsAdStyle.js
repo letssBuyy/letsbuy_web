@@ -19,9 +19,13 @@ export const Container = styled.div`
 
 export const ContainerImages = styled.div`
     width: 40%;
-    display: flex;
-    flex-direction: column;
 
+    @media screen and (max-width: 900px) {
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    /* 
     >img {
         width: 100%;
         height: auto;
@@ -58,7 +62,7 @@ export const ContainerImages = styled.div`
             width: 60px;
             height: 60px;
         }
-    }
+    } */
 `;
 
 export const ContainerContent = styled.div`
@@ -96,12 +100,12 @@ export const InfoAd = styled.div`
        margin-bottom: 50px;
     }
 
-    >div:nth-child(4) {
+    >div:nth-child(5) {
         display: flex;
         margin: 30px 0;
     }
 
-    >div:nth-child(4) button:first-child {
+    >div:nth-child(5) button:first-child {
         border-radius: 5px;
         background-color: ${colors.pink};
         padding: 12px 80px;
@@ -111,7 +115,7 @@ export const InfoAd = styled.div`
         color: ${colors.white};
     }
  
-    >div:nth-child(4) button:last-child {
+    >div:nth-child(5) button:last-child {
         font-size: 14px;
         font-family: ${fonts.medium};
         color: ${colors.pink};
@@ -120,13 +124,13 @@ export const InfoAd = styled.div`
     }
 
     @media screen and (max-width: 1100px) {
-        >div:nth-child(4) {
+        >div:nth-child(5) {
             align-items: center;
             justify-content: center;
             flex-direction: column;
         }
 
-        >div:nth-child(4) button:last-child {
+        >div:nth-child(5) button:last-child {
             margin: 20px 0;
         }
     }
@@ -164,6 +168,20 @@ export const InfoAd = styled.div`
         font-family: ${fonts.semiBold};
         color: ${colors.blackGray};
         margin-bottom: 10px;
+    }
+`;
+
+export const BoxNewFinders = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    div {
+        display: flex;
+    }
+
+    p {
+        margin-left: 5px;
     }
 `;
 

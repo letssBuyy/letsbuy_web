@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { AuthContext } from "../utils/AuthContext";
+import moment from "moment";
 import Navbar from "../components/Navbar";
 import {
     Container,
@@ -6,9 +9,9 @@ import {
     ContainerContent,
     InfoAd,
     TipsOfSecurity,
-    SaleInformation
+    SaleInformation,
+    BoxNewFinders
 } from "../assets/styles/detailsAdStyle";
-
 import ImageDefault from '../assets/images/image-default.png';
 import pix from "../assets/images/payment/icon-pix.svg";
 import elo from "../assets/images/payment/icon-elo.svg";
@@ -16,43 +19,132 @@ import mastercard from "../assets/images/payment/icon-masterCard.svg";
 import mercadopago from "../assets/images/payment/icon-mercadopago.svg";
 import paypal from "../assets/images/payment/icon-paypal.svg";
 import visa from "../assets/images/payment/icon-visa.svg";
-
 import shield from "../assets/images/icon-shield.svg";
 import Verify from '../assets/images/icon-verify.svg';
 import chat from "../assets/images/icon-chat-pink.svg";
 import heart from "../assets/images/icon-heart.svg";
 import heartSelected from "../assets/images/icon-heart-selected.svg";
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { url } from "../utils/request";
+import { findByQuality, findByColor, findByCategory } from "../utils/enums";
 
 export default function Advertise() {
-    const [advertisementImages, setAdvertisementImages] = useState([ImageDefault, ImageDefault, ImageDefault, ImageDefault, ImageDefault])
-    const [isFavorite, setIsFavorite] = useState(true);
-    const [title, setTitle] = useState('Bolsa marrom');
-    const [dateOfPublish, setDateOfPublish] = useState('24/02/2023');
-    const [price, setPrice] = useState('200');
-    const [description, setDescription] = useState('Lorem ipsum dolor sit amet consectetur. Mauris mauris viverra urna velit leo justo. Elit amet est posuere augue egestas eget dignissim quis. Amet eget enim id nec vulputate iaculis massa cras.');
-
+    const [advertisementImages, setAdvertisementImages] = useState([
+        {
+            original: ImageDefault,
+            thumbnail: ImageDefault,
+        },
+        {
+            original: ImageDefault,
+            thumbnail: ImageDefault,
+        },
+        {
+            original: ImageDefault,
+            thumbnail: ImageDefault,
+        },
+        {
+            original: ImageDefault,
+            thumbnail: ImageDefault,
+        },
+    ])
+    const [idAdvertise, setIdAdvertise] = useState('');
+    const [isFavorite, setIsFavorite] = useState(false);
+    const [collor, setCollor] = useState('');
+    const [quality, setQuality] = useState('');
+    const [category, setCategory] = useState('');
+    const [title, setTitle] = useState('');
+    const [dateOfPublish, setDateOfPublish] = useState('');
+    const [price, setPrice] = useState('');
+    const [description, setDescription] = useState('');
+    const [sellerId, setSellerId] = useState('');
     const [sellerImage, setSellerImage] = useState(ImageDefault);
-    const [sellerName, setSellerName] = useState('Luiz');
-    const [sellerCity, setSellerCity] = useState('São Paulo');
-    const [sellerState, setSellerState] = useState('SP');
-    const [sellerIsVerified, setSellerIsVerified] = useState(true);
-    const [sellerStartDate, setSellerStartDate] = useState('2023');
+    const [sellerName, setSellerName] = useState('');
+    const [sellerCity, setSellerCity] = useState('');
+    const [sellerState, setSellerState] = useState('');
+    const [sellerStartDate, setSellerStartDate] = useState('');
+    const [sellerAdsSold, setSellerAdsSold] = useState('');
+    const [sellerAdsForSale, setSellerAdsForSale] = useState('');
 
-    const [sellerAdsSold, setSellerAdsSold] = useState('1');
-    const [sellerAdsForSale, setSellerAdsForSale] = useState('2');
+    let navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const { id } = useParams();
+    const idUser = user.id
+    
+    async function load() {
+        await axios.get(`${url}/adversiments/${id}/${idUser}`).then((response) => {
+            const data = response.data
+            setIdAdvertise(data.id)
+            setTitle(data.title)
+            setDescription(data.description)
+            setPrice(data.price)
+            setIsFavorite(data.isLike)
+            setCollor(findByColor(data.color))
+            setQuality(findByQuality(data.quality))
+            setCategory(findByCategory(data.category))
+            const seller = data.user
+            setSellerName(seller.name)
+            setSellerId(seller.id)
+            setSellerImage(seller.profileImage)
+            setSellerCity(seller.city)
+            setSellerState(seller.state)
+            setSellerStartDate(seller.registrationDate)
+            setSellerAdsSold(seller.quantityTotalSolded)
+            setSellerAdsForSale(seller.quantityTotalActive)
+
+            const messageDate = moment(data.postDate);
+            setDateOfPublish(messageDate.format("DD/MM/YYYY"))
+
+            if (data.images != null && data.images.length > 0) {
+                const images = []
+                data.images.map((image) => {
+                    images.push({
+                        original: image,
+                        thumbnail: image,
+                    })
+                })
+
+                setAdvertisementImages(images)
+            }
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
+
+    function sendToChat() {
+        navigate(`/chat?openChatWithSeller=${sellerId}`)
+    }
+
+    function sendToSellerProfile() {
+        navigate(`/perfil/${sellerId}`)
+    }
+
+    function buyAdvertise() {
+        navigate(`/checkout-pagamento/${idAdvertise}`)
+    }
+
+    function sendProposal() {
+        navigate(`/chat?openChatWithSeller=${sellerId}&openModalPropose=true`)
+    }
+
+    useEffect(() => {
+        load()
+    }, [])
 
     return (
         <>
             <Navbar type='principal' />
             <Container>
                 <ContainerImages>
-                    <img src={advertisementImages[0]} />
-                    <div>
-                        <img src={advertisementImages[1]} />
-                        <img src={advertisementImages[2]} />
-                        <img src={advertisementImages[3]} />
-                        <img src={advertisementImages[4]} />
-                    </div>
+                    <ImageGallery
+                        items={advertisementImages}
+                        showPlayButton={false}
+                        thumbnailPosition={'bottom'}
+                        showFullscreenButton={false}
+                        showNav={false}
+                    />
                 </ContainerImages>
                 <ContainerContent>
                     <InfoAd>
@@ -78,9 +170,25 @@ export default function Advertise() {
                             <h3>Descrição</h3>
                             <p>{description}</p>
                         </div>
+                        <BoxNewFinders>
+                            <div>
+                                <h3>Categoria: </h3>
+                                <p>{category}</p>
+                            </div>
+
+                            <div>
+                                <h3>Qualidade do produto: </h3>
+                                <p>{quality}</p>
+                            </div>
+
+                            <div>
+                                <h3>Cor: </h3>
+                                <p>{collor}</p>
+                            </div>
+                        </BoxNewFinders>
                         <div>
-                            <button>Comprar</button>
-                            <button>Enviar proposta</button>
+                            <button onClick={() => buyAdvertise()}>Comprar</button>
+                            <button onClick={() => sendProposal()}>Enviar proposta</button>
                         </div>
                         <div>
                             <h3>Meios de pagamento</h3>
@@ -100,21 +208,22 @@ export default function Advertise() {
                     </TipsOfSecurity>
                     <SaleInformation>
                         <div>
-                            <div>
+                            <div onClick={() => sendToSellerProfile()}>
                                 <img src={sellerImage} alt="Imagem de perfil do usuário" />
                                 <div>
                                     <p>{sellerName}</p>
-                                    <span>{sellerCity} - {sellerState}</span>
+                                    {
+                                        sellerCity !== null && sellerCity !== "" && sellerCity !== undefined
+                                        && sellerState !== null && sellerState !== "" && sellerState !== undefined ?
+                                            <span>{sellerCity} - {sellerState}</span>
+                                            :
+                                            <></>
+                                    }
                                 </div>
-                                {
-                                    sellerIsVerified ?
-                                        <img src={Verify} alt="Usuário verificado" />
-                                        :
-                                        <></>
-                                }
+                                <img src={Verify} alt="Usuário verificado" />
                             </div>
                             <div>
-                                <button>
+                                <button onClick={() => sendToChat()}>
                                     Conversar
                                     <img src={chat} alt="Conversar com o vendedor" />
                                 </button>
