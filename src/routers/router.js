@@ -40,7 +40,7 @@ export default function Routers() {
 
                 <Route path='/perfil/:id' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
-                <Route path='/checkout-pagamento' element={<Checkout />} />
+                <Route path='/checkout-pagamento/:id' element={<Checkout />} />
                 <Route path='/editar-anuncio' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
                 <Route path='/chat' element={<Chat />} />
@@ -50,7 +50,6 @@ export default function Routers() {
                 <Route path='/disputa' element={<Help />} />
                 <Route path='/meus-anuncios' element={<MyAds />} />
                 <Route path='/dashboard' element={<Dashboard />} />
-                
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
