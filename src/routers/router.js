@@ -23,6 +23,7 @@ import SearchAd from '../pages/SearchAd';
 import Help from '../pages/Help';
 import MyAds from '../pages/MyAds';
 import DetailsAd from '../pages/DetailsAd';
+import Wallet from '../pages/Wallet';
 
 export default function Routers() {
     return (
@@ -50,6 +51,7 @@ export default function Routers() {
                 <Route path='/disputa' element={<Help />} />
                 <Route path='/meus-anuncios' element={<MyAds />} />
                 <Route path='/dashboard' element={<Dashboard />} />
+                <Route path='/minha-carteira' element={<Wallet />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

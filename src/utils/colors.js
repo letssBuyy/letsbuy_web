@@ -12,4 +12,5 @@ export const colors = {
     whiteGrayTwo: "#ECECEC",
     blackMedium: "#818181",
     blackMediumTwo: "#686868",
+    green: "#0BBC47"
 };
