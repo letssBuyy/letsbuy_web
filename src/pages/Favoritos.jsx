@@ -1,36 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import ImageDefault from '../assets/images/image-default.png';
 import {
     Container
-} from "../assets/styles/favoritosStyle"
+} from "../assets/styles/favoritosStyle";
+import { AuthContext } from "../utils/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import { url } from "../utils/request";
+import axios from "axios";
+import Loading from "../components/Loading";
+
 export default function Favoritos() {
-    const [cardList, setCardList] = useState([])
-
-    function handleClickSeller() {
-        console.log('clicou no vendedor')
-    }
-
-    function handleClickCard() {
-        console.log('clicou no card')
-    }
-
-    function loadFavorites() {
-        setCardList([1,2,3,4,5,6,7,8,9,10])
-    }
-
-    const [isSelectedHeart, setIsSelectedHeart] = useState(false)
-    function handleClickHeart() {
-        setIsSelectedHeart(!isSelectedHeart)
+    const [cardList, setCardList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const { user, isAuthenticated } = useContext(AuthContext);
+    const userId = user.id
+    
+    let navigate = useNavigate();
+    
+    async function load() {
+        try {
+            setLoading(true)
+            await axios.get(`${url}/adversiments/like/${userId}`).then((response) => {
+                const data = response.data
+                setCardList(data)
+            }).catch((e) => {
+                console.log(e)
+            })
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        loadFavorites()
+        if (!isAuthenticated) {
+            navigate("/")
+        } else {
+            load()
+        }
     }, [])
 
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar type='basic' showBackButton={true} />
             <Container>
                 <h1>Favoritos</h1>
@@ -39,19 +53,15 @@ export default function Favoritos() {
                     {cardList.map((card, index) => (
                         <Card
                             key={index}
-                            image={ImageDefault}
-                            price={'200'}
-                            name={'Bolsa marrom'}
+                            image={card.images ? card.images[0] : null}
+                            price={card.price}
+                            name={card.title}
                             brand={'Tommy'}
-                            sellerName={'Luiz'}
+                            sellerName={card.user.name}
                             sellerCity={'São Paulo'}
                             sellerState={'SP'}
-                            sellerIsVerify={true}
-                            sellerImageProfile={ImageDefault}
-                            isSelectedHeart={isSelectedHeart}
-                            onClickHeart={handleClickHeart}
-                            onClickSeller={handleClickSeller}
-                            onClickCard={handleClickCard}
+                            sellerImageProfile={card.user.imageProfile}
+                            isSelectedHeart={card.isSelectedHeart}
                             margin={'5px'}
                         />
                     ))}

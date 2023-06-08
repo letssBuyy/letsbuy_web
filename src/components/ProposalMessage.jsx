@@ -16,7 +16,7 @@ export default function ProposalMessage(props) {
                     <span>O comprador sugeriu o valor de:</span>
                     <CardAdvertise>
                         <div>
-                            <img src={props.advertiseImage ? props.advertiseImage : ImageDefault} />
+                            <img src={props.advertiseImage ? props.advertiseImage : ImageDefault} alt="Imagem do anúncio" />
                         </div>
                         <div>
                             <p>{props.advertiseTitle}</p>
