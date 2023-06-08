@@ -155,6 +155,7 @@ export const ListAdvertise = styled.div`
     -webkit-box-pack: center;
     place-content: stretch center;
     flex-wrap: wrap;
+    min-height: 200px;
 
     @media screen and (max-width: 768px) {
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

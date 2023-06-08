@@ -22,17 +22,16 @@ export default function Card(props) {
         setIsHovering(false);
     };
 
-
     function handleChangeHeart() {
-        props.onClickHeart();
+        console.log("cliclou em curtir")
     }
 
     function handleChangeSaller() {
-        props.onClickSeller();
+        console.log("cliclou no vendedor")
     }
 
     function handleChangeCard() {
-        props.onClickCard();
+        console.log("cliclou no card")
     }
 
     return (
