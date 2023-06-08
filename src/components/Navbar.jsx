@@ -11,6 +11,7 @@ import Chat from "../assets/images/icon-chat-black.svg";
 import Edit from "../assets/images/icon-edit-black.svg";
 import Favorite from "../assets/images/icon-favorite-black.svg";
 import Grid from "../assets/images/icon-grid-black.svg";
+import Money from "../assets/images/icon-money.svg";
 import iconLogout from "../assets/images/icon-log-out.svg";
 import { useNavigate } from 'react-router-dom';
 import {
@@ -31,10 +32,9 @@ export default function Navbar(props) {
     var showBackButton = props.showBackButton ? props.showBackButton : false
 
     const [userName, setUserName] = useState('');
-    
     const { user, isAuthenticated, authlogout } = useContext(AuthContext);
-
     const [visible, setVisible] = useState(false);
+    
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -158,6 +158,14 @@ export default function Navbar(props) {
                                             </div>
                                             <div>
                                                 <p>Minhas compras</p>
+                                            </div>
+                                        </ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/minha-carteira")}>
+                                            <div>
+                                                <img src={Money} alt="Minha carteira" />
+                                            </div>
+                                            <div>
+                                                <p>Minha carteira</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
                                         <ItensContainerNavbarIsAuthenticated onClick={() => authlogout()}>
