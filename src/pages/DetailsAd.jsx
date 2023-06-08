@@ -30,6 +30,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { url } from "../utils/request";
 import { findByQuality, findByColor, findByCategory } from "../utils/enums";
+import Loading from "../components/Loading";
 
 export default function Advertise() {
     const [advertisementImages, setAdvertisementImages] = useState([
@@ -67,50 +68,58 @@ export default function Advertise() {
     const [sellerStartDate, setSellerStartDate] = useState('');
     const [sellerAdsSold, setSellerAdsSold] = useState('');
     const [sellerAdsForSale, setSellerAdsForSale] = useState('');
+    const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const { id } = useParams();
     const idUser = user.id
-    
+
     async function load() {
-        await axios.get(`${url}/adversiments/${id}/${idUser}`).then((response) => {
-            const data = response.data
-            setIdAdvertise(data.id)
-            setTitle(data.title)
-            setDescription(data.description)
-            setPrice(data.price)
-            setIsFavorite(data.isLike)
-            setCollor(findByColor(data.color))
-            setQuality(findByQuality(data.quality))
-            setCategory(findByCategory(data.category))
-            const seller = data.user
-            setSellerName(seller.name)
-            setSellerId(seller.id)
-            setSellerImage(seller.profileImage)
-            setSellerCity(seller.city)
-            setSellerState(seller.state)
-            setSellerStartDate(seller.registrationDate)
-            setSellerAdsSold(seller.quantityTotalSolded)
-            setSellerAdsForSale(seller.quantityTotalActive)
+        try {
+            setLoading(true)
+            await axios.get(`${url}/adversiments/${id}/${idUser}`).then((response) => {
+                const data = response.data
+                setIdAdvertise(data.id)
+                setTitle(data.title)
+                setDescription(data.description)
+                setPrice(data.price)
+                setIsFavorite(data.isLike)
+                setCollor(findByColor(data.color))
+                setQuality(findByQuality(data.quality))
+                setCategory(findByCategory(data.category))
+                const seller = data.user
+                setSellerName(seller.name)
+                setSellerId(seller.id)
+                setSellerImage(seller.profileImage)
+                setSellerCity(seller.city)
+                setSellerState(seller.state)
+                setSellerStartDate(seller.registrationDate)
+                setSellerAdsSold(seller.quantityTotalSolded)
+                setSellerAdsForSale(seller.quantityTotalActive)
 
-            const messageDate = moment(data.postDate);
-            setDateOfPublish(messageDate.format("DD/MM/YYYY"))
+                const messageDate = moment(data.postDate);
+                setDateOfPublish(messageDate.format("DD/MM/YYYY"))
 
-            if (data.images != null && data.images.length > 0) {
-                const images = []
-                data.images.map((image) => {
-                    images.push({
-                        original: image,
-                        thumbnail: image,
+                if (data.images != null && data.images.length > 0) {
+                    const images = []
+                    data.images.map((image) => {
+                        images.push({
+                            original: image,
+                            thumbnail: image,
+                        })
                     })
-                })
 
-                setAdvertisementImages(images)
-            }
-        }).catch((e) => {
-            console.log(e);
-        });
+                    setAdvertisementImages(images)
+                }
+            }).catch((e) => {
+                console.log(e);
+            });
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
     }
 
     function sendToChat() {
@@ -135,6 +144,7 @@ export default function Advertise() {
 
     return (
         <>
+        <Loading isEnabled={loading}/>
             <Navbar type='principal' />
             <Container>
                 <ContainerImages>
@@ -214,7 +224,7 @@ export default function Advertise() {
                                     <p>{sellerName}</p>
                                     {
                                         sellerCity !== null && sellerCity !== "" && sellerCity !== undefined
-                                        && sellerState !== null && sellerState !== "" && sellerState !== undefined ?
+                                            && sellerState !== null && sellerState !== "" && sellerState !== undefined ?
                                             <span>{sellerCity} - {sellerState}</span>
                                             :
                                             <></>
