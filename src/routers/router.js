@@ -42,7 +42,7 @@ export default function Routers() {
                 <Route path='/perfil/:id' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
                 <Route path='/checkout-pagamento/:id' element={<Checkout />} />
-                <Route path='/editar-anuncio' element={<EditAd />} />
+                <Route path='/editar-anuncio/:id' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
