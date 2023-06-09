@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import IconError from "../assets/images/icon-error.svg";
 import IconCamPink from "../assets/images/icon-cam-pink.svg";
@@ -23,6 +24,11 @@ import {
     ImagesContainer,
     ImagemSelecionada
 } from '../assets/styles/components/InputStyle';
+import { AuthContext } from "../utils/AuthContext";
+import { url } from "../utils/request";
+import axios from "axios";
+import { successAlert, errorAlert } from "../utils/alerts";
+import Loading from "../components/Loading";
 
 export default function EditAd() {
     const [title, setTitle] = useState('');
@@ -36,7 +42,6 @@ export default function EditAd() {
     const [imageTwo, setImageTwo] = useState('');
     const [imageThree, setImageThree] = useState('');
     const [imageFour, setImageFour] = useState('');
-    const [imageFive, setImageFive] = useState('');
 
     const [showTituloError, setShowTituloError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
@@ -44,6 +49,12 @@ export default function EditAd() {
     const [showQualityError, setShowQualityError] = useState(false);
     const [showPriceError, setShowPriceError] = useState(false);
     const [showImagesError, setShowImagesError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { user, isAuthenticated } = useContext(AuthContext);
+    const idUser = user.id;
+    const { id } = useParams();
+
+    let navigate = useNavigate();
 
     function handleImageOneChange(event) {
         const file = event.target.files[0];
@@ -81,21 +92,51 @@ export default function EditAd() {
         };
     }
 
-    function handleImageFiveChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageFive(reader.result);
-        };
+    async function updateAd() {
+        try {
+            setLoading(true)
+
+            let isValidFields = validateFields()
+
+            if (isValidFields) {
+                await axios.put(`${url}/adversiments/${id}`, {
+                    userId: idUser,
+                    title: title,
+                    description: description,
+                    price: price,
+                    category: category,
+                    quality: quality,
+                    color: color
+                }).then(async (response) => {
+                    await uploadImages(response.data.id).then(() => {
+                        successAlert("Anúncio atualizado com sucesso!")
+                    }).catch(() => {
+                        errorAlert("Ocorreu um erro ao atualizar o anúncio")
+                    })
+                }).catch((e) => {
+                    errorAlert("Ocorreu um erro ao atualizar o anúncio")
+                })
+            }
+        } catch (error) {
+            errorAlert("Ocorreu um erro ao atualizar o anúncio")
+        } finally {
+            setLoading(false)
+        }
     }
 
-    function atualizar() {
-        let isValidFields = validateFields()
-        
-        if (isValidFields) {
-            console.log('todos os campos estão validos')
-        }
+    async function uploadImages(idAdvertise) {
+        const formData = new FormData();
+
+        formData.append('img1', imageOne);
+        formData.append('img2', imageTwo);
+        formData.append('img3', imageThree);
+        formData.append('img4', imageFour);
+
+        await axios.post(`${url}/images/adversiment/${idAdvertise}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 
     function validateFields() {
@@ -143,8 +184,7 @@ export default function EditAd() {
             imageOne === null || imageOne === undefined || imageOne === "" ||
             imageTwo === null || imageTwo === undefined || imageTwo === "" ||
             imageThree === null || imageThree === undefined || imageThree === "" ||
-            imageFour === null || imageFour === undefined || imageFour === "" ||
-            imageFive === null || imageFive === undefined || imageFive === ""
+            imageFour === null || imageFour === undefined || imageFour === ""
         ) {
             isValidAllFields = false
             setShowImagesError(true)
@@ -155,8 +195,21 @@ export default function EditAd() {
         return isValidAllFields
     }
 
+    function load() {
+
+    }
+
+    useEffect(() => {
+        if (!isAuthenticated) {
+            navigate("/")
+        } else {
+            load()
+        }
+    }, [])
+
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar
                 type='basic'
                 isAuthenticated={false}
@@ -314,26 +367,16 @@ export default function EditAd() {
                                     <label htmlFor="imagem4"></label>
                                     <input id="imagem4" type="file" onChange={handleImageFourChange} />
                                 </div>
-                                <div>
-                                    {
-                                        imageFive !== '' ?
-                                            <ImagemSelecionada src={imageFive} alt="imagemSelecionada" />
-                                            :
-                                            <img src={IconCamGray} alt="Selecione uma imagem dos seus arquivos" />
-                                    }
-                                    <label htmlFor="imagem5"></label>
-                                    <input id="imagem5" type="file" onChange={handleImageFiveChange} />
-                                </div>
                             </div>
 
                         </ImagesContainer>
                         <ContainerError style={showImagesError ? { display: 'flex' } : { display: 'none' }}>
-                        <img src={IconError} alt="Fotos obrigatórias (Insira todas as imagens)" />
+                            <img src={IconError} alt="Fotos obrigatórias (Insira todas as imagens)" />
                             <span>Fotos obrigatórias (Insira todas as imagens)</span>
                         </ContainerError>
                     </div>
 
-                    <Button onClick={() => atualizar()}>Atualizar</Button>
+                    <Button onClick={() => updateAd()}>Atualizar</Button>
                 </Container>
             </div>
         </>
