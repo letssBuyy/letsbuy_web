@@ -10,14 +10,11 @@ export const Container = styled.div`
     justify-content: space-between;
     padding: 0 100px;
 
-
   @media screen and (max-width: 900px) {
     max-width: 100vw;
     flex-direction: column-reverse;
     padding: 0px;
     margin: 50px 20px 0 20px;
-
-
   }
 `
 export const DivAccordin = styled.div`
@@ -28,15 +25,13 @@ export const DivAccordin = styled.div`
         flex-direction: column-reverse;
         padding: 0px;
         margin: 50px 20px 0 20px;
-    
-    
-      }
+    }
 `
 
 export const H1Accordin = styled.h1`
   padding: 30px;
-  font-size:18px;
-  font-family:{fonts.regular};
+  font-size: 14px;
+  font-family: ${fonts.regular};
 
   @media screen and (max-width: 900px) {
     font-size:15px;
@@ -65,8 +60,8 @@ export const Image = styled.div`
 
 export const Title = styled.p`
   color: ${colors.blackGray};
-  font-family: '${fonts.regular}';
-  font-size: 30px;
+  font-family: '${fonts.medium}';
+  font-size: 20px;
   margin-bottom: 30px;
 
   @media screen and (max-width: 900px) {
@@ -82,7 +77,8 @@ export const Title = styled.p`
 export const P = styled.p`
   font-family: ${fonts.regular};
   color: ${colors.black};
-  font-size: 20px;
+  font-size: 14px;
+  margin: 37px 0 50px 0;
 
   @media screen and (max-width: 900px) {
     font-size:15px;

@@ -56,13 +56,12 @@ export default function Favoritos() {
                             image={card.images ? card.images[0] : null}
                             price={card.price}
                             name={card.title}
-                            brand={'Tommy'}
+                            brand={card.category}
                             sellerName={card.user.name}
-                            sellerCity={'São Paulo'}
-                            sellerState={'SP'}
+                            sellerCity={card.user.city}
+                            sellerState={card.user.state}
                             sellerImageProfile={card.user.imageProfile}
                             isSelectedHeart={card.isSelectedHeart}
-                            margin={'5px'}
                         />
                     ))}
                 </div>
