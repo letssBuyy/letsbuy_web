@@ -41,20 +41,20 @@ export default function Card(props) {
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 style={{
-                    margin: props.margin ? props.margin : 0,
+                    margin: props.margin ? props.margin : "5px",
                     padding: props.padding ? props.padding : 0
                 }}
             >
                 <CardProfile>
-                    <img src={props.image ? props.image : ImageDefault} alt={props.name} />
+                    <img src={props.image ? props.image : ImageDefault} alt={props.name ? props.name : ""} />
                 </CardProfile>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <ContainerDivs>
 
                         <InfoAdvertise style={!isHovering ? { opacity: 1 } : { opacity: 0 }}>
-                            <h1>R${props.price}</h1>
-                            <p>{props.name}</p>
-                            <span>{props.brand}</span>
+                            <h1>R${props.price ? props.price : ""}</h1>
+                            <p>{props.name ? props.name : ""}</p>
+                            <span>{props.brand ? props.brand : ""}</span>
                         </InfoAdvertise>
 
                         <InfoSalle
@@ -65,8 +65,8 @@ export default function Card(props) {
                                 <img src={props.sellerImageProfile ? props.sellerImageProfile : ImageDefault} alt={props.sellerName} />
                             </div>
                             <div>
-                                <h1>{props.sellerName}</h1>
-                                <p>{props.sellerCity}</p>
+                                <h1>{props.sellerName ? props.sellerName : ""}</h1>
+                                <p>{props.sellerCity ? props.sellerCity : ""}</p>
                             </div>
                         </InfoSalle>
                     </ContainerDivs>

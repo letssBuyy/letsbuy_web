@@ -1,1 +1,1 @@
-export const url = "https://letsbuy-api.azurewebsites.net";
+export const url = "https://letsbuy-api-dev.azurewebsites.net";
