@@ -49,19 +49,15 @@ export default function CarouselCards(props) {
                     <Item key={index}>
                         <Card
                             key={index}
-                            image={item.image}
-                            price={item.price}
-                            name={item.name}
-                            brand={item.brand}
-                            sellerName={item.sellerName}
-                            sellerCity={item.sellerCity}
-                            sellerIsVerify={item.sellerIsVerify}
-                            sellerImageProfile={item.sellerImageProfile}
-                            isSelectedHeart={item.isSelectedHeart}
-                            onClickHeart={item.onClickHeart}
-                            onClickSeller={item.onClickSeller}
-                            onClickCard={item.onClickCard}
-                            margin={'5px'}
+                            image={item.adversiments.images ? item.adversiments.images[0] : null}
+                            price={item.adversiments.price}
+                            name={item.adversiments.title}
+                            brand={item.adversiments.category}
+                            sellerName={item.adversiments.userSellerLikeDto.name}
+                            sellerCity={item.adversiments.userSellerLikeDto.city}
+                            sellerState={item.adversiments.userSellerLikeDto.state}
+                            sellerImageProfile={item.adversiments.userSellerLikeDto.imageProfile}
+                            isSelectedHeart={item.adversiments.isSelectedHeart}
                         />
                     </Item>
                 ))}
