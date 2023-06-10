@@ -12,6 +12,11 @@ import {
 } from "../assets/styles/walletStyle";
 import EyeClose from '../assets/images/icon-eye-close.svg';
 import EyeOpen from '../assets/images/icon-eye-open.svg';
+import { url } from "../utils/request";
+import axios from "axios";
+import moment from "moment";
+import WithdrawModal from "../components/WithdrawModal";
+
 export default function Wallet() {
     const { user, isAuthenticated } = useContext(AuthContext);
     const id = user.id
@@ -20,10 +25,27 @@ export default function Wallet() {
     const [balance, setBalance] = useState(0);
     const [showBalance, setShowBalance] = useState(false);
     const [historic, setHistoric] = useState([1]);
+    const [modalOpen, setModalOpen] = useState(false);
 
-    function load() { }
+    const openModal = () => {
+        setModalOpen(true);
+    };
 
-    function withdraw() { }
+    const closeModal = () => {
+        setModalOpen(false);
+    };
+
+    async function load() {
+        await axios.get(`${url}/users/transaction?idUser=${id}`).then((response) => {
+            const data = response.data
+            setBalance(data.balance)
+            setHistoric(data.transactions)
+        })
+    }
+
+    function withdraw() {
+        openModal()
+    }
 
     function openAdsSale() {
         navigate("/meus-anuncios?isSelected=sale")
@@ -39,6 +61,11 @@ export default function Wallet() {
 
     return (
         <>
+            <WithdrawModal
+                isOpen={modalOpen}
+                onClose={closeModal}
+                balance={balance}
+            />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
                 <h1>Minhas carteira</h1>
@@ -69,30 +96,33 @@ export default function Wallet() {
                             {
                                 historic.length > 0 ?
                                     historic.map((item, index) => (
-                                        <>
+                                        item.transactionType === "DEPOSIT" ?
+                                            <div key={index}>
+                                                <CardDeposit>
+                                                    <div>
+                                                        <p>Depósito</p>
+                                                        <span onClick={() => openAdsSale()}>Visualizar anúncios vendidos</span>
+                                                        <h3>Realizado em: {moment(item.createdAt).format("DD/MM/YYYY")}</h3>
+                                                    </div>
+                                                    <div>
+                                                        <h1>+ R$ {item.amount}</h1>
+                                                    </div>
+                                                </CardDeposit>
+                                            </div>
+                                            :
                                             <div key={index}>
                                                 <CardWithdraw>
                                                     <div>
                                                         <p>Saque</p>
                                                         <span>Conta bancária: 012210383-5</span>
-                                                        <h3>Realizado em: 10/05/2024</h3>
+                                                        <h3>Realizado em: {moment(item.createdAt).format("DD/MM/YYYY")}</h3>
                                                     </div>
                                                     <div>
-                                                        <h1>- R$ 200</h1>
+                                                        <h1>- {item.amount}</h1>
                                                     </div>
                                                 </CardWithdraw>
-                                                <CardDeposit>
-                                                    <div>
-                                                        <p>Depósito</p>
-                                                        <span onClick={() => openAdsSale()}>Visualizar anúncios vendidos</span>
-                                                        <h3>Realizado em: 10/05/2024</h3>
-                                                    </div>
-                                                    <div>
-                                                        <h1>+ R$ 200</h1>
-                                                    </div>
-                                                </CardDeposit>
                                             </div>
-                                        </>
+
                                     ))
                                     :
                                     <NoContent
