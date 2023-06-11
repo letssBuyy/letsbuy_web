@@ -32,14 +32,19 @@ export default function Navbar(props) {
     var showBackButton = props.showBackButton ? props.showBackButton : false
 
     const [userName, setUserName] = useState('');
+    const [userImageProfile, setUserImageProfile] = useState('');
     const { user, isAuthenticated, authlogout } = useContext(AuthContext);
+    const id = user.id;
     const [visible, setVisible] = useState(false);
-    
+
     let navigate = useNavigate();
 
     useEffect(() => {
         if (user !== null && user !== undefined) {
             setUserName(user.name)
+            if (user.profileImage) {
+                setUserImageProfile(user.profileImage)
+            }
         }
     }, [])
 
@@ -110,7 +115,7 @@ export default function Navbar(props) {
                                     <ContainerNavbarIsAuthenticated>
                                         <ContainerMyAccount onClick={() => navigate("/editar-perfil")}>
                                             <div>
-                                                <img src={ImageDefault} alt="Icone de perfil" />
+                                                <img src={userImageProfile ? userImageProfile : ImageDefault} alt="Icone de perfil" />
                                                 <div>
                                                     <p>{userName}</p>
                                                     <span>Minha conta</span>
