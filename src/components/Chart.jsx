@@ -10,6 +10,8 @@ const ChartComponent = ({ data }) => {
         type: 'bar',
         data: data,
         options: {
+          maintainAspectRatio: true,
+          responsive:true
           // Configurações de opções do gráfico, como título, legenda, etc.
         },
       });

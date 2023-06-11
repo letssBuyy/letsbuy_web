@@ -9,23 +9,23 @@ import iconPubli from "../assets/images/iconsPublicados.svg"
 import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Legendas, Limitador, Quantidades, SemiTitulo, TituloGrafico, Titulos } from "../assets/styles/dashboardStyle";
 
 
-    
+
 export default function Exibir() {
 
-    const chartData = {
-        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
-   datasets: [
-    {
-      label: 'Meses',
-      data: [20, 220, 180, 150, 200, 300],
-      backgroundColor: 'rgba(75, 192, 192, 0.6)', // Cor das barras
-      borderColor: 'rgba(75, 192, 192, 1)', // Cor da borda das barras
-      borderWidth: 1, // Largura da borda das barras
-    },
-  ],
-}
+  const chartData = {
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
+    datasets: [
+      {
+        label: 'Meses',
+        data: [20, 220, 180, 150, 200, 300],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Cor das barras
+        borderColor: 'rgba(75, 192, 192, 1)', // Cor da borda das barras
+        borderWidth: 1, // Largura da borda das barras
+      },
+    ],
+  }
 
-const chartDataLine = {
+  const chartDataLine = {
     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
     datasets: [
       {
@@ -58,61 +58,73 @@ const chartDataLine = {
     ],
   }
 
-    return (
-        <>
-            <Navbar type='basic'
-                isAuthenticated={false}
-                showBackButton={true}
-            />
-            <Limitador>
-                <CaixaKpi>
-                    <CaixasFilhas>
-                        <ImagensCaixinhas>
-                        <img src={iconPeopleDash} alt="icone" />
-                        </ImagensCaixinhas>
-                        <Titulos>
-                            <Quantidades>30</Quantidades>
-                            <Legendas>Usuários cadastrados</Legendas>
-                        </Titulos>
-                    </CaixasFilhas>
-                    <CaixasFilhas>
-                    <ImagensCaixinhas>
-                    <img src={iconFinalizados} alt="icone" />
-                        </ImagensCaixinhas>
-                        <Titulos>
-                            <Quantidades>30</Quantidades>
-                            <Legendas>Anúncios finalizados</Legendas>
-                        </Titulos>
-                    </CaixasFilhas>
-                    <CaixasFilhas>
-                    <ImagensCaixinhas>
-                            <img src={iconTaxa} alt="icone" />
-                        </ImagensCaixinhas>
-                        <Titulos>
-                            <Quantidades>30</Quantidades>
-                            <Legendas>Taxas arrecadadas</Legendas>
-                        </Titulos>
-                    </CaixasFilhas>
-                    <CaixasFilhas>
-                    <ImagensCaixinhas>
-                    <img src={iconPubli} alt="icone" />
-                        </ImagensCaixinhas>
-                        <Titulos>
-                            <Quantidades>30</Quantidades>
-                            <Legendas>Anúncios publicados</Legendas>
-                        </Titulos>
-                    </CaixasFilhas>
-                </CaixaKpi>
+  return (
+    <>
+      <Navbar type='basic'
+        isAuthenticated={false}
+        showBackButton={true}
+      />
+      <Limitador>
+        <CaixaKpi>
+          <CaixasFilhas>
+            <ImagensCaixinhas>
+              <img src={iconPeopleDash} alt="icone" />
+            </ImagensCaixinhas>
+            <Titulos>
+              <Quantidades>30</Quantidades>
+              <Legendas>Usuários cadastrados</Legendas>
+            </Titulos>
+          </CaixasFilhas>
+          <CaixasFilhas>
+            <ImagensCaixinhas>
+              <img src={iconFinalizados} alt="icone" />
+            </ImagensCaixinhas>
+            <Titulos>
+              <Quantidades>30</Quantidades>
+              <Legendas>Anúncios finalizados</Legendas>
+            </Titulos>
+          </CaixasFilhas>
+          <CaixasFilhas>
+            <ImagensCaixinhas>
+              <img src={iconTaxa} alt="icone" />
+            </ImagensCaixinhas>
+            <Titulos>
+              <Quantidades>30</Quantidades>
+              <Legendas>Taxas arrecadadas</Legendas>
+            </Titulos>
+          </CaixasFilhas>
+          <CaixasFilhas>
+            <ImagensCaixinhas>
+              <img src={iconPubli} alt="icone" />
+            </ImagensCaixinhas>
+            <Titulos>
+              <Quantidades>30</Quantidades>
+              <Legendas>Anúncios publicados</Legendas>
+            </Titulos>
+          </CaixasFilhas>
+        </CaixaKpi>
 
-                <CaixaGraficos>
-                    <Graficos>
-                    <LineChart data={chartDataLine}/>
-                    </Graficos>
-                    <Graficos>
-                    <ChartComponent data={chartData} />
-                    </Graficos>
-                </CaixaGraficos>
-            </Limitador>
-        </>
-    )
-    };
+        <CaixaGraficos>
+          <Graficos>
+            <TituloGrafico>
+              Vendas por categoria
+            </TituloGrafico>
+            <SemiTitulo>
+            Quantidade de vendas em cada categoria
+            </SemiTitulo>
+            <LineChart data={chartDataLine} />
+          </Graficos>
+          <Graficos>
+            <TituloGrafico>
+              Vendas por Mês
+            </TituloGrafico>
+            <SemiTitulo>
+            Quantidade de vendas em cada Mês
+            </SemiTitulo>
+            <ChartComponent data={chartData} />
+          </Graficos>
+        </CaixaGraficos>
+      </Limitador>
+    </>
+  )
+};

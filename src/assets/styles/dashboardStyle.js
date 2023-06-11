@@ -58,14 +58,14 @@ export const Legendas= styled.span`
 export const TituloGrafico= styled.span`
     font-size:30px;
     font-family:'${fonts.semiBold}';
-    margin: -5px 40px;
+    margin: -5px 35px;
     
 `
 
 export const SemiTitulo= styled.span`
-    font-size:10px;
+    font-size:15px;
     font-family:'${fonts.light}';
-    margin: -5px 40px;
+    margin: 0px 35px;
     
 `
 
@@ -75,7 +75,7 @@ export const Titulos = styled.div`
 `
 
 export const CaixaGraficos = styled.div`
-    height:50vh;
+    height:55vh;
     width:100%;
     display:flex;
     justify-content: space-between;
@@ -86,6 +86,7 @@ export const Graficos = styled.div`
     border-radius: 15px;
     width:44%;
     padding-top:2%;
+    display:grid;
 `
 
 export const Limitador = styled.div`
