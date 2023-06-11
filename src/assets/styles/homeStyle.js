@@ -113,7 +113,7 @@ export const Input = styled.div`
 `;
 
 export const CardsSection = styled.section`
-
+  margin-bottom: 50px;
 `
 
 export const CategorysSection = styled.section`

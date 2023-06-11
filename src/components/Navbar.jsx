@@ -34,7 +34,6 @@ export default function Navbar(props) {
     const [userName, setUserName] = useState('');
     const [userImageProfile, setUserImageProfile] = useState('');
     const { user, isAuthenticated, authlogout } = useContext(AuthContext);
-    const id = user.id;
     const [visible, setVisible] = useState(false);
 
     let navigate = useNavigate();
@@ -46,7 +45,7 @@ export default function Navbar(props) {
                 setUserImageProfile(user.profileImage)
             }
         }
-    }, [])
+    }, [user])
 
     switch (type) {
         case "basic":

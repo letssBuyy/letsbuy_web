@@ -56,7 +56,7 @@ export default function Home() {
         } else {
             urlcontent = `/searches/filter?title=${search}`
         }
-        
+
         await axios.get(`${url}${urlcontent}`, {
             "city": null,
             "priceMin": null,
@@ -75,24 +75,17 @@ export default function Home() {
         var urlcontent = ""
 
         if (idUser !== 0) {
-            urlcontent = `/searches/filter?idUser=${idUser}`
+            urlcontent = `/searches?idUser=${idUser}`
         } else {
-            urlcontent = "/searches/filter"
+            urlcontent = "/searches"
         }
-        
-        await axios.get(`${url}${urlcontent}`, {
-            "city": null,
-            "priceMin": null,
-            "priceMax": null,
-            "quality": null,
-            "category": null,
-            "color": null,
-            "filter": 1
-        }).then((response) => {
+
+        await axios.get(`${url}${urlcontent}`).then((response) => {
             const data = response.data.content
-            
+            console.log(data)
+
             const list1 = data.slice(0, 6)
-            const list2 = data.slice(6, 11) 
+            const list2 = data.slice(7, 12)
 
             setAdvertiseList1(list1)
             setAdvertiseList2(list2)
@@ -143,10 +136,17 @@ export default function Home() {
                     </IndexSection>
                     <CardsSection>
                         {
-                            advertiseList1.length >= 5 && advertiseList2.length >= 5  ?
+                            advertiseList1.length >= 6 ?
                                 <>
                                     <TitleSection>Produtos em destaque</TitleSection>
                                     <CarrouselCards items={advertiseList1} />
+                                </>
+                                :
+                                <></>
+                        }
+                        {
+                            advertiseList2.length >= 6 ?
+                                <>
                                     <CarrouselCards items={advertiseList2} />
                                 </>
                                 :

@@ -10,9 +10,12 @@ import {
     ContainerDivs,
     HeartIcon
 } from '../assets/styles/components/cardStyle';
+import { useNavigate } from 'react-router-dom';
+import { findByCategory } from "../utils/enums"
 
 export default function Card(props) {
     const [isHovering, setIsHovering] = useState(false);
+    let navigate = useNavigate();
 
     const handleMouseEnter = () => {
         setIsHovering(true);
@@ -26,18 +29,17 @@ export default function Card(props) {
         console.log("cliclou em curtir")
     }
 
-    function handleChangeSaller() {
-        console.log("cliclou no vendedor")
+    function handleChangeSeller() {
+        navigate(`/perfil/${props.idSeller}`)
     }
 
     function handleChangeCard() {
-        console.log("cliclou no card")
+        navigate(`/anuncio/${props.id}`)
     }
 
     return (
         <>
             <CardContainer
-                onClick={handleChangeCard}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 style={{
@@ -45,20 +47,20 @@ export default function Card(props) {
                     padding: props.padding ? props.padding : 0
                 }}
             >
-                <CardProfile>
+                <CardProfile onClick={handleChangeCard}>
                     <img src={props.image ? props.image : ImageDefault} alt={props.name ? props.name : ""} />
                 </CardProfile>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <ContainerDivs>
 
-                        <InfoAdvertise style={!isHovering ? { opacity: 1 } : { opacity: 0 }}>
+                        <InfoAdvertise style={!isHovering ? { opacity: 1 } : { opacity: 0 }} onClick={handleChangeCard}>
                             <h1>R${props.price ? props.price : ""}</h1>
                             <p>{props.name ? props.name : ""}</p>
-                            <span>{props.brand ? props.brand : ""}</span>
+                            <span>{props.brand ? findByCategory(props.brand) : ""}</span>
                         </InfoAdvertise>
 
                         <InfoSalle
-                            onClick={handleChangeSaller}
+                            onClick={handleChangeSeller}
                             style={!isHovering ? { opacity: 0 } : { opacity: 1 }}
                         >
                             <div>

@@ -76,13 +76,18 @@ export const InfoSalle = styled.div`
         height: 40px;
         border-radius: 40px;
         margin-right: 9px;
+        object-fit: cover;
     }
 
     h1 {
+        max-width: 110px;
         font-family: ${fonts.semiBold};
         font-size: 16px;
         color: ${colors.pink};
         margin-bottom: 3px;
+        white-space: nowrap; /* Evita que o texto quebre em várias linhas */
+        overflow: hidden; /* Oculta o texto que excede a largura */
+        text-overflow: ellipsis; /* Exibe as bolinhas no final do texto truncado */
     }
 
     p {
