@@ -60,6 +60,7 @@ export default function CarouselCards(props) {
                             sellerState={item.adversiments.userSellerLikeDto.state}
                             sellerImageProfile={item.adversiments.userSellerLikeDto.profileImage}
                             isSelectedHeart={item.adversiments.isLike}
+                            likeId={item.adversiments.likeId ? item.adversiments.likeId : undefined}
                         />
                     </Item>
                 ))}

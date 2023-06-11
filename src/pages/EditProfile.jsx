@@ -24,6 +24,7 @@ import { url } from "../utils/request";
 import { AuthContext } from "../utils/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import { errorAlert, successAlert } from '../utils/alerts';
+import Loading from "../components/Loading";
 
 export default function EditProfile() {
     const [profileImage, setProfileImage] = useState('');
@@ -50,16 +51,21 @@ export default function EditProfile() {
     const [showDateOfBirthError, setShowDateOfBirthError] = useState(false)
     const [showPhoneNumberError, setShowPhoneNumberError] = useState(false)
     const [showEmailError, setShowEmailError] = useState(false);
-    const [disabledAdressInputs, setDisableAdressInputs] = useState(true)
+    const [disabledAdressInputs, setDisableAdressInputs] = useState(true);
+
+    const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
     const { user, isAuthenticated } = useContext(AuthContext);
     const userID = user.id
 
+    const [file, setFile] = useState(null);
     function handleChangeProfileImage(event) {
-        const file = event.target.files[0];
+        const uploadedFile = event.target.files[0];
+        setFile(uploadedFile)
+
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(uploadedFile);
         reader.onload = () => {
             setProfileImage(reader.result);
         };
@@ -117,6 +123,7 @@ export default function EditProfile() {
         if (cep) {
             if (cep.length === 8) {
                 try {
+                    setLoading(true)
                     const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
                     if (!response.data.erro) {
                         const { logradouro, localidade, uf, bairro } = response.data;
@@ -128,6 +135,8 @@ export default function EditProfile() {
                     }
                 } catch (error) {
                     console.log('Erro ao obter o endereço:', error);
+                } finally {
+                    setLoading(false)
                 }
             }
         }
@@ -138,6 +147,7 @@ export default function EditProfile() {
 
         if (isValidFields) {
             try {
+                setLoading(true)
                 await axios.put(`${url}/users/${userID}`, {
                     name: name,
                     email: email,
@@ -145,6 +155,7 @@ export default function EditProfile() {
                     birthDate: dateOfBirth,
                     phoneNumber: phoneNumber,
                     cep: cep,
+                    city: city,
                     state: state,
                     neighborhood: neighborhood,
                     road: road,
@@ -162,31 +173,34 @@ export default function EditProfile() {
                 })
             } catch (error) {
                 errorAlert("Ocorreu um erro ao atualizar o perfil.")
+            } finally {
+                setLoading(false)
             }
         }
     }
 
     async function updateProfileImage() {
         const formData = new FormData();
-        formData.append('img', profileImage);
+        formData.append('img', file);
 
         try {
-            await axios.post(`${url}/images/user/${userID}`, formData, {
+            setLoading(true);
+            const response = await axios.post(`${url}/images/user/${userID}`, formData, {
                 headers: {
-                  'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data'
                 }
-              })
-            .then((response) => {
-                if (response.status === 200) {
-                    successAlert("Imagem atualizada com sucesso!")
-                } else {
-                    errorAlert("Ocorreu um erro ao atualizar a imagem.")
-                }
-            }).catch(() => {
-                errorAlert("Ocorreu um erro ao atualizar a imagem.")
-            })
+            });
+
+            if (response.status === 200) {
+                successAlert("Imagem atualizada com sucesso!");
+            } else {
+                errorAlert("Ocorreu um erro ao atualizar a imagem.");
+            }
         } catch (error) {
-            errorAlert("Ocorreu um erro ao atualizar a imagem.")
+            console.log(error);
+            errorAlert("Ocorreu um erro ao atualizar a imagem.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -233,31 +247,35 @@ export default function EditProfile() {
 
     async function load() {
         try {
+            setLoading(true)
             await axios.get(`${url}/users/${userID}`
             ).then((response) => {
-                const data = response.data
-                setProfileImage(data.profileImage)
-                setName(data.name)
-                setCpf(data.cpf)
-                setDateOfBirth(data.birthDate)
-                setPhoneNumber(data.phoneNumber)
+                const data = response.data;
 
-                setEmail(data.email)
-                const bank = data.bankAccount
-                setAccount(bank.accountNumber)
-                setAgency(bank.agencyNumber)
-                setBank(bank.bankNumber)
+                setProfileImage(data.profileImage ? data.profileImage : "");
+                setName(data.name ? data.name : '');
+                setCpf(data.cpf ? data.cpf : '');
+                setDateOfBirth(data.birthDate ? data.birthDate : "");
+                setPhoneNumber(data.phoneNumber ? data.phoneNumber : "");
+                setEmail(data.email ? data.email : "");
 
-                setCep(data.cep)
-                setState(data.state)
-                setCity(data.city)
-                setNeighborhood(data.neighborhood)
-                setRoad(data.road)
-                setComplement(data.complement)
-                setNumber(data.number)
+                const bank = data.bankAccount ? data.bankAccount : "";
+                setAccount(bank.accountNumber ? bank.accountNumber : "");
+                setAgency(bank.agencyNumber ? bank.agencyNumber : "");
+                setBank(bank.bankNumber ? bank.bankNumber : "");
+
+                setCep(data.cep ? data.cep : "");
+                setState(data.state ? data.state : "");
+                setCity(data.city ? data.city : "");
+                setNeighborhood(data.neighborhood ? data.neighborhood : "");
+                setRoad(data.road ? data.road : "");
+                setComplement(data.complement ? data.complement : "");
+                setNumber(data.number ? data.number : "");
             })
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -269,19 +287,25 @@ export default function EditProfile() {
         }
     }, [])
 
+    useEffect(() => {
+        if (file) {
+            updateProfileImage();
+        }
+    }, [file]);
+
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar type='basic' isAuthenticated={false} showBackButton={true} />
             <Container>
                 <Title>Editar perfil</Title>
-
                 <div>
                     <Accordion
                         header="Dados cadastrais"
                         content={
                             <>
                                 <ContainerInputs>
-                                    <ProfileImage>
+                                    <ProfileImage onChange={handleChangeProfileImage}>
                                         {
                                             profileImage !== '' ?
                                                 <div>
@@ -293,10 +317,9 @@ export default function EditProfile() {
                                                 </div>
                                         }
                                         <label htmlFor="imagem1"></label>
-                                        <input id="imagem1" type="file" onChange={handleChangeProfileImage} />
-                                        <h1 onChange={() => updateProfileImage()}>Alterar foto de perfil</h1>
+                                        <input id="imagem1" type="file" />
+                                        <h1>Alterar foto de perfil</h1>
                                     </ProfileImage>
-
                                     <div>
                                         <Label>Nome</Label>
                                         <InputContainer style={{ minWidth: '100%', height: '48px' }}>
@@ -524,7 +547,7 @@ export default function EditProfile() {
                         }
                     />
                 </div>
-                <ButtonUpdate onClick={() => update()}>Atualizar</ButtonUpdate>
+                <ButtonUpdate onClick={() => { update() }}>Atualizar</ButtonUpdate>
             </Container>
         </>
     )

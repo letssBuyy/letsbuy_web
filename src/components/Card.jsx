@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Heart from '../assets/images/icon-heart.svg';
 import HeartSelected from '../assets/images/icon-heart-selected.svg';
 import ImageDefault from '../assets/images/image-default.png';
@@ -11,11 +11,16 @@ import {
     HeartIcon
 } from '../assets/styles/components/cardStyle';
 import { useNavigate } from 'react-router-dom';
-import { findByCategory } from "../utils/enums"
+import { findByCategory } from "../utils/enums";
+import axios from "axios";
+import { url } from "../utils/request";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function Card(props) {
     const [isHovering, setIsHovering] = useState(false);
     let navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const userID = user.id;
 
     const handleMouseEnter = () => {
         setIsHovering(true);
@@ -25,8 +30,16 @@ export default function Card(props) {
         setIsHovering(false);
     };
 
-    function handleChangeHeart() {
-        console.log("cliclou em curtir")
+    async function handleChangeHeart() {
+        const isLiked = props.isSelectedHeart
+        const adversimentId = props.id
+        const likeId = props.likeId
+        
+        if(!isLiked) {
+            await axios.post(`${url}/adversiments/like/${userID}/${adversimentId}`)
+        } else {
+            await axios.delete(`${url}/adversiments/deslike/${likeId}`)
+        }
     }
 
     function handleChangeSeller() {
