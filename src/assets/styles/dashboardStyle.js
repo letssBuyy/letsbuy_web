@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { fonts } from '../../utils/fonts'
+import { colors } from "../../utils/colors"
 
 export const Container = styled.div`
     display: column;
@@ -50,7 +51,22 @@ export const Quantidades= styled.span`
 export const Legendas= styled.span`
     font-size:12px;
     font-family:'${fonts.regular}';
+    color: ${colors.blackGray};
 
+`
+
+export const TituloGrafico= styled.span`
+    font-size:30px;
+    font-family:'${fonts.semiBold}';
+    margin: -5px 40px;
+    
+`
+
+export const SemiTitulo= styled.span`
+    font-size:10px;
+    font-family:'${fonts.light}';
+    margin: -5px 40px;
+    
 `
 
 export const Titulos = styled.div`
@@ -59,7 +75,7 @@ export const Titulos = styled.div`
 `
 
 export const CaixaGraficos = styled.div`
-    height:55vh;
+    height:50vh;
     width:100%;
     display:flex;
     justify-content: space-between;
@@ -69,6 +85,7 @@ export const Graficos = styled.div`
     border:solid 2px #ECE8E5;
     border-radius: 15px;
     width:44%;
+    padding-top:2%;
 `
 
 export const Limitador = styled.div`
