@@ -308,3 +308,15 @@ export const RedirectPayment = styled.div`
         padding: 40px 20px 40px 20px;
     }
 `;
+
+export const PaymentMethod = styled.div`
+    div >div {
+        margin-bottom: 40px;
+    }
+
+    span {
+        font-family: ${fonts.medium} !important;
+        font-size: 14px !important;
+        color: ${colors.blackGray} !important;
+    }
+`;

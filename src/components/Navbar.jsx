@@ -112,7 +112,7 @@ export default function Navbar(props) {
                                             <div>
                                                 <img src={ImageDefault} alt="Icone de perfil" />
                                                 <div>
-                                                    <p>Lucas da Silva</p>
+                                                    <p>{userName}</p>
                                                     <span>Minha conta</span>
                                                 </div>
                                             </div>
