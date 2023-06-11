@@ -26,6 +26,7 @@ import axios from "axios";
 import { url } from "../utils/request";
 import { findByQuality, findByColor, findByCategory } from "../utils/enums";
 import Loading from "../components/Loading";
+import { formatCurrency } from "../utils/strings";
 
 export default function Advertise() {
     const [advertisementImages, setAdvertisementImages] = useState([
@@ -64,6 +65,7 @@ export default function Advertise() {
     const [sellerAdsSold, setSellerAdsSold] = useState('');
     const [sellerAdsForSale, setSellerAdsForSale] = useState('');
     const [loading, setLoading] = useState(false);
+    const [likeId, setLikeId] = useState('');
 
     let navigate = useNavigate();
     const { user } = useContext(AuthContext);
@@ -74,34 +76,41 @@ export default function Advertise() {
         try {
             setLoading(true)
             await axios.get(`${url}/adversiments/${id}/${idUser}`).then((response) => {
-                const data = response.data
-                setIdAdvertise(data.id)
-                setTitle(data.title)
-                setDescription(data.description)
-                setPrice(data.price)
+                const data = response.data[0]
                 setIsFavorite(data.isLike)
-                setCollor(findByColor(data.color))
-                setQuality(findByQuality(data.quality))
-                setCategory(findByCategory(data.category))
-                const seller = data.user
+                setLikeId(data.likeId)
+
+                const advertisement = data.adversiments
+                setIdAdvertise(advertisement.id)
+                setTitle(advertisement.title)
+                setDescription(advertisement.description)
+                setPrice(advertisement.price)
+                
+                setCollor(findByColor(advertisement.color))
+                setQuality(findByQuality(advertisement.quality))
+                setCategory(findByCategory(advertisement.category))
+                
+                const seller = advertisement.userSellerLikeDto
                 setSellerName(seller.name)
                 setSellerId(seller.id)
                 setSellerImage(seller.profileImage)
                 setSellerCity(seller.city)
                 setSellerState(seller.state)
-                setSellerStartDate(seller.registrationDate)
                 setSellerAdsSold(seller.quantityTotalSolded)
                 setSellerAdsForSale(seller.quantityTotalActive)
 
                 const messageDate = moment(data.postDate);
                 setDateOfPublish(messageDate.format("DD/MM/YYYY"))
 
-                if (data.images != null && data.images.length > 0) {
+                const sellerStartDate = moment(seller.registrationDate);
+                setSellerStartDate(sellerStartDate.format("DD/MM/YYYY"))
+
+                if (advertisement.images != null && advertisement.images.length > 0) {
                     const images = []
-                    data.images.map((image) => {
+                    advertisement.images.map((image) => {
                         images.push({
-                            original: image,
-                            thumbnail: image,
+                            original: image.url,
+                            thumbnail: image.url,
                         })
                     })
 
@@ -133,6 +142,14 @@ export default function Advertise() {
         navigate(`/chat?openChatWithSeller=${sellerId}&openModalPropose=true`)
     }
 
+    async function handleChangeHeart() {   
+        if(!isFavorite) {
+            await axios.post(`${url}/adversiments/like/${idUser}/${id}`)
+        } else {
+            await axios.delete(`${url}/adversiments/deslike/${likeId}`)
+        }
+    }
+
     useEffect(() => {
         load()
     }, [])
@@ -156,7 +173,7 @@ export default function Advertise() {
                         <div>
                             <div>
                                 <h1>{title}</h1>
-                                <button>
+                                <button onClick={() => handleChangeHeart()}>
                                     {
                                         isFavorite ?
                                             <img src={heartSelected} alt="Curtido" />
@@ -169,7 +186,7 @@ export default function Advertise() {
                             <span>Publicado em {dateOfPublish}</span>
                         </div>
                         <div>
-                            <h2>R$ {price}</h2>
+                            <h2>{formatCurrency(price)}</h2>
                         </div>
                         <div>
                             <h3>Descrição</h3>
@@ -211,7 +228,7 @@ export default function Advertise() {
                     <SaleInformation>
                         <div>
                             <div onClick={() => sendToSellerProfile()}>
-                                <img src={sellerImage} alt="Imagem de perfil do usuário" />
+                                <img src={sellerImage ? sellerImage : ImageDefault} alt="Imagem de perfil do usuário" />
                                 <div>
                                     <p>{sellerName}</p>
                                     {

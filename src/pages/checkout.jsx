@@ -28,6 +28,8 @@ import {
 import InputMask from 'react-input-mask';
 import Loading from "../components/Loading";
 import { findByCategory } from "../utils/enums";
+import { formatCurrency } from "../utils/strings"
+import moment from "moment";
 
 export default function Checkout() {
     let navigate = useNavigate();
@@ -116,16 +118,17 @@ export default function Checkout() {
 
             //Preenche os campos do vendedor e do anuncio
             await axios.get(`${url}/adversiments/${id}/${userId}`).then((response) => {
-                const data = response.data
+                const data = response.data[0].adversiments
+                console.log(data)
                 setAdvertiseName(data.title)
                 setAdvertisePrice(data.price)
                 setAdvertiseCategory(findByCategory(data.category))
                 if (data.images != null && data.images.length > 0) {
-                    setAdvertiseImage(data.images[0])
+                    setAdvertiseImage(data.images[0].url)
                 }
-                const seller = data.user
-                setSellerName(seller.name)
-                setSellerCpf(seller.cpf)
+                const seller = data.userSellerLikeDto
+                setSellerName(seller.name ? seller.name : '')
+                setSellerCpf(seller.cpf ? seller.cpf : '')
             }).catch((e) => {
                 console.log(e);
             });
@@ -139,25 +142,33 @@ export default function Checkout() {
 
     function validateFields() {
         let isValidateAllFields = true;
-
-        if (cardNumber.trim().length !== 16) {
+        
+        if (cardNumber.length !== 19) {
             setShowCardNumberError(true);
             isValidateAllFields = false;
+        } else {
+            setShowCardNumberError(false)
         }
 
-        if (holderName.trim().length === 0) {
+        if (holderName.length <= 0) {
             setShowHolderNameError(true);
             isValidateAllFields = false;
+        } else {
+            setShowHolderNameError(false)
         }
 
-        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expirationDate)) {
+        if (expirationDate.length !== 10) {
             setShowExpirationDateError(true);
             isValidateAllFields = false;
+        } else {
+            setShowExpirationDateError(false)
         }
 
-        if (securityCode.trim().length !== 3) {
+        if (securityCode.length !== 3) {
             setShowSecurityCodeError(true);
             isValidateAllFields = false;
+        } else {
+            setShowSecurityCodeError(false);
         }
 
         return isValidateAllFields;
@@ -281,7 +292,7 @@ export default function Checkout() {
                                             type="text"
                                             placeholder="0000"
                                             value={expirationDate}
-                                            mask="99/99"
+                                            mask="99/99/9999"
                                             onChange={(e) => setExpirationDate(e.target.value)}
                                         />
                                     </div>
@@ -326,7 +337,7 @@ export default function Checkout() {
                         </div>
                         <div>
                             <span>Total a pagar:</span>
-                            <span>R${advertisePrice}</span>
+                            <span>{formatCurrency(advertisePrice)}</span>
                         </div>
                     </AdvertiseCard>
                 </div>

@@ -15,6 +15,7 @@ import { findByCategory } from "../utils/enums";
 import axios from "axios";
 import { url } from "../utils/request";
 import { AuthContext } from "../utils/AuthContext";
+import { formatCurrency } from "../utils/strings";
 
 export default function Card(props) {
     const [isHovering, setIsHovering] = useState(false);
@@ -67,7 +68,7 @@ export default function Card(props) {
                     <ContainerDivs>
 
                         <InfoAdvertise style={!isHovering ? { opacity: 1 } : { opacity: 0 }} onClick={handleChangeCard}>
-                            <h1>R${props.price ? props.price : ""}</h1>
+                            <h1>{props.price ? formatCurrency(props.price) : ""}</h1>
                             <p>{props.name ? props.name : ""}</p>
                             <span>{props.brand ? findByCategory(props.brand) : ""}</span>
                         </InfoAdvertise>

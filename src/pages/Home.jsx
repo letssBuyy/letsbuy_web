@@ -82,11 +82,8 @@ export default function Home() {
 
         await axios.get(`${url}${urlcontent}`).then((response) => {
             const data = response.data.content
-            console.log(data)
-
             const list1 = data.slice(0, 6)
             const list2 = data.slice(7, 12)
-
             setAdvertiseList1(list1)
             setAdvertiseList2(list2)
         })
@@ -94,7 +91,7 @@ export default function Home() {
 
     useEffect(() => {
         load()
-    }, [])
+    }, [user])
 
     return (
         <>
