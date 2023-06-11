@@ -75,6 +75,14 @@ export const ContainerContent = styled.div`
     }
 `;
 
+export const DivImagePagSeguro = styled.div`
+    width: 100%;
+    img {
+        width: 100%;
+        height: auto;
+    }
+`;
+
 export const InfoAd = styled.div`
     border: 1px solid ${colors.gray};
     border-radius: 10px;
