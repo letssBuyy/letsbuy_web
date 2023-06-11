@@ -10,15 +10,10 @@ import {
     InfoAd,
     TipsOfSecurity,
     SaleInformation,
-    BoxNewFinders
+    BoxNewFinders,
+    DivImagePagSeguro
 } from "../assets/styles/detailsAdStyle";
 import ImageDefault from '../assets/images/image-default.png';
-import pix from "../assets/images/payment/icon-pix.svg";
-import elo from "../assets/images/payment/icon-elo.svg";
-import mastercard from "../assets/images/payment/icon-masterCard.svg";
-import mercadopago from "../assets/images/payment/icon-mercadopago.svg";
-import paypal from "../assets/images/payment/icon-paypal.svg";
-import visa from "../assets/images/payment/icon-visa.svg";
 import shield from "../assets/images/icon-shield.svg";
 import Verify from '../assets/images/icon-verify.svg';
 import chat from "../assets/images/icon-chat-pink.svg";
@@ -123,7 +118,7 @@ export default function Advertise() {
     }
 
     function sendToChat() {
-        navigate(`/chat?openChatWithSeller=${sellerId}`)
+        navigate(`/chat?openChatWithSeller=${sellerId}&idAdvertise=${idAdvertise}`)
     }
 
     function sendToSellerProfile() {
@@ -144,7 +139,7 @@ export default function Advertise() {
 
     return (
         <>
-        <Loading isEnabled={loading}/>
+            <Loading isEnabled={loading} />
             <Navbar type='principal' />
             <Container>
                 <ContainerImages>
@@ -164,9 +159,9 @@ export default function Advertise() {
                                 <button>
                                     {
                                         isFavorite ?
-                                            <img src={heartSelected} />
+                                            <img src={heartSelected} alt="Curtido" />
                                             :
-                                            <img src={heart} />
+                                            <img src={heart} alt="Não curtido" />
                                     }
 
                                 </button>
@@ -202,14 +197,11 @@ export default function Advertise() {
                         </div>
                         <div>
                             <h3>Meios de pagamento</h3>
-                            <div>
-                                <img src={pix} />
-                                <img src={mercadopago} />
-                                <img src={paypal} />
-                                <img src={visa} />
-                                <img src={mastercard} />
-                                <img src={elo} />
-                            </div>
+                            <DivImagePagSeguro>
+                                <img src="//assets.pagseguro.com.br/ps-integration-assets/banners/pagamento/avista_estatico_550_70.gif"
+                                    alt="Logotipos de meios de pagamento do PagSeguro"
+                                />
+                            </DivImagePagSeguro>
                         </div>
                     </InfoAd>
                     <TipsOfSecurity>
