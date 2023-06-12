@@ -41,3 +41,13 @@ export function formatCurrency(value) {
     // Retorna o valor formatado
     return `R$ ${parts.join(',')}`;
 }
+
+export function removeCurrencyFormatting(value) {
+    // Remove todos os caracteres não numéricos da string
+    const numericValue = value.replace(/[^\d]/g, '');
+  
+    // Obtém somente a parte inteira do valor
+    const integerValue = parseFloat(numericValue, 10);
+  
+    return integerValue / 100;
+  }

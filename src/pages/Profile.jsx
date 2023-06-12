@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from '../components/Navbar';
 import Verify from '../assets/images/icon-verify.svg';
 import ImageDefault from '../assets/images/image-default.png';
@@ -12,13 +12,15 @@ import {
 } from '../assets/styles/profileStyle';
 import Card from "../components/Card";
 import { useParams } from "react-router-dom";
-import { findByCategory } from "../utils/enums";
 import { url } from "../utils/request";
 import axios from "axios";
 import NoContent from "../components/NoContent";
 import Loading from "../components/Loading";
+import moment from "moment";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function Profile() {
+    const [idseller, setIdSeller] = useState('')
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
@@ -27,22 +29,32 @@ export default function Profile() {
     const [cardList, setCardList] = useState([]);
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        load()
-    }, [])
+    const { user } = useContext(AuthContext);
+    const userId = user.id;
 
     async function load() {
         try {
             setLoading(true)
-            await axios.get(`${url}/users/${id}`).then((response) => {
+
+            var urlcontent = ""
+
+            if (userId !== 0) {
+                urlcontent = `/users?sellerId=${id}&buyerId=${userId}`
+            } else {
+                urlcontent = `/users?sellerId=${id}`
+            }
+
+            await axios.get(`${url}${urlcontent}`).then((response) => {
                 const data = response.data
-                setName(data.name)
-                setCity(data.city)
-                setState(data.state)
-                setSubscribeSince(data.registrationDate)
-                setProfileIcon(data.profileImage);
-                setCardList(data.adversiments)
+                console.log(data)
+                setIdSeller(data.id ? data.id : '')
+                setName(data.name ? data.name : '')
+                setCity(data.city ? data.city : '')
+                setState(data.state ? data.state : '')
+                const messageDate = moment(data.registrationDate ? data.registrationDate : '');
+                setSubscribeSince(messageDate.format("DD/MM/YYYY"))
+                setProfileIcon(data.profileImage ? data.profileImage : '');
+                setCardList(data.adversiments ? data.adversiments : '');
             }).catch((e) => {
                 console.log(e)
             })
@@ -52,6 +64,10 @@ export default function Profile() {
             setLoading(false)
         }
     }
+
+    useEffect(() => {
+        load()
+    }, [])
 
     return (
         <>
@@ -68,7 +84,12 @@ export default function Profile() {
                             <img src={Verify} alt="Vendedor verificado" />
                             <span>Vendedor verificado</span>
                         </div>
-                        <span>{city}, {state} | na LetsBuy desde {subscribeSince}</span>
+                        {
+                            city && state ?
+                                <span>{city}, {state} | na LetsBuy desde {subscribeSince}</span>
+                                :
+                                <span>Na LetsBuy desde {subscribeSince}</span>
+                        }
                     </BoxText>
                 </InfoUser>
                 <ContainerAdvertise>
@@ -78,16 +99,18 @@ export default function Profile() {
                             cardList.map((card, index) => (
                                 <Card
                                     key={index}
-                                    image={ImageDefault}
+                                    id={card && card.id ? card.id : ''}
+                                    idSeller={idseller}
+                                    image={card.images && card.images.length > 0 ? card.images[0].url : null}
                                     price={card.price}
                                     name={card.title}
-                                    isSelectedHeart={card.isLike}
-                                    brand={findByCategory(card.category)}
-                                    sellerName={card.user.name}
-                                    sellerCity={card.user.city}
-                                    sellerState={card.user.state}
-                                    sellerImageProfile={card.user.profileImage}
-                                    margin={'5px'}
+                                    brand={card.category}
+                                    sellerName={name}
+                                    sellerCity={city}
+                                    sellerState={state}
+                                    sellerImageProfile={profileIcon}
+                                    isSelectedHeart={card && card.isLike}
+                                    likeId={card && card.likeId ? card.likeId : ''}
                                 />
                             ))
                             :

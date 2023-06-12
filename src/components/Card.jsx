@@ -37,9 +37,17 @@ export default function Card(props) {
         const likeId = props.likeId
         
         if(!isLiked) {
-            await axios.post(`${url}/adversiments/like/${userID}/${adversimentId}`)
+            await axios.post(`${url}/adversiments/like/${userID}/${adversimentId}`).then(() => {
+
+            }).catch((e) => {
+                console.log(e)
+            })
         } else {
-            await axios.delete(`${url}/adversiments/deslike/${likeId}`)
+            await axios.delete(`${url}/adversiments/deslike/${likeId}`).then(() => {
+
+            }).catch((e) => {
+                console.log(e)
+            })
         }
     }
 

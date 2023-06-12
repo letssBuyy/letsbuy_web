@@ -16,6 +16,7 @@ import { url } from "../utils/request";
 import axios from "axios";
 import moment from "moment";
 import WithdrawModal from "../components/WithdrawModal";
+import { formatCurrency } from "../utils/strings";
 
 export default function Wallet() {
     const { user, isAuthenticated } = useContext(AuthContext);
@@ -24,7 +25,7 @@ export default function Wallet() {
 
     const [balance, setBalance] = useState(0);
     const [showBalance, setShowBalance] = useState(false);
-    const [historic, setHistoric] = useState([1]);
+    const [historic, setHistoric] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
 
     const openModal = () => {
@@ -36,10 +37,10 @@ export default function Wallet() {
     };
 
     async function load() {
-        await axios.get(`${url}/users/transaction?idUser=${id}`).then((response) => {
+        await axios.get(`${url}/users/transaction/${id}`).then((response) => {
             const data = response.data
-            setBalance(data.balance)
-            setHistoric(data.transactions)
+            setBalance(data.balance ? data.balance : '')
+            setHistoric(data.transactions ? data.transactions : [])
         })
     }
 
@@ -65,6 +66,7 @@ export default function Wallet() {
                 isOpen={modalOpen}
                 onClose={closeModal}
                 balance={balance}
+                userId={id}
             />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
@@ -72,7 +74,7 @@ export default function Wallet() {
                 <div>
                     <ContainerBalance>
                         <div>
-                            <p>R$ {showBalance ? balance : "••••"}</p>
+                            <p>{showBalance ? formatCurrency(balance) : "R$ ••••"}</p>
                             {
                                 showBalance ?
                                     <img
@@ -92,20 +94,21 @@ export default function Wallet() {
                     </ContainerBalance>
                     <ContainerHistoric>
                         <p>Histórico</p>
+
                         <div>
                             {
-                                historic.length > 0 ?
+                                historic && historic.length > 0 ?
                                     historic.map((item, index) => (
                                         item.transactionType === "DEPOSIT" ?
                                             <div key={index}>
                                                 <CardDeposit>
                                                     <div>
                                                         <p>Depósito</p>
-                                                        <span onClick={() => openAdsSale()}>Visualizar anúncios vendidos</span>
+                                                        <span style={{ cursor: 'pointer' }} onClick={() => openAdsSale()}>Visualizar anúncios vendidos</span>
                                                         <h3>Realizado em: {moment(item.createdAt).format("DD/MM/YYYY")}</h3>
                                                     </div>
                                                     <div>
-                                                        <h1>+ R$ {item.amount}</h1>
+                                                        <h1>+ {formatCurrency(item.amount)}</h1>
                                                     </div>
                                                 </CardDeposit>
                                             </div>
@@ -118,11 +121,10 @@ export default function Wallet() {
                                                         <h3>Realizado em: {moment(item.createdAt).format("DD/MM/YYYY")}</h3>
                                                     </div>
                                                     <div>
-                                                        <h1>- {item.amount}</h1>
+                                                        <h1>- {formatCurrency(item.amount)}</h1>
                                                     </div>
                                                 </CardWithdraw>
                                             </div>
-
                                     ))
                                     :
                                     <NoContent

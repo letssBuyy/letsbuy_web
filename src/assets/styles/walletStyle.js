@@ -84,7 +84,7 @@ export const CardDeposit = styled.div`
     border: 1px solid ${colors.gray};
     border-radius: 10px;
     padding: 18px 45px;
-    margin: 30px 0;
+    margin: 15px 0;
 
     div:first-child {
         display: flex;
@@ -156,6 +156,7 @@ export const CardWithdraw = styled.div`
     border: 1px solid ${colors.gray};
     border-radius: 10px;
     padding: 18px 45px;
+    margin: 15px 0;
 
     div:first-child {
         display: flex;

@@ -52,20 +52,12 @@ export default function Home() {
         var urlcontent = ""
 
         if (idUser !== 0) {
-            urlcontent = `/searches/filter?title=${search}&idUser=${idUser}`
+            urlcontent = `/searches?title=${search}&idUser=${idUser}&page=0&size=30`
         } else {
-            urlcontent = `/searches/filter?title=${search}`
+            urlcontent = `/searches?title=${search}&page=0&size=30`
         }
 
-        await axios.get(`${url}${urlcontent}`, {
-            "city": null,
-            "priceMin": null,
-            "priceMax": null,
-            "quality": null,
-            "category": null,
-            "color": null,
-            "filter": 1
-        }).then((response) => {
+        await axios.get(`${url}${urlcontent}`).then((response) => {
             const data = response.data.content
             setContentResult(data)
         })
@@ -112,9 +104,9 @@ export default function Home() {
                                 </Input>
                                 <ResultSearch style={showResult ? { display: 'flex' } : { display: 'none' }}>
                                     {
-                                        contentResult.length > 0 ?
+                                        contentResult && contentResult.length > 0 ?
                                             contentResult.map((item, index) => (
-                                                <div key={index} onClick={() => { navigate(`/buscar-anuncios?resultSearch=${item.title}`) }}>
+                                                <div key={index} onClick={() => { navigate(`/buscar-anuncios?resultSearch=${item.adversiments.title}`) }}>
                                                     <p>{item.adversiments.title}</p>
                                                 </div>
                                             ))
@@ -133,7 +125,7 @@ export default function Home() {
                     </IndexSection>
                     <CardsSection>
                         {
-                            advertiseList1.length >= 6 ?
+                            advertiseList1 && advertiseList1.length >= 6 ?
                                 <>
                                     <TitleSection>Produtos em destaque</TitleSection>
                                     <CarrouselCards items={advertiseList1} />
@@ -142,7 +134,7 @@ export default function Home() {
                                 <></>
                         }
                         {
-                            advertiseList2.length >= 6 ?
+                            advertiseList2 && advertiseList2.length >= 6 ?
                                 <>
                                     <CarrouselCards items={advertiseList2} />
                                 </>

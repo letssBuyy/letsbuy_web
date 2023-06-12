@@ -49,18 +49,18 @@ export default function CarouselCards(props) {
                     <Item key={index}>
                         <Card
                             key={index}
-                            id={item.adversiments.id}
-                            idSeller={item.adversiments.userSellerLikeDto.id}
-                            image={item.adversiments.images && item.adversiments.images.length > 0 ? item.adversiments.images[0].url : null}
-                            price={item.adversiments.price}
-                            name={item.adversiments.title}
-                            brand={item.adversiments.category}
-                            sellerName={item.adversiments.userSellerLikeDto.name}
-                            sellerCity={item.adversiments.userSellerLikeDto.city}
-                            sellerState={item.adversiments.userSellerLikeDto.state}
-                            sellerImageProfile={item.adversiments.userSellerLikeDto.profileImage}
-                            isSelectedHeart={item.adversiments.isLike}
-                            likeId={item.adversiments.likeId ? item.adversiments.likeId : undefined}
+                            id={item.adversiments && item.adversiments.id ? item.adversiments.id : ''}
+                            idSeller={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.id : ''}
+                            image={item.adversiments && item.adversiments.images && item.adversiments.images.length > 0 ? item.adversiments.images[0].url : null}
+                            price={item.adversiments && item.adversiments.price}
+                            name={item.adversiments && item.adversiments.title}
+                            brand={item.adversiments && item.adversiments.category}
+                            sellerName={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.name : ''}
+                            sellerCity={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.city : ''}
+                            sellerState={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.state : ''}
+                            sellerImageProfile={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.profileImage : ''}
+                            isSelectedHeart={item.adversiments && item.adversiments.isLike}
+                            likeId={item.adversiments && item.adversiments.likeId ? item.adversiments.likeId : undefined}
                         />
                     </Item>
                 ))}

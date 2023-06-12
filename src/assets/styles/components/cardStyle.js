@@ -81,10 +81,10 @@ export const InfoSalle = styled.div`
 
     h1 {
         max-width: 110px;
+        height: 20px;
         font-family: ${fonts.semiBold};
         font-size: 16px;
         color: ${colors.pink};
-        margin-bottom: 3px;
         white-space: nowrap; /* Evita que o texto quebre em várias linhas */
         overflow: hidden; /* Oculta o texto que excede a largura */
         text-overflow: ellipsis; /* Exibe as bolinhas no final do texto truncado */

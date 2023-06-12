@@ -29,6 +29,7 @@ import axios from "axios";
 import { url } from "../utils/request";
 import { successAlert, errorAlert } from "../utils/alerts";
 import Loading from "../components/Loading";
+import { removeCurrencyFormatting } from "../utils/strings";
 
 export default function PublishAd() {
     const [title, setTitle] = useState('');
@@ -55,8 +56,11 @@ export default function PublishAd() {
     const { user, isAuthenticated } = useContext(AuthContext);
     const idUser = user.id;
 
+    const [img1, setImg1] = useState(null);
     function handleImageOneChange(event) {
         const file = event.target.files[0];
+        setImg1(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -64,8 +68,11 @@ export default function PublishAd() {
         };
     }
 
+    const [img2, setImg2] = useState(null);
     function handleImageTwoChange(event) {
         const file = event.target.files[0];
+        setImg2(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -73,8 +80,11 @@ export default function PublishAd() {
         };
     }
 
+    const [img3, setImg3] = useState(null);
     function handleImageThreeChange(event) {
         const file = event.target.files[0];
+        setImg3(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -82,15 +92,18 @@ export default function PublishAd() {
         };
     }
 
+    const [img4, setImg4] = useState(null);
     function handleImageFourChange(event) {
         const file = event.target.files[0];
+        setImg4(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
             setImageFour(reader.result);
         };
     }
-
+    
     async function registerAd() {
         try {
             setLoading(true)
@@ -102,7 +115,7 @@ export default function PublishAd() {
                     userId: idUser,
                     title: title,
                     description: description,
-                    price: price,
+                    price: removeCurrencyFormatting(price),
                     category: category,
                     quality: quality,
                     color: color
@@ -126,10 +139,10 @@ export default function PublishAd() {
     async function uploadImages(idAdvertise) {
         const formData = new FormData();
 
-        formData.append('img1', imageOne);
-        formData.append('img2', imageTwo);
-        formData.append('img3', imageThree);
-        formData.append('img4', imageFour);
+        formData.append('img1', img1);
+        formData.append('img2', img2);
+        formData.append('img3', img3);
+        formData.append('img4', img4);
 
         await axios.post(`${url}/images/adversiment/${idAdvertise}`, formData, {
             headers: {

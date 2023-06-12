@@ -17,6 +17,7 @@ import Loading from "./Loading";
 import axios from "axios";
 import { url } from "../utils/request";
 import { successAlert, errorAlert } from "../utils/alerts";
+import { removeCurrencyFormatting } from "../utils/strings";
 
 export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
     const [price, setPrice] = useState('');
@@ -28,12 +29,15 @@ export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
     };
 
     async function withdraw() {
-        if (price > 0 && price > balance && userId) {
+        console.log(removeCurrencyFormatting(price) > 0)
+        console.log(balance > removeCurrencyFormatting(price))
+        console.log(userId)
+        if (removeCurrencyFormatting(price) > 0 && balance > removeCurrencyFormatting(price) && userId) {
             try {
                 setLoading(true)
-                await axios.patch(`${url}/transaction`, {
+                await axios.patch(`${url}/users/transaction`, {
                     userId: userId,
-                    amount: price,
+                    amount: removeCurrencyFormatting(price),
                     transactionType: "WITHDRAW"
                 }).then((response) => {
                     if (response.status === 200) {
@@ -48,6 +52,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
                 errorAlert("Ocorreu um erro ao realizar o saque.")
             } finally {
                 setLoading(false)
+                closeModal()
             }
         } else {
             setShowPriceError(true)

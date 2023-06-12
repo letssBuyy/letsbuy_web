@@ -152,7 +152,7 @@ export default function Advertise() {
 
     useEffect(() => {
         load()
-    }, [])
+    }, [user])
 
     return (
         <>
