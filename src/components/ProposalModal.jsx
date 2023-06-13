@@ -18,6 +18,8 @@ import Loading from "./Loading";
 import axios from "axios";
 import { url } from "../utils/request";
 import { successAlert, errorAlert } from "../utils/alerts";
+import ImageDefault from "../assets/images/image-default.png";
+import { formatCurrency, removeCurrencyFormatting } from "../utils/strings";
 
 export default function ProposalModal({ isOpen, onClose, userId, advertise, idChat }) {
     const [price, setPrice] = useState('');
@@ -29,18 +31,20 @@ export default function ProposalModal({ isOpen, onClose, userId, advertise, idCh
     };
 
     async function proposal() {
-        if (price > 0 && price > advertise.price && userId) {
+        if (removeCurrencyFormatting(price) > 0 && userId) {
             try {
                 setLoading(true)
-                await axios.patch(`${url}/messages/proposal`, {
+                await axios.post(`${url}/messages/proposal`, {
                     idChat: idChat,
                     idUser: userId,
-                    amount: price
+                    amount: removeCurrencyFormatting(price)
                 }).then((response) => {
-                    if (response.status === 200) {
+                    if (response.status === 200 || response.status === 201) {
+                        closeModal()
                         successAlert("Proposta enviada com sucesso!")
                     } else {
                         errorAlert("Ocorreu um erro ao realizar a proposta.")
+                        closeModal()
                     }
                 }).catch(() => {
                     errorAlert("Ocorreu um erro ao realizar a proposta.")
@@ -64,10 +68,10 @@ export default function ProposalModal({ isOpen, onClose, userId, advertise, idCh
                     <ModalContent>
                         <Title>Fazer uma proposta</Title>
                         <BoxProposal>
-                            <img src={advertise.image} alt="Anúncio para proposta"/>
+                            <img src={advertise.image ? advertise.image : ImageDefault} alt="Anúncio para proposta"/>
                             <div>
                                 <p>{advertise.title}</p>
-                                <h1>R$ {advertise.price}</h1>
+                                <h1>{formatCurrency(advertise.price)}</h1>
                             </div>
                         </BoxProposal>
                         <div>

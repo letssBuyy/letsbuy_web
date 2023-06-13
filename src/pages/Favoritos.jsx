@@ -14,7 +14,7 @@ import NoContent from "../components/NoContent";
 export default function Favoritos() {
     const [cardList, setCardList] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const userId = user.id
 
     let navigate = useNavigate();
@@ -37,7 +37,8 @@ export default function Favoritos() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/")
         } else {
             load()

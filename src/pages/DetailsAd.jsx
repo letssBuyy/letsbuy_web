@@ -85,11 +85,11 @@ export default function Advertise() {
                 setTitle(advertisement.title)
                 setDescription(advertisement.description)
                 setPrice(advertisement.price)
-                
+
                 setCollor(findByColor(advertisement.color))
                 setQuality(findByQuality(advertisement.quality))
                 setCategory(findByCategory(advertisement.category))
-                
+
                 const seller = advertisement.userSellerLikeDto
                 setSellerName(seller.name)
                 setSellerId(seller.id)
@@ -139,11 +139,11 @@ export default function Advertise() {
     }
 
     function sendProposal() {
-        navigate(`/chat?openChatWithSeller=${sellerId}&openModalPropose=true`)
+        navigate(`/chat?openChatWithSeller=${sellerId}&idAdvertise=${idAdvertise}&openModalPropose=true`)
     }
 
-    async function handleChangeHeart() {   
-        if(!isFavorite) {
+    async function handleChangeHeart() {
+        if (!isFavorite) {
             await axios.post(`${url}/adversiments/like/${idUser}/${id}`)
         } else {
             await axios.delete(`${url}/adversiments/deslike/${likeId}`)
@@ -208,10 +208,18 @@ export default function Advertise() {
                                 <p>{collor}</p>
                             </div>
                         </BoxNewFinders>
-                        <div>
-                            <button onClick={() => buyAdvertise()}>Comprar</button>
-                            <button onClick={() => sendProposal()}>Enviar proposta</button>
-                        </div>
+                        {
+                            sellerId != idUser ?
+                                <div>
+                                    <button onClick={() => buyAdvertise()}>Comprar</button>
+                                    <button onClick={() => sendProposal()}>Enviar proposta</button>
+                                </div>
+                                :
+                                <div>
+                                    <button disabled={true} onClick={() => buyAdvertise()}>Comprar</button>
+                                    <button disabled={true} onClick={() => sendProposal()}>Enviar proposta</button>
+                                </div>
+                        }
                         <div>
                             <h3>Meios de pagamento</h3>
                             <DivImagePagSeguro>
@@ -222,7 +230,7 @@ export default function Advertise() {
                         </div>
                     </InfoAd>
                     <TipsOfSecurity>
-                        <img src={shield} />
+                        <img src={shield} alt="Dicas de segurança" />
                         <p>para proteger sua compra nunca transfira dinheiro ou se comunique fora do site ou aplicativo. <span>mais dicas de segurança</span></p>
                     </TipsOfSecurity>
                     <SaleInformation>
@@ -242,10 +250,15 @@ export default function Advertise() {
                                 <img src={Verify} alt="Usuário verificado" />
                             </div>
                             <div>
-                                <button onClick={() => sendToChat()}>
-                                    Conversar
-                                    <img src={chat} alt="Conversar com o vendedor" />
-                                </button>
+                                {
+                                    sellerId != idUser ?
+                                        <button onClick={() => sendToChat()}>
+                                            Conversar
+                                            <img src={chat} alt="Conversar com o vendedor" />
+                                        </button>
+                                        :
+                                        <></>
+                                }
                             </div>
                         </div>
                         <div>

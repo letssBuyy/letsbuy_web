@@ -31,21 +31,24 @@ export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState('');
     const [userImageProfile, setUserImageProfile] = useState('');
-    const { user, isAuthenticated, authlogout } = useContext(AuthContext);
+    const { authlogout } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
 
     let navigate = useNavigate();
 
     useEffect(() => {
-        if (user !== null && user !== undefined) {
-            setUserName(user.name)
-            if (user.profileImage) {
-                setUserImageProfile(user.profileImage)
-            }
+        if (localStorage.getItem('name') !== undefined &&
+            localStorage.getItem('name') !== null &&
+            localStorage.getItem('name') !== undefined &&
+            localStorage.getItem('name') !== null) {
+            setIsAuthenticated(true)
+            setUserName(localStorage.getItem('name'))
+            setUserImageProfile(localStorage.getItem('profileImage'))
         }
-    }, [user])
+    }, [])
 
     switch (type) {
         case "basic":

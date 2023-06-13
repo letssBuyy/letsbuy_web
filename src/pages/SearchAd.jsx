@@ -5,17 +5,14 @@ import IconSearch from "../assets/images/icon-search.svg";
 import { CoupleInputs, InputContainer, Label } from '../assets/styles/components/InputStyle';
 import {
     ButtonOpenSideBarMobile,
-    Checkbox,
     CloseButton,
     Container,
     ContainerAdvertise,
-    ContainerCheckbox,
     Header,
     Input,
     OrdinationMobile,
     SelectOrdenation,
     SideBar,
-    ResultSearch,
     ContainerSarchAndInput,
     Pagination
 } from "../assets/styles/searchAdStyle";

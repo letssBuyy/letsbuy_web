@@ -14,23 +14,16 @@ export default function ProposalMessage(props) {
 
     async function acceptProposal() {
         await axios.patch(`${url}/chats/${messageID}`).then((response) => {
-            if (response.status === 200) {
-                successAlert("Proposta aceita com sucesso!")
-            } else {
-                errorAlert("Ocorreu um erro ao aceitar a proposta.")
-            }
+            successAlert("Proposta aceita com sucesso!")
+            deleteProposal()
         }).catch(() => {
             errorAlert("Ocorreu um erro ao aceitar a proposta.")
         })
     }
 
-    async function refuseProposal() {
+    async function deleteProposal() {
         await axios.delete(`${url}/messages/${messageID}`).then((response) => {
-            if (response.status === 200) {
-                successAlert("Proposta recusada com sucesso!")
-            } else {
-                errorAlert("Ocorreu um erro ao recusar a proposta.")
-            }
+            successAlert("Proposta recusada com sucesso!")
         }).catch(() => {
             errorAlert("Ocorreu um erro ao recusar a proposta.")
         })
@@ -55,9 +48,9 @@ export default function ProposalMessage(props) {
                             <span>R$ {props.proposalValue}</span>
                         </div>
                     </CardAdvertise>
-                    <Buttons style={props.hiddenButtons ? {display: 'none'} : {display: 'flex'}}>
+                    <Buttons style={props.hiddenButtons ? { display: 'none' } : { display: 'flex' }}>
                         <button onClick={() => { acceptProposal() }}>Aceitar proposta</button>
-                        <button onClick={() => { refuseProposal() }}>Recusar</button>
+                        <button onClick={() => { deleteProposal() }}>Recusar</button>
                     </Buttons>
                 </div>
             </Container>

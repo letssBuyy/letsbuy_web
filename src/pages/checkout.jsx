@@ -29,11 +29,10 @@ import InputMask from 'react-input-mask';
 import Loading from "../components/Loading";
 import { findByCategory } from "../utils/enums";
 import { formatCurrency } from "../utils/strings"
-import moment from "moment";
 
 export default function Checkout() {
     let navigate = useNavigate();
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const userId = user.id;
     const { id } = useParams();
 
@@ -106,7 +105,7 @@ export default function Checkout() {
             setLoading(true)
 
             //Preenche os campos do usuario logado
-            await axios.get(`${url}/users/${userId}`
+            await axios.get(`${url}/users?sellerId=${userId}`
             ).then((response) => {
                 const data = response.data
                 setState(data.state)
@@ -179,7 +178,8 @@ export default function Checkout() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/")
         } else {
             load()

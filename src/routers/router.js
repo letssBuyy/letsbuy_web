@@ -50,9 +50,9 @@ export default function Routers() {
                 <Route path='/sobre-nos' element={<AboutUs />} />
                 <Route path='/alterar-senha/:id' element={<RecoveryPassword />} />
                 <Route path='/anuncio/:id' element={<DetailsAd />} />
-
                 <Route path='/perfil/:id' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
+                
                 <Route path='/checkout-pagamento/:id' element={<Checkout />} />
                 <Route path='/editar-anuncio/:id' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />

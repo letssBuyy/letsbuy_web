@@ -1,4 +1,8 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, {
+    useState,
+    useRef,
+    useEffect,
+} from "react";
 import ImageDefault from "../assets/images/image-default.png";
 import Send from "../assets/images/icon-send.svg";
 import Navbar from "../components/Navbar";
@@ -20,9 +24,13 @@ import {
     ModalMoreOptions,
     NoContentContainer
 } from "../assets/styles/chatStyle";
-import { AuthContext } from "../utils/AuthContext";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import NoContent from "../components/NoContent";
+import ProposalModal from "../components/ProposalModal";
+import axios from "axios";
+import { url } from "../utils/request";
+import { errorAlert } from "../utils/alerts";
+import Loading from "../components/Loading";
 
 export default function Chat() {
     moment.locale("pt-br");
@@ -30,16 +38,23 @@ export default function Chat() {
     const [showOptions, setShowOptions] = useState(false);
     const containerRef = useRef(null);
     const subContainerRef = useRef(null);
-    const sideBarRef = useRef(null)
+    const sideBarRef = useRef(null);
     const [selected, setSelected] = useState(2);
     const [advertiseId, setAdvertiseId] = useState(0);
-    const [advertiseTitle, setAdvertiseTitle] = useState('Bolsa marrom');
-    const [advertiseImage, setAdvertiseImage] = useState('https://images.pexels.com/photos/2081199/pexels-photo-2081199.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    const [advertiseTitle, setAdvertiseTitle] = useState('');
+    const [advertiseImage, setAdvertiseImage] = useState('');
+    const [advertisePrice, setAdvertisePrice] = useState('')
     const [userImageProfile, setUserImageProfile] = useState('');
-    const [userName, setUserName] = useState('Regina Lima');
-    const { user, isAuthenticated } = useContext(AuthContext);
-    let userId = user.id;
+    const [userName, setUserName] = useState('');
+    let userId = localStorage.getItem('userId');
     let navigate = useNavigate();
+    const location = useLocation();
+    const [currentChatID, setCurrentChatID] = useState('');
+    const [currentChat, setCurrentChat] = useState([]);
+    const [chats, setChats] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 900);
+    const [modalOpen, setModalOpen] = useState(false);
 
     function formatDate(date) {
         const messageDate = moment(date);
@@ -75,11 +90,10 @@ export default function Chat() {
         }
     }
 
-    function handleSelectedItem(id) {
-        loadMessages(id)
-        setSelected(id)
+    function handleSelectedItem(sellerId, idAdvertise) {
+        createChat(sellerId, idAdvertise)
 
-        if (window.innerWidth < 900) {
+        if (isMobileView) {
             sideBarRef.current.style.display = "none";
             subContainerRef.current.style.display = "flex";
         }
@@ -90,131 +104,65 @@ export default function Chat() {
         subContainerRef.current.style.display = "none";
     }
 
-    const chats = [
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            advertiseName: "Bolsa marrom",
-            userName: "Kawan Gonçalves",
-            date: "2023-05-06T09:23:45.000Z",
-            id: 1,
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            advertiseName: "Bolsa marrom",
-            userName: "Gustavo Rezende",
-            date: "2023-04-10T09:23:45.000Z",
-            id: 2,
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            advertiseName: "Bolsa marrom",
-            userName: "Leonardo Nakagawa",
-            date: "2023-05-05T09:23:45.000Z",
-            id: 3,
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            advertiseName: "Bolsa marrom",
-            userName: "Yohan Hudson",
-            date: "2023-05-05T09:23:45.000Z",
-            id: 4,
-        },
-    ]
+    async function createChat(sellerId, idAdvertise) {
+        setLoading(true)
+        await axios.post(`${url}/chats`, {
+            idSeller: sellerId,
+            idBuyer: userId,
+            idAdversiment: idAdvertise
+        }).then((response) => {
+            const data = response.data
+            setAdvertiseId(data.adversiment && data.adversiment.id ? data.adversiment.id : "");
+            setAdvertiseTitle(data.adversiment && data.adversiment.title ? data.adversiment.title : "");
+            setAdvertiseImage(data.adversiment && data.adversiment.images && data.adversiment.images.length > 0 ? data.adversiment.images[0].url : "");
+            setAdvertisePrice(data.adversiment && data.adversiment.price ? data.adversiment.price : "");
+            setUserImageProfile(data.seller && data.seller.profileImage ? data.seller.profileImage : "");
+            setUserName(data.seller && data.seller.name ? data.seller.name : "");
 
-    const chat = {
-        id: 123,
-        members: [
-            {
-                id: 1,
-                name: "Alice"
-            },
-            {
-                id: 2,
-                name: "Bob"
+            if (data.id) {
+                setCurrentChatID(data.id)
+                loadMessages(data.id)
+                setSelected(data.id)
             }
-        ],
-        content: [
-            {
-                date: "2023-05-05",
-                messages: [
-                    {
-                        sender: {
-                            id: 1,
-                            name: "Alice"
-                        },
-                        value: "Olá, tudo bem?",
-                        timestamp: "2023-05-05T09:23:45.000Z",
-                        isProposal: false
-                    },
-                    {
-                        sender: {
-                            id: 2,
-                            name: "Bob"
-                        },
-                        value: "Sim, e você?",
-                        timestamp: "2023-05-05T09:30:12.000Z",
-                        isProposal: false
-                    }
-                ]
-            },
-            {
-                date: "2023-05-06",
-                messages: [
-                    {
-                        sender: {
-                            id: 2,
-                            name: "Bob"
-                        },
-                        value: "Bom dia!",
-                        timestamp: "2023-05-06T08:45:21.000Z",
-                        isProposal: false
-                    },
-                    {
-                        sender: {
-                            id: 2,
-                            name: "Bob"
-                        },
-                        value: "Bom dia, Charlie!",
-                        timestamp: "2023-05-06T08:47:36.000Z",
-                        isProposal: false
-                    },
-                    {
-                        sender: {
-                            id: 1,
-                            name: "Alice"
-                        },
-                        value: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-                        timestamp: "2023-05-06T09:02:17.000Z",
-                        isProposal: false
-                    },
-                    {
-                        sender: {
-                            id: 2,
-                            name: "Bob"
-                        },
-                        value: "",
-                        timestamp: "2023-05-06T09:02:17.000Z",
-                        isProposal: true,
-                        proposal: {
-                            value: "200"
-                        }
-                    },
-                ]
-            }
-        ]
-    };
+        }).catch((error) => {
+            console.error(error); // Exibir o erro completo no console
+            errorAlert("Ocorreu um erro ao criar o chat.");
+        })
 
-    function loadChats() {
-        //Carregar as conversas do usuario
+        setLoading(false)
     }
 
-    function loadMessages(idChat) {
-        console.log(idChat)
-        //Carregar as conversas de um chat especifico do usuario
+    async function loadChats() {
+        setLoading(true)
+        await axios.get(`${url}/chats/${userId}`).then((response) => {
+            const data = response.data
+            setChats(data)
+        })
+        setLoading(false)
     }
 
-    function sendMessage() {
-        //ENVIA MENSAGEM DO USUARIO
+    async function loadMessages(idChat) {
+        if (idChat) {
+            await axios.get(`${url}/messages/${idChat}`).then((response) => {
+                const data = response.data
+                setCurrentChat(data)
+                console.log(data)
+            })
+        }
+    }
+
+    async function sendMessage() {
+        await axios.post(`${url}/messages`, {
+            idChat: currentChatID,
+            message: message,
+            idUser: userId
+        }).then((response) => {
+            const data = response.data
+            setCurrentChat(data)
+            setMessage('');
+        }).catch(() => {
+            errorAlert("Ocorreu um erro ao enviar a mensagem.")
+        })
     }
 
     function sendDetailAd() {
@@ -222,53 +170,91 @@ export default function Chat() {
     }
 
     function createProposal() {
-        //CRIAR PROPOSTA
-        //CRIAR MODAL
+        openModal()
     }
+
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     useEffect(() => {
         const container = containerRef.current;
         container.scrollTop = container.scrollHeight - container.clientHeight;
 
-        if (!isAuthenticated) {
-            navigate("/")
-        } else {
-            loadChats()
+        const chatParams = new URLSearchParams(location.search);
+        const openChatWithSeller = chatParams.get('openChatWithSeller');
+        const idAdvertise = chatParams.get('idAdvertise')
+        const openModalPropose = chatParams.get('openModalPropose');
+
+        if (openModalPropose && idAdvertise && openChatWithSeller) {
+            createChat(openChatWithSeller, idAdvertise)
+            openModal()
         }
+
+        if (openChatWithSeller && idAdvertise) {
+            createChat(openChatWithSeller, idAdvertise)
+        }
+
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        }
+
+        loadChats()
     }, []);
+
+    useEffect(() => {
+        loadMessages(currentChatID)
+    }, [message])
+
+    setTimeout(() => {
+        if (currentChatID != '' && currentChatID != null && currentChatID != undefined) {
+            loadMessages(currentChatID)
+        }
+    }, 15000);
 
     return (
         <>
-            <Navbar type='basic' isAuthenticated={false} showBackButton={true} />
+            <Loading isEnabled={loading} />
+            <ProposalModal
+                isOpen={modalOpen}
+                onClose={closeModal}
+                userId={userId}
+                advertise={{
+                    id: advertiseId,
+                    title: advertiseTitle,
+                    price: advertisePrice,
+                    image: advertiseImage
+                }}
+                idChat={currentChatID}
+            />
+            <Navbar type='basic' showBackButton={true} />
             <Container>
                 <SideBar ref={sideBarRef}>
-                    {
-                        chats.length ?
-                            chats.map((item, index) => (
-                                <>
-                                    <div onClick={() => handleSelectedItem(item.id)}>
-                                        <ChatItem
-                                            key={index}
-                                            image={item.image}
-                                            advertiseName={item.advertiseName}
-                                            userName={item.userName}
-                                            date={formatDate(item.date)}
-                                            isSelected={selected === item.id}
-                                        />
-                                    </div>
-                                </>
-                            ))
-
-                            :
-
-                            <>
-                                <NoContentContainer>
-                                    <NoContent
-                                        message="Você ainda não possui conversas"
-                                        accessibilityMessage="Você ainda não possui conversas"
-                                    />
-                                </NoContentContainer>
-                            </>}
+                    {chats && chats.length > 0 ? (
+                        chats.map((item) => (
+                            <div key={item.id} onClick={() => handleSelectedItem(item.id, item.seller.id, item.adversiment.id)}>
+                                <ChatItem
+                                    image={item.adversiment && item.adversiment.images && item.adversiment.images.length > 0 ? item.adversiment.images[0].url : ImageDefault}
+                                    advertiseName={item.adversiment ? item.adversiment.title : ''}
+                                    userName={item.seller ? item.seller.name : ''}
+                                    date={item.lastMessageAt ? formatDate(item.lastMessageAt) : ''}
+                                    isSelected={selected === item.id}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <NoContentContainer>
+                            <NoContent
+                                message="Você ainda não possui conversas"
+                                accessibilityMessage="Você ainda não possui conversas"
+                            />
+                        </NoContentContainer>
+                    )}
                 </SideBar>
                 <SubContainer ref={subContainerRef}>
                     <TopBar>
@@ -282,37 +268,36 @@ export default function Chat() {
                         <div onClick={togleOptions}>
                             <img src={More} alt="Clique para ver mais" />
                         </div>
-
                         <ModalMoreOptions style={showOptions ? { display: "flex" } : { display: "none" }}>
                             <button onClick={() => sendDetailAd()}>Ver anúncio</button>
                             <button onClick={() => createProposal()}>Enviar proposta</button>
                         </ModalMoreOptions>
                     </TopBar>
                     <ChatContainer ref={containerRef}>
-
                         {
-
-                            chat.content.length ?
-                                chat.content.map((item, index) => (
+                            currentChat && currentChat.length > 0 ?
+                                currentChat.map((item, index) => (
                                     <>
                                         <p key={index}>{formatDate(item.date)}</p>
                                         {item.messages.map((message, index) => (
                                             !message.isProposal ?
                                                 <ChatMessage
                                                     key={index}
-                                                    align={message.sender.id === userId ? "flex-end" : "flex-start"}
-                                                    hour={obterHorario(message.timestamp)}
-                                                    message={message.value}
+                                                    align={message.idUser == userId ? "flex-end" : "flex-start"}
+                                                    hour={obterHorario(message.postedAt)}
+                                                    message={message.message}
                                                 />
                                                 :
                                                 <>
                                                     <ProposalMessage
                                                         key={index}
-                                                        align={message.sender.id === userId ? "flex-end" : "flex-start"}
-                                                        hour={obterHorario(message.timestamp)}
-                                                        proposalValue={message.proposal.value}
+                                                        id={message.id}
+                                                        align={message.idUser == userId ? "flex-end" : "flex-start"}
+                                                        hour={obterHorario(message.postedAt)}
+                                                        proposalValue={message.amount}
                                                         advertiseImage={advertiseImage}
                                                         advertiseTitle={advertiseTitle}
+                                                        hiddenButtons={message.idUser === userId ? true : false}
                                                     />
                                                 </>
                                         ))}
@@ -331,6 +316,7 @@ export default function Chat() {
                     </ChatContainer>
                     <BottomBar>
                         <input
+                            value={message}
                             placeholder="Digite uma mensagem..."
                             onChange={(e) => setMessage(e.target.value)}
                             onKeyDown={handleKeyPress}

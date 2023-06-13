@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import IconError from "../assets/images/icon-error.svg";
 import {
@@ -14,7 +14,6 @@ import {
     Label
 } from '../assets/styles/components/InputStyle';
 import { containsNumbers, validateEmail } from "../utils/strings";
-import { AuthContext } from "../utils/AuthContext";
 import { useNavigate } from 'react-router-dom';
 
 export default function Help() {
@@ -29,7 +28,6 @@ export default function Help() {
     const [showDescriptionError, setShowDescriptionError] = useState(false)
 
     let navigate = useNavigate();
-    const { isAuthenticated } = useContext(AuthContext);
 
     function enviarDisputa() {
         let isValidFields = validateFields()
@@ -74,7 +72,8 @@ export default function Help() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/")
         }
     }, [])

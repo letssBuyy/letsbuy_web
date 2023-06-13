@@ -53,7 +53,7 @@ export default function PublishAd() {
     const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const idUser = user.id;
 
     const [img1, setImg1] = useState(null);
@@ -103,7 +103,7 @@ export default function PublishAd() {
             setImageFour(reader.result);
         };
     }
-    
+
     async function registerAd() {
         try {
             setLoading(true)
@@ -122,6 +122,7 @@ export default function PublishAd() {
                 }).then(async (response) => {
                     await uploadImages(response.data.id).then(() => {
                         successAlert("Anúncio públicado com sucesso!")
+                        navigate('/meus-anuncios')
                     }).catch(() => {
                         errorAlert("Ocorreu um erro ao públicar o anúncio")
                     })
@@ -161,10 +162,8 @@ export default function PublishAd() {
             setShowTituloError(false)
         }
 
-        const formattedPrice = price.replace(/[R$,]/g, '');
-        const parsedPrice = parseFloat(formattedPrice);
 
-        if (parsedPrice <= 100) {
+        if (removeCurrencyFormatting(price) <= 1) {
             isValidAllFields = false
             setShowPriceError(true)
         } else {
@@ -208,7 +207,9 @@ export default function PublishAd() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        console.log(isAuthenticated)
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/entrar")
         }
     }, [])

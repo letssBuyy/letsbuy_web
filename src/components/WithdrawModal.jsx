@@ -29,9 +29,6 @@ export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
     };
 
     async function withdraw() {
-        console.log(removeCurrencyFormatting(price) > 0)
-        console.log(balance > removeCurrencyFormatting(price))
-        console.log(userId)
         if (removeCurrencyFormatting(price) > 0 && balance > removeCurrencyFormatting(price) && userId) {
             try {
                 setLoading(true)

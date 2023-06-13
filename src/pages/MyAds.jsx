@@ -12,11 +12,14 @@ import { colors } from "../utils/colors";
 import Card from "../components/CardMyAds";
 import NoContent from "../components/NoContent";
 import CustomDropdown from "../components/CustomDropdown";
+import { useNavigate } from "react-router";
 
 export default function MyAds() {
     const [option, setOption] = useState(0);
     const [ads, setAds] = useState([]);
     const [typeCard, setTypeCard] = useState("progress");
+    
+    let navigate = useNavigate()
 
     function loadProgress() {
         setOption(0)
@@ -67,6 +70,10 @@ export default function MyAds() {
     }
 
     useEffect(() => {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        }
         loadProgress()
     }, [])
 

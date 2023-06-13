@@ -20,7 +20,7 @@ export default function Recovery() {
     async function enviar() {
         if (password.length >= 6 && password.length < 50) {
             try {
-                await axios.patch(`${url}/users/${id}`, {
+                await axios.patch(`${url}/users?sellerId=${id}`, {
                     "password": password
                 }).then(() => {
                     successAlert("Senha atualizada com sucesso!")

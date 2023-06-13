@@ -2,8 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import Navbar from "../components/Navbar";
 import IconError from "../assets/images/icon-error.svg";
-import IconCamPink from "../assets/images/icon-cam-pink.svg";
-import IconCamGray from "../assets/images/icon-cam-gray.svg";
 import { NumericFormat } from 'react-number-format';
 import {
     colorOptions,
@@ -20,15 +18,14 @@ import {
     ContainerError,
     InputContainer,
     TextAreaContainer,
-    Label,
-    ImagesContainer,
-    ImagemSelecionada
+    Label
 } from '../assets/styles/components/InputStyle';
 import { AuthContext } from "../utils/AuthContext";
 import { url } from "../utils/request";
 import axios from "axios";
 import { successAlert, errorAlert } from "../utils/alerts";
 import Loading from "../components/Loading";
+import { removeCurrencyFormatting } from "../utils/strings";
 
 export default function EditAd() {
     const [title, setTitle] = useState('');
@@ -38,105 +35,41 @@ export default function EditAd() {
     const [quality, setQuality] = useState('');
     const [price, setPrice] = useState('0');
 
-    const [imageOne, setImageOne] = useState('');
-    const [imageTwo, setImageTwo] = useState('');
-    const [imageThree, setImageThree] = useState('');
-    const [imageFour, setImageFour] = useState('');
-
     const [showTituloError, setShowTituloError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
     const [showCategoryError, setShowCategoryError] = useState(false);
     const [showQualityError, setShowQualityError] = useState(false);
     const [showPriceError, setShowPriceError] = useState(false);
-    const [showImagesError, setShowImagesError] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const idUser = user.id;
     const { id } = useParams();
-
     let navigate = useNavigate();
 
-    function handleImageOneChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageOne(reader.result);
-        };
-    }
-
-    function handleImageTwoChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageTwo(reader.result);
-        };
-    }
-
-    function handleImageThreeChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageThree(reader.result);
-        };
-    }
-
-    function handleImageFourChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageFour(reader.result);
-        };
-    }
-
     async function updateAd() {
-        try {
-            setLoading(true)
+        setLoading(true)
 
-            let isValidFields = validateFields()
+        let isValidFields = validateFields()
 
-            if (isValidFields) {
-                await axios.put(`${url}/adversiments/${id}`, {
-                    userId: idUser,
-                    title: title,
-                    description: description,
-                    price: price,
-                    category: category,
-                    quality: quality,
-                    color: color
-                }).then(async (response) => {
-                    await uploadImages(response.data.id).then(() => {
-                        successAlert("Anúncio atualizado com sucesso!")
-                    }).catch(() => {
-                        errorAlert("Ocorreu um erro ao atualizar o anúncio")
-                    })
-                }).catch((e) => {
-                    errorAlert("Ocorreu um erro ao atualizar o anúncio")
-                })
-            }
-        } catch (error) {
-            errorAlert("Ocorreu um erro ao atualizar o anúncio")
-        } finally {
-            setLoading(false)
+        if (isValidFields) {
+            await axios.put(`${url}/adversiments/${id}`, {
+                userId: idUser,
+                title: title,
+                description: description,
+                price: removeCurrencyFormatting(price),
+                category: category,
+                quality: quality,
+                color: color
+            }).then(() => {
+                successAlert("Anúncio públicado com sucesso!")
+                navigate('/meus-anuncios')
+            }).catch((e) => {
+                console.log('caiu no cath de dentro')
+                errorAlert("Ocorreu um erro ao atualizar o anúncio")
+            })
         }
-    }
 
-    async function uploadImages(idAdvertise) {
-        const formData = new FormData();
-
-        formData.append('img1', imageOne);
-        formData.append('img2', imageTwo);
-        formData.append('img3', imageThree);
-        formData.append('img4', imageFour);
-
-        await axios.post(`${url}/images/adversiment/${idAdvertise}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
+        setLoading(false)
     }
 
     function validateFields() {
@@ -149,10 +82,7 @@ export default function EditAd() {
             setShowTituloError(false)
         }
 
-        const formattedPrice = price.replace(/[R$,]/g, '');
-        const parsedPrice = parseFloat(formattedPrice);
-
-        if (parsedPrice <= 100) {
+        if (removeCurrencyFormatting(price) <= 1) {
             isValidAllFields = false
             setShowPriceError(true)
         } else {
@@ -179,28 +109,33 @@ export default function EditAd() {
         } else {
             setShowQualityError(false)
         }
-
-        if (
-            imageOne === null || imageOne === undefined || imageOne === "" ||
-            imageTwo === null || imageTwo === undefined || imageTwo === "" ||
-            imageThree === null || imageThree === undefined || imageThree === "" ||
-            imageFour === null || imageFour === undefined || imageFour === ""
-        ) {
-            isValidAllFields = false
-            setShowImagesError(true)
-        } else {
-            setShowImagesError(false)
-        }
-
         return isValidAllFields
     }
 
-    function load() {
-
+    async function load() {
+        try {
+            setLoading(true)
+            await axios.get(`${url}/adversiments/4/1`).then(async (response) => {
+                const data = response.data[0].adversiments
+                setTitle(data.title ? data.title : '')
+                setDescription(data.description ? data.description : '')
+                setColor(data.color ? data.color : '')
+                setCategory(data.category ? data.category : '')
+                setQuality(data.quality ? data.quality : '')
+                setPrice(data.price ? data.price : '')
+            }).catch((e) => {
+                console.log(e)
+            })
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/")
         } else {
             load()
@@ -231,6 +166,7 @@ export default function EditAd() {
                             <input
                                 type="text"
                                 placeholder="Digite o titulo"
+                                value={title}
                                 onChange={(event) => setTitle(event.target.value)}
                             ></input>
                         </InputContainer>
@@ -245,6 +181,7 @@ export default function EditAd() {
                         <TextAreaContainer>
                             <textarea
                                 placeholder="Digite a descrição"
+                                value={description}
                                 onChange={(event) => setDescription(event.target.value)}
                                 maxLength={500}
                             />
@@ -323,59 +260,6 @@ export default function EditAd() {
                             <span>Digite o preço</span>
                         </ContainerError>
                     </div>
-                    <div>
-                        <Label>Fotos</Label>
-                        <ImagesContainer>
-                            <div>
-                                {
-                                    imageOne !== '' ?
-                                        <ImagemSelecionada src={imageOne} alt="imagemSelecionada" />
-                                        :
-                                        <img src={IconCamPink} alt="Selecione uma imagem dos seus arquivos" />
-                                }
-                                <label htmlFor="imagem1"></label>
-                                <input id="imagem1" type="file" onChange={handleImageOneChange} />
-                            </div>
-                            <div>
-                                <div>
-                                    {
-                                        imageTwo !== '' ?
-                                            <ImagemSelecionada src={imageTwo} alt="imagemSelecionada" />
-                                            :
-                                            <img src={IconCamGray} alt="Selecione uma imagem dos seus arquivos" />
-                                    }
-                                    <label htmlFor="imagem2"></label>
-                                    <input id="imagem2" type="file" onChange={handleImageTwoChange} />
-                                </div>
-                                <div>
-                                    {
-                                        imageThree !== '' ?
-                                            <ImagemSelecionada src={imageThree} alt="imagemSelecionada" />
-                                            :
-                                            <img src={IconCamGray} alt="Selecione uma imagem dos seus arquivos" />
-                                    }
-                                    <label htmlFor="imagem3"></label>
-                                    <input id="imagem3" type="file" onChange={handleImageThreeChange} />
-                                </div>
-                                <div>
-                                    {
-                                        imageFour !== '' ?
-                                            <ImagemSelecionada src={imageFour} alt="imagemSelecionada" />
-                                            :
-                                            <img src={IconCamGray} alt="Selecione uma imagem dos seus arquivos" />
-                                    }
-                                    <label htmlFor="imagem4"></label>
-                                    <input id="imagem4" type="file" onChange={handleImageFourChange} />
-                                </div>
-                            </div>
-
-                        </ImagesContainer>
-                        <ContainerError style={showImagesError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Fotos obrigatórias (Insira todas as imagens)" />
-                            <span>Fotos obrigatórias (Insira todas as imagens)</span>
-                        </ContainerError>
-                    </div>
-
                     <Button onClick={() => updateAd()}>Atualizar</Button>
                 </Container>
             </div>

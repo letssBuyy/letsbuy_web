@@ -6,11 +6,24 @@ import iconPeopleDash from "../assets/images/iconPeoplesDash.svg"
 import iconFinalizados from "../assets/images/iconFinalizados.svg"
 import iconTaxa from "../assets/images/iconTaxas.svg"
 import iconPubli from "../assets/images/iconsPublicados.svg"
-import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Legendas, Limitador, Quantidades, SemiTitulo, TituloGrafico, Titulos } from "../assets/styles/dashboardStyle";
-
-
+import {
+  CaixaGraficos,
+  CaixaKpi,
+  CaixasFilhas,
+  Graficos,
+  ImagensCaixinhas,
+  Legendas,
+  Limitador,
+  Quantidades,
+  SemiTitulo,
+  TituloGrafico,
+  Titulos
+} from "../assets/styles/dashboardStyle";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default function Exibir() {
+  let navigate = useNavigate()
 
   const chartData = {
     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],
@@ -57,6 +70,13 @@ export default function Exibir() {
       },
     ],
   }
+
+  useEffect(() => {
+    let isAuthenticated = localStorage.getItem('userId')
+    if (isAuthenticated === undefined || isAuthenticated === null) {
+      navigate("/")
+    }
+  }, [])
 
   return (
     <>
@@ -110,7 +130,7 @@ export default function Exibir() {
               Vendas por categoria
             </TituloGrafico>
             <SemiTitulo>
-            Quantidade de vendas em cada categoria
+              Quantidade de vendas em cada categoria
             </SemiTitulo>
             <LineChart data={chartDataLine} />
           </Graficos>
@@ -119,7 +139,7 @@ export default function Exibir() {
               Vendas por Mês
             </TituloGrafico>
             <SemiTitulo>
-            Quantidade de vendas em cada Mês
+              Quantidade de vendas em cada Mês
             </SemiTitulo>
             <ChartComponent data={chartData} />
           </Graficos>

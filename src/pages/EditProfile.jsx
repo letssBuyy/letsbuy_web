@@ -56,7 +56,7 @@ export default function EditProfile() {
     const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const userID = user.id
 
     const [file, setFile] = useState(null);
@@ -148,7 +148,7 @@ export default function EditProfile() {
         if (isValidFields) {
             try {
                 setLoading(true)
-                await axios.put(`${url}/users/${userID}`, {
+                await axios.put(`${url}/users?sellerId=${userID}`, {
                     name: name,
                     email: email,
                     cpf: cpf,
@@ -248,7 +248,7 @@ export default function EditProfile() {
     async function load() {
         try {
             setLoading(true)
-            await axios.get(`${url}/users/${userID}`
+            await axios.get(`${url}/users?sellerId=${userID}`
             ).then((response) => {
                 const data = response.data;
 
@@ -280,8 +280,9 @@ export default function EditProfile() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
-            navigate("/");
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
         } else {
             load();
         }

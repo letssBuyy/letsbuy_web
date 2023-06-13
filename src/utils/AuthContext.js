@@ -17,11 +17,11 @@ const AuthProvider = ({ children }) => {
     if (token && storedUserId) {
       fetchUser(storedUserId);
     }
-  }, [token]);
+  }, []);
 
   async function fetchUser(userId) {
     try {
-      const response = await axios.get(`${url}/users/${userId}`);
+      const response = await axios.get(`${url}/users?sellerId=${userId}`);
       const data = response.data;
       setUser(prevUser => ({ ...prevUser, ...data }));
       setIsAuthenticated(true);
@@ -44,8 +44,11 @@ const AuthProvider = ({ children }) => {
       const data = response.data;
       const { token, user: userData } = data;
       setToken(token);
+      
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userData.id);
+      localStorage.setItem('profileImage', userData.profileImage);
+      localStorage.setItem('name', userData.name)
 
       setUser(prevUser => ({ ...prevUser, ...userData }));
       setIsAuthenticated(true);
@@ -65,6 +68,8 @@ const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem('userId');
     localStorage.removeItem('token');
+    localStorage.removeItem('profileImage');
+    localStorage.removeItem('name');
   };
 
   return (

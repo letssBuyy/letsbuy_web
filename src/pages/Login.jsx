@@ -31,7 +31,7 @@ export default function Login() {
                     toastSucess("Entrada realizada com sucesso!");
                     setTimeout(() => {
                         navigate('/');
-                    }, 3000);
+                    }, 1000);
                 } else {
                     setShowLoginError(true)
                 }

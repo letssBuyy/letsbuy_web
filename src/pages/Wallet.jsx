@@ -19,7 +19,7 @@ import WithdrawModal from "../components/WithdrawModal";
 import { formatCurrency } from "../utils/strings";
 
 export default function Wallet() {
-    const { user, isAuthenticated } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const id = user.id
     let navigate = useNavigate();
 
@@ -53,7 +53,8 @@ export default function Wallet() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
             navigate("/")
         } else {
             load()
