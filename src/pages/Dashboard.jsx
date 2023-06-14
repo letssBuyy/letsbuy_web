@@ -110,6 +110,7 @@ export default function Exibir() {
         data.map((item) => {
           months.push(findMonthPerNumber(item.month))
           valueMonths.push(item.quantity)
+          return null
         })
 
         setchartData({
@@ -149,6 +150,7 @@ export default function Exibir() {
         data.map((item) => {
           category.push(findByCategory(item.category))
           valueCategory.push(item.quantity)
+          return null
         })
 
         setchartDataBar({

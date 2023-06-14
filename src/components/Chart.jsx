@@ -6,7 +6,7 @@ const ChartComponent = ({ data }) => {
 
   useEffect(() => {
     if (chartRef && chartRef.current) {
-      const myChart = new Chart(chartRef.current, {
+      new Chart(chartRef.current, {
         type: 'bar',
         data: data,
         options: {

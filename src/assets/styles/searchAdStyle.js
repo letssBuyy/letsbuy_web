@@ -5,6 +5,7 @@ import { fonts } from "../../utils/fonts";
 export const Container = styled.div`
     display: flex;
     height: 100vh;
+    margin-top: 80px;
 
     >div:last-child {
         width: 100%;
@@ -18,7 +19,7 @@ export const SideBar = styled.div`
     width: 350px;
     border: 1px solid ${colors.gray};
     background-color: ${colors.white};
-
+    
     >div {
       margin: 20px 10px;
     }

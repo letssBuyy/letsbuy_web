@@ -3,7 +3,7 @@ import { colors } from "../../utils/colors";
 import { fonts } from '../../utils/fonts'
 
 export const Container = styled.div`
-    padding: 90px 100px;
+    padding: 160px 100px;
     
     h1 {
         font-family: ${fonts.semiBold};

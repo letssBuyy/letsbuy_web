@@ -6,8 +6,7 @@ import Navbar from "../components/Navbar";
 export default function AboutUs() {
     return (
         <>
-            <Navbar type='principal'
-                isAuthenticated={false}
+            <Navbar type='basic'
                 showBackButton={true}
             />
             <div>

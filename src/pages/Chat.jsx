@@ -56,7 +56,6 @@ export default function Chat() {
     const [sellerChatId, setSellerChatId] = useState('');
 
     const [loading, setLoading] = useState(false);
-    const [isMobileView, setIsMobileView] = useState(window.innerWidth < 900);
     const [modalOpen, setModalOpen] = useState(false);
 
     function formatDate(date) {
@@ -96,7 +95,7 @@ export default function Chat() {
     function handleSelectedItem(sellerId, idAdvertise) {
         createChat(sellerId, idAdvertise)
 
-        if (isMobileView) {
+        if (window.innerWidth < 900) {
             sideBarRef.current.style.display = "none";
             subContainerRef.current.style.display = "flex";
         }
@@ -217,7 +216,7 @@ export default function Chat() {
     }, [message])
 
     setTimeout(() => {
-        if (currentChatID != '' && currentChatID != null && currentChatID != undefined) {
+        if (currentChatID !== '' && currentChatID !== null && currentChatID !== undefined) {
             loadMessages(currentChatID)
         }
     }, 15000);
