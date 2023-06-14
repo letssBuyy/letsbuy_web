@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import Shield from "../assets/images/shield.svg";
 import {
     AdvertiseCard,
@@ -14,7 +14,6 @@ import {
 } from "../assets/styles/checkoutStyle";
 import Navbar from "../components/Navbar";
 import Home from "../assets/images/icon-home.svg";
-import { AuthContext } from "../utils/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import IconError from '../assets/images/icon-error.svg';
 import { url } from "../utils/request";

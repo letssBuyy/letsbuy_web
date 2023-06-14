@@ -6,6 +6,7 @@ import {
     ItemTabBar,
     ContainerCards,
     TabbarMobile,
+    HEADERPAGE
 } from "../assets/styles/myAdsStyle";
 import Navbar from "../components/Navbar";
 import { colors } from "../utils/colors";
@@ -14,8 +15,9 @@ import NoContent from "../components/NoContent";
 import CustomDropdown from "../components/CustomDropdown";
 import { useNavigate } from "react-router";
 import Loading from "../components/Loading";
-import { url } from "../utils/request";
 import axios from "axios";
+import { url } from "../utils/request";
+import { errorAlert } from "../utils/alerts";
 
 export default function MyAds() {
     const [option, setOption] = useState(0);
@@ -82,6 +84,31 @@ export default function MyAds() {
         }
     }
 
+    async function exportTxt() {
+        if (ads.length) {
+            try {
+                const response = await axios.get(`${url}/adversiments/export-txt/${userid}`, {
+                    responseType: 'blob',
+                });
+    
+                const urlDeExportacao = window.URL.createObjectURL(new Blob([response.data]));
+    
+                const link = document.createElement('a');
+                link.href = urlDeExportacao;
+                link.setAttribute('download', 'export.txt'); 
+                document.body.appendChild(link);
+                link.click();
+    
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(urlDeExportacao);
+            } catch (error) {
+                errorAlert("Ocorreu um erro ao exportar o txt")
+            }
+        } else {
+            errorAlert("Você não possui anúncios para exportar")
+        }
+    }
+
     useEffect(() => {
         let isAuthenticated = localStorage.getItem('userId')
         if (isAuthenticated === undefined || isAuthenticated === null) {
@@ -95,7 +122,10 @@ export default function MyAds() {
             <Loading isEnabled={loading} />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
-                <Title>Meus anúncios</Title>
+                <HEADERPAGE>
+                    <Title>Meus anúncios</Title>
+                    <button onClick={() => { exportTxt() }}>Exportar anúncios</button>
+                </HEADERPAGE>
 
                 <TabBar>
                     <ItemTabBar

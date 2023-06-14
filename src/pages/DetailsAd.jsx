@@ -105,15 +105,15 @@ export default function Advertise() {
                 const sellerStartDate = moment(seller.registrationDate);
                 setSellerStartDate(sellerStartDate.format("DD/MM/YYYY"))
 
-                if (advertisement.images != null && advertisement.images.length > 0) {
+                if (advertisement.images !== null && advertisement.images.length > 0) {
                     const images = []
                     advertisement.images.map((image) => {
                         images.push({
                             original: image.url,
                             thumbnail: image.url,
                         })
+                        return null
                     })
-
                     setAdvertisementImages(images)
                 }
             }).catch((e) => {
@@ -148,6 +148,8 @@ export default function Advertise() {
         } else {
             await axios.delete(`${url}/adversiments/deslike/${likeId}`)
         }
+
+        window.location.reload()
     }
 
     useEffect(() => {
@@ -209,7 +211,7 @@ export default function Advertise() {
                             </div>
                         </BoxNewFinders>
                         {
-                            sellerId != idUser ?
+                            sellerId !== idUser ?
                                 <div>
                                     <button onClick={() => buyAdvertise()}>Comprar</button>
                                     <button onClick={() => sendProposal()}>Enviar proposta</button>
@@ -251,7 +253,7 @@ export default function Advertise() {
                             </div>
                             <div>
                                 {
-                                    sellerId != idUser ?
+                                    sellerId !== idUser ?
                                         <button onClick={() => sendToChat()}>
                                             Conversar
                                             <img src={chat} alt="Conversar com o vendedor" />

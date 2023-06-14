@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import IconCamPink from "../assets/images/icon-cam-gray.svg";
 import IconError from '../assets/images/icon-error.svg';
 import {
@@ -21,7 +21,6 @@ import { containsNumbers, validateEmail, validateAge } from "../utils/strings"
 import InputMask from 'react-input-mask';
 import axios from "axios";
 import { url } from "../utils/request";
-import { AuthContext } from "../utils/AuthContext";
 import { useNavigate } from 'react-router-dom';
 import { errorAlert, successAlert } from '../utils/alerts';
 import Loading from "../components/Loading";
@@ -191,6 +190,9 @@ export default function EditProfile() {
             });
 
             if (response.status === 200) {
+                localStorage.setItem('profileImage', response.data.profileImage)
+                localStorage.setItem('name', response.data.name)
+                
                 successAlert("Imagem atualizada com sucesso!");
             } else {
                 errorAlert("Ocorreu um erro ao atualizar a imagem.");

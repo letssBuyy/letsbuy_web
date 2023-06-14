@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { AuthContext } from "../utils/AuthContext";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
@@ -27,6 +27,9 @@ import {
     ItensContainerNavbarIsAuthenticated
 } from '../assets/styles/components/navbarStyle';
 import IconAdmin from "../assets/images/icon-admin.svg";
+import IconFile from "../assets/images/icon-file.svg";
+import axios from "axios";
+import { successAlert, errorAlert } from "../utils/alerts";
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
@@ -39,7 +42,33 @@ export default function Navbar(props) {
     const [visible, setVisible] = useState(false);
     const accesLevel = localStorage.getItem('accessLevel')
 
+    const fileInputRef = useRef(null);
+
     let navigate = useNavigate();
+
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        handleFileUpload(selectedFile);
+    };
+
+    const clickInputReference = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFileUpload = (file) => {
+        if (file) {
+            const formData = new FormData();
+            formData.append('arquivo', file);
+
+            axios.post('/adversiments/import-txt', formData)
+                .then((response) => {
+                    successAlert("Importação realizada com sucesso!")
+                })
+                .catch((error) => {
+                    errorAlert("Ocorreu um erro ao realizar a importação")
+                });
+        }
+    };
 
     useEffect(() => {
         if (localStorage.getItem('name') !== undefined &&
@@ -98,13 +127,20 @@ export default function Navbar(props) {
                                     :
                                     <button onClick={() => navigate("/entrar")}>Entrar</button>
                             }
-                            
+
                             <button onClick={() => visible ? setVisible(false) : setVisible(true)} className="btn-mobile">
                                 <img src={Menu} alt="mais opções" />
                             </button>
                         </div>
                     </ContainerPrincipal>
                     <NavbarMobile style={visible ? { marginLeft: 0 } : { marginLeft: '-375px' }}>
+                        <input
+                            type="file"
+                            accept=".txt"
+                            style={{ display: 'none' }}
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                        />
                         {
                             !isAuthenticated ?
                                 <>
@@ -136,14 +172,24 @@ export default function Navbar(props) {
                                         </ContainerMyAccount>
                                         {
                                             accesLevel && accesLevel === "ADMIN" ?
-                                                <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/dashboard")}>
-                                                    <div>
-                                                        <img src={IconAdmin} alt="Dashboard" />
-                                                    </div>
-                                                    <div>
-                                                        <p>Dashboard</p>
-                                                    </div>
-                                                </ItensContainerNavbarIsAuthenticated>
+                                                <>
+                                                    <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/dashboard")}>
+                                                        <div>
+                                                            <img src={IconAdmin} alt="Dashboard" />
+                                                        </div>
+                                                        <div>
+                                                            <p>Dashboard</p>
+                                                        </div>
+                                                    </ItensContainerNavbarIsAuthenticated>
+                                                    <ItensContainerNavbarIsAuthenticated onClick={() => { clickInputReference() }}>
+                                                        <div>
+                                                            <img src={IconFile} alt="Importar anúncios e usuários" />
+                                                        </div>
+                                                        <div>
+                                                            <p>Importação</p>
+                                                        </div>
+                                                    </ItensContainerNavbarIsAuthenticated>
+                                                </>
                                                 :
                                                 <></>
                                         }
