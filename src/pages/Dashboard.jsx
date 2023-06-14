@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import ChartComponent from '../components/Chart';
 import LineChart from '../components/ChartLine';
 import Navbar from "../components/Navbar";
 import iconPeopleDash from "../assets/images/iconPeoplesDash.svg"
 import iconFinalizados from "../assets/images/iconFinalizados.svg"
 import iconTaxa from "../assets/images/iconTaxas.svg"
+import { url } from "../utils/request";
+import axios from 'axios';
+import moment from 'moment';
 import iconPubli from "../assets/images/iconsPublicados.svg"
 import { CaixaGraficos, CaixaKpi, CaixasFilhas, Graficos, ImagensCaixinhas, Legendas, Limitador, Quantidades, SemiTitulo, TituloGrafico, Titulos } from "../assets/styles/dashboardStyle";
+import { useEffect } from "react";
 
 
 
@@ -58,6 +62,28 @@ export default function Exibir() {
     ],
   }
 
+  const [qtdUser, setQtdUser] = useState(0)
+
+  async function load() {
+    try {
+      await axios.get(`${url}/users/qtd-users`).then((response) => {
+        const data = response.data
+        console.log(data)
+        setQtdUser(data)
+        // const messageDate = moment(data.registrationDate ? data.registrationDate : '');
+      }).catch((e) => {
+        console.log(e)
+      })
+    } catch (e) {
+      console.log(e)
+    } finally {
+    }
+  }
+
+  useEffect(() => {
+    load()
+  }, [])
+
   return (
     <>
       <Navbar type='basic'
@@ -98,7 +124,7 @@ export default function Exibir() {
               <img src={iconPubli} alt="icone" />
             </ImagensCaixinhas>
             <Titulos>
-              <Quantidades>30</Quantidades>
+              <Quantidades></Quantidades>
               <Legendas>Anúncios publicados</Legendas>
             </Titulos>
           </CaixasFilhas>
@@ -110,7 +136,7 @@ export default function Exibir() {
               Vendas por categoria
             </TituloGrafico>
             <SemiTitulo>
-            Quantidade de vendas em cada categoria
+              Quantidade de vendas em cada categoria
             </SemiTitulo>
             <LineChart data={chartDataLine} />
           </Graficos>
@@ -119,7 +145,7 @@ export default function Exibir() {
               Vendas por Mês
             </TituloGrafico>
             <SemiTitulo>
-            Quantidade de vendas em cada Mês
+              Quantidade de vendas em cada Mês
             </SemiTitulo>
             <ChartComponent data={chartData} />
           </Graficos>
