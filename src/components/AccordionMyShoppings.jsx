@@ -5,17 +5,42 @@ import {
     AccordionContent,
     ButtonDisabled,
     ContainerCheckout
-} from "../assets/styles/components/accordionShoppingStyle"
+} from "../assets/styles/components/accordionShoppingStyle";
 import Checkout from "./checkoutPayment";
-import { toUppercasedString } from "../utils/strings"
+import { toUppercasedString } from "../utils/strings";
+import { url } from "../utils/request";
+import axios from "axios";
+import { successAlert, errorAlert } from "../utils/alerts";
+import { formatCurrency } from "../utils/strings";
+import ImageDefault from "../assets/images/image-default.png";
 
 export default function AccordionMyShoppings(props) {
     const [isOpen, setIsOpen] = useState(false);
     const contentRef = React.useRef(null);
     const height = isOpen ? contentRef.current.scrollHeight : 0;
+    let userId = localStorage.getItem('userId')
+    const idAd = props.id
+    const trackings = props.etapa ? props.etapa : []
 
-    function confirm() {
-        alert("confirmou")
+    function findDeliveredIndex() {
+        let deliveredIndex = -1;
+        trackings.map((item, index) => {
+            if (item.status === 'DELIVERED') {
+                deliveredIndex = index;
+            }
+            return null;
+        });
+        return deliveredIndex;
+    };
+
+    async function confirm() {
+        await axios.post(`${url}/trackings/${userId}/${idAd}`, {
+            status: 'DELIVERED'
+        }).then(() => {
+            successAlert("Status atualiado com sucesso!")
+        }).catch(() => {
+            errorAlert("Ocorreu um erro ao atualizar o status do anúncio.")
+        })
     }
 
     return (
@@ -23,15 +48,15 @@ export default function AccordionMyShoppings(props) {
             <AccordionWrapper>
                 <AccordionHeader onClick={() => setIsOpen(!isOpen)}>
                     <div>
-                        <img src={props.image} alt="anuncio" />
+                        <img src={props.image ? props.image : ImageDefault} alt="anuncio" />
                         <div>
-                            <h1>{props.title}</h1>
-                            <span>{props.preco}</span>
+                            <h1>{props.title ? props.title : ''}</h1>
+                            <span>{formatCurrency(props.preco)}</span>
                         </div>
                     </div>
                     <div>
                         {
-                            props.finalized ?
+                            findDeliveredIndex() === -1 ?
                                 <button onClick={() => confirm()}>Pedido recebido</button>
                                 :
                                 <ButtonDisabled disabled={true}>Pedido finalizado</ButtonDisabled>
@@ -44,17 +69,13 @@ export default function AccordionMyShoppings(props) {
                 >
                     <div>
                         <p>Informações do pedido</p>
-                        <span>Vendido por: {toUppercasedString(props.sellerName)}
+                        <span>Vendido por: {toUppercasedString(props.sellerName)}<br />
                             CPF: {props.cpf.substring(0, 3)}.***.***-**</span>
                         <span>{props.date}</span>
                         <span>ID do anúncio: {props.id}</span>
                     </div>
-                    <div>
-                        <p>Endereço de entrega</p>
-                        <span>{props.adress}</span>
-                    </div>
                     <ContainerCheckout>
-                        <Checkout etapa={2} />
+                        <Checkout etapa={props.etapa.length + 1} />
                     </ContainerCheckout>
                 </AccordionContent>
             </AccordionWrapper>

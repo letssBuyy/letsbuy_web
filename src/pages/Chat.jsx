@@ -52,6 +52,9 @@ export default function Chat() {
     const [currentChatID, setCurrentChatID] = useState('');
     const [currentChat, setCurrentChat] = useState([]);
     const [chats, setChats] = useState([]);
+
+    const [sellerChatId, setSellerChatId] = useState('');
+
     const [loading, setLoading] = useState(false);
     const [isMobileView, setIsMobileView] = useState(window.innerWidth < 900);
     const [modalOpen, setModalOpen] = useState(false);
@@ -112,12 +115,14 @@ export default function Chat() {
             idAdversiment: idAdvertise
         }).then((response) => {
             const data = response.data
+            console.log(response.data)
             setAdvertiseId(data.adversiment && data.adversiment.id ? data.adversiment.id : "");
             setAdvertiseTitle(data.adversiment && data.adversiment.title ? data.adversiment.title : "");
             setAdvertiseImage(data.adversiment && data.adversiment.images && data.adversiment.images.length > 0 ? data.adversiment.images[0].url : "");
             setAdvertisePrice(data.adversiment && data.adversiment.price ? data.adversiment.price : "");
             setUserImageProfile(data.seller && data.seller.profileImage ? data.seller.profileImage : "");
             setUserName(data.seller && data.seller.name ? data.seller.name : "");
+            setSellerChatId(data.seller && data.seller.id ? data.seller.id : '');
 
             if (data.id) {
                 setCurrentChatID(data.id)
@@ -232,7 +237,7 @@ export default function Chat() {
                 }}
                 idChat={currentChatID}
             />
-            <Navbar type='basic' showBackButton={true} />
+            <Navbar type='principal' />
             <Container>
                 <SideBar ref={sideBarRef}>
                     {chats && chats.length > 0 ? (
@@ -270,7 +275,12 @@ export default function Chat() {
                         </div>
                         <ModalMoreOptions style={showOptions ? { display: "flex" } : { display: "none" }}>
                             <button onClick={() => sendDetailAd()}>Ver anúncio</button>
-                            <button onClick={() => createProposal()}>Enviar proposta</button>
+                            {
+                                userId !== sellerChatId ?
+                                    <button onClick={() => createProposal()}>Enviar proposta</button>
+                                    :
+                                    <></>
+                            }
                         </ModalMoreOptions>
                     </TopBar>
                     <ChatContainer ref={containerRef}>
@@ -297,7 +307,7 @@ export default function Chat() {
                                                         proposalValue={message.amount}
                                                         advertiseImage={advertiseImage}
                                                         advertiseTitle={advertiseTitle}
-                                                        hiddenButtons={message.idUser === userId ? true : false}
+                                                        hiddenButtons={message.idUser == userId ? true : false}
                                                     />
                                                 </>
                                         ))}

@@ -35,8 +35,8 @@ export default function Card(props) {
         const isLiked = props.isSelectedHeart
         const adversimentId = props.id
         const likeId = props.likeId
-        
-        if(!isLiked) {
+
+        if (!isLiked) {
             await axios.post(`${url}/adversiments/like/${userID}/${adversimentId}`).then(() => {
 
             }).catch((e) => {

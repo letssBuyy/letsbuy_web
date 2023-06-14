@@ -32,8 +32,7 @@ import { formatCurrency } from "../utils/strings"
 
 export default function Checkout() {
     let navigate = useNavigate();
-    const { user } = useContext(AuthContext);
-    const userId = user.id;
+    const userId = localStorage.getItem('userId');
     const { id } = useParams();
 
     const [deliveryOption, setDeliveryOption] = useState(1);

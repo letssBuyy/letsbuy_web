@@ -8,6 +8,7 @@ import ImageDefault from "../assets/images/image-default.png";
 import axios from "axios";
 import { url } from "../utils/request";
 import { successAlert, errorAlert } from "../utils/alerts";
+import { formatCurrency } from "../utils/strings";
 
 export default function ProposalMessage(props) {
     const messageID = props.id;
@@ -45,7 +46,7 @@ export default function ProposalMessage(props) {
                         </div>
                         <div>
                             <p>{props.advertiseTitle}</p>
-                            <span>R$ {props.proposalValue}</span>
+                            <span>{formatCurrency(props.proposalValue)}</span>
                         </div>
                     </CardAdvertise>
                     <Buttons style={props.hiddenButtons ? { display: 'none' } : { display: 'flex' }}>

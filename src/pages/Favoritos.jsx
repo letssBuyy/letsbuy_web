@@ -48,7 +48,7 @@ export default function Favoritos() {
     return (
         <>
             <Loading isEnabled={loading} />
-            <Navbar type='basic' showBackButton={true} />
+            <Navbar type='principal' />
             <Container>
                 <h1>Favoritos</h1>
 

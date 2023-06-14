@@ -1,5 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../utils/AuthContext";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { useNavigate } from 'react-router-dom';
 import NoContent from "../components/NoContent";
@@ -19,11 +18,9 @@ import WithdrawModal from "../components/WithdrawModal";
 import { formatCurrency } from "../utils/strings";
 
 export default function Wallet() {
-    const { user } = useContext(AuthContext);
-    const id = user.id
+    const id = localStorage.getItem('userId');
     let navigate = useNavigate();
-
-    const [balance, setBalance] = useState(0);
+    const [balance, setBalance] = useState(0.0);
     const [showBalance, setShowBalance] = useState(false);
     const [historic, setHistoric] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
@@ -39,7 +36,7 @@ export default function Wallet() {
     async function load() {
         await axios.get(`${url}/users/transaction/${id}`).then((response) => {
             const data = response.data
-            setBalance(data.balance ? data.balance : '')
+            setBalance(data.balance ? data.balance : 0.0)
             setHistoric(data.transactions ? data.transactions : [])
         })
     }
@@ -67,7 +64,6 @@ export default function Wallet() {
                 isOpen={modalOpen}
                 onClose={closeModal}
                 balance={balance}
-                userId={id}
             />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>

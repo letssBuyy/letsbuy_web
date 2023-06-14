@@ -44,11 +44,11 @@ const AuthProvider = ({ children }) => {
       const data = response.data;
       const { token, user: userData } = data;
       setToken(token);
-      
+      localStorage.setItem('accessLevel', userData.accessLevel);
       localStorage.setItem('token', token);
       localStorage.setItem('userId', userData.id);
       localStorage.setItem('profileImage', userData.profileImage);
-      localStorage.setItem('name', userData.name)
+      localStorage.setItem('name', userData.name);
 
       setUser(prevUser => ({ ...prevUser, ...userData }));
       setIsAuthenticated(true);
@@ -70,6 +70,8 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('profileImage');
     localStorage.removeItem('name');
+
+    window.location.reload();
   };
 
   return (

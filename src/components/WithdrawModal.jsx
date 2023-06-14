@@ -19,10 +19,12 @@ import { url } from "../utils/request";
 import { successAlert, errorAlert } from "../utils/alerts";
 import { removeCurrencyFormatting } from "../utils/strings";
 
-export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
+export default function WithdrawModal({ isOpen, onClose, balance }) {
     const [price, setPrice] = useState('');
+    const [messageError, setMessageError] = useState('Digite um valor válido!');
     const [showPriceError, setShowPriceError] = useState(false);
     const [loading, setLoading] = useState(false);
+    const userId = localStorage.getItem('userId');
 
     const closeModal = () => {
         onClose();
@@ -52,6 +54,13 @@ export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
                 closeModal()
             }
         } else {
+
+            console.log(balance)
+            console.log(removeCurrencyFormatting(price))
+            if (balance > removeCurrencyFormatting(price)) {
+                setMessageError('Você não possui saldo suficiente!')
+            }
+
             setShowPriceError(true)
         }
     }
@@ -80,7 +89,7 @@ export default function WithdrawModal({ isOpen, onClose, balance, userId }) {
                             </InputContainer>
                             <ContainerError style={showPriceError ? { display: 'flex' } : { display: 'none' }}>
                                 <img src={IconError} alt="Preço inválido" />
-                                <span>Digite um valor válido</span>
+                                <span>{messageError}</span>
                             </ContainerError>
                         </div>
                         <Button onClick={() => withdraw()}>Sacar</Button>

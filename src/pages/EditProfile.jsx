@@ -56,8 +56,7 @@ export default function EditProfile() {
     const [loading, setLoading] = useState(false);
 
     let navigate = useNavigate();
-    const { user } = useContext(AuthContext);
-    const userID = user.id
+    const userID = localStorage.getItem('userId')
 
     const [file, setFile] = useState(null);
     function handleChangeProfileImage(event) {
@@ -148,7 +147,7 @@ export default function EditProfile() {
         if (isValidFields) {
             try {
                 setLoading(true)
-                await axios.put(`${url}/users?sellerId=${userID}`, {
+                await axios.put(`${url}/users/${userID}`, {
                     name: name,
                     email: email,
                     cpf: cpf,

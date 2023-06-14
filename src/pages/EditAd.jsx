@@ -115,7 +115,7 @@ export default function EditAd() {
     async function load() {
         try {
             setLoading(true)
-            await axios.get(`${url}/adversiments/4/1`).then(async (response) => {
+            await axios.get(`${url}/adversiments/${id}/${idUser}`).then(async (response) => {
                 const data = response.data[0].adversiments
                 setTitle(data.title ? data.title : '')
                 setDescription(data.description ? data.description : '')

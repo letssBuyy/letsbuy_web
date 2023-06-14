@@ -26,6 +26,7 @@ import {
     ContainerMyAccount,
     ItensContainerNavbarIsAuthenticated
 } from '../assets/styles/components/navbarStyle';
+import IconAdmin from "../assets/images/icon-admin.svg";
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
@@ -36,6 +37,7 @@ export default function Navbar(props) {
     const [userImageProfile, setUserImageProfile] = useState('');
     const { authlogout } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
+    const accesLevel = localStorage.getItem('accessLevel')
 
     let navigate = useNavigate();
 
@@ -96,7 +98,7 @@ export default function Navbar(props) {
                                     :
                                     <button onClick={() => navigate("/entrar")}>Entrar</button>
                             }
-
+                            
                             <button onClick={() => visible ? setVisible(false) : setVisible(true)} className="btn-mobile">
                                 <img src={Menu} alt="mais opções" />
                             </button>
@@ -117,7 +119,12 @@ export default function Navbar(props) {
                                     <ContainerNavbarIsAuthenticated>
                                         <ContainerMyAccount onClick={() => navigate("/editar-perfil")}>
                                             <div>
-                                                <img src={userImageProfile ? userImageProfile : ImageDefault} alt="Icone de perfil" />
+                                                <img
+                                                    src={userImageProfile !== null &&
+                                                        userImageProfile !== undefined &&
+                                                        userImageProfile !== 'null' ? userImageProfile : ImageDefault}
+                                                    alt="Icone de perfil"
+                                                />
                                                 <div>
                                                     <p>{userName}</p>
                                                     <span>Minha conta</span>
@@ -127,6 +134,19 @@ export default function Navbar(props) {
                                                 <img src={ArrowBack} alt="Ir para minhas compras" />
                                             </div>
                                         </ContainerMyAccount>
+                                        {
+                                            accesLevel && accesLevel === "ADMIN" ?
+                                                <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/dashboard")}>
+                                                    <div>
+                                                        <img src={IconAdmin} alt="Dashboard" />
+                                                    </div>
+                                                    <div>
+                                                        <p>Dashboard</p>
+                                                    </div>
+                                                </ItensContainerNavbarIsAuthenticated>
+                                                :
+                                                <></>
+                                        }
                                         <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/chat")}>
                                             <div>
                                                 <img src={Chat} alt="Chat" />

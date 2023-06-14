@@ -19,6 +19,7 @@ export const Title = styled.p`
   font-family: '${fonts.semiBold}';
   font-size: 20px;
   margin-bottom: 40px;
+  margin-top: 90px;
 
   @media screen and (max-width: 900px) {
     width: 100%;
