@@ -20,7 +20,6 @@ export default function Exibir() {
                     </div>
 
                     <DivAccordin>
-
                         <Accordion
                             header="Como eu posso efetuar o pagamento por um produto?"
                             content={<H1Accordin>"Para realizar o pagamento basta escolher o produto de sua preferência, selecionar a opção "Comprar", e em seguida confirmar as informações do produto escolhido, selecionar "Realizar pagamento", assim você será redirecionado para nossa tela de Checkout onde você terá disponível a opção de pagar com o cartão de crédito, que é feita via PagSeguro. Basta preencher as informações do cartão e concluir sua compra. Após isso uma nova tela informando que a sua compra foi concluída vai aparecer."</H1Accordin>}

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { AuthContext } from "../utils/AuthContext";
 import Logo from '../assets/images/logo-black-pink.svg';
 import BackButton from '../assets/images/icon-back-button.svg';
 import Menu from '../assets/images/icon-menu-black.svg';
@@ -10,9 +11,9 @@ import Chat from "../assets/images/icon-chat-black.svg";
 import Edit from "../assets/images/icon-edit-black.svg";
 import Favorite from "../assets/images/icon-favorite-black.svg";
 import Grid from "../assets/images/icon-grid-black.svg";
+import Money from "../assets/images/icon-money.svg";
 import iconLogout from "../assets/images/icon-log-out.svg";
 import { useNavigate } from 'react-router-dom';
-
 import {
     ContainerBasic,
     LogoBasic,
@@ -29,13 +30,25 @@ import {
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
-    var isAuthenticated = props.isAuthenticated ? props.isAuthenticated : false
-    var userName = localStorage.getItem("USER_NAME") ? localStorage.getItem("USER_NAME") : 'Maria'
 
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userName, setUserName] = useState('');
+    const [userImageProfile, setUserImageProfile] = useState('');
+    const { authlogout } = useContext(AuthContext);
     const [visible, setVisible] = useState(false);
+
     let navigate = useNavigate();
 
-    function logout() { }
+    useEffect(() => {
+        if (localStorage.getItem('name') !== undefined &&
+            localStorage.getItem('name') !== null &&
+            localStorage.getItem('name') !== undefined &&
+            localStorage.getItem('name') !== null) {
+            setIsAuthenticated(true)
+            setUserName(localStorage.getItem('name'))
+            setUserImageProfile(localStorage.getItem('profileImage'))
+        }
+    }, [])
 
     switch (type) {
         case "basic":
@@ -104,9 +117,9 @@ export default function Navbar(props) {
                                     <ContainerNavbarIsAuthenticated>
                                         <ContainerMyAccount onClick={() => navigate("/editar-perfil")}>
                                             <div>
-                                                <img src={ImageDefault} alt="Icone de perfil" />
+                                                <img src={userImageProfile ? userImageProfile : ImageDefault} alt="Icone de perfil" />
                                                 <div>
-                                                    <p>Lucas da Silva</p>
+                                                    <p>{userName}</p>
                                                     <span>Minha conta</span>
                                                 </div>
                                             </div>
@@ -154,7 +167,15 @@ export default function Navbar(props) {
                                                 <p>Minhas compras</p>
                                             </div>
                                         </ItensContainerNavbarIsAuthenticated>
-                                        <ItensContainerNavbarIsAuthenticated onClick={() => logout()}>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => navigate("/minha-carteira")}>
+                                            <div>
+                                                <img src={Money} alt="Minha carteira" />
+                                            </div>
+                                            <div>
+                                                <p>Minha carteira</p>
+                                            </div>
+                                        </ItensContainerNavbarIsAuthenticated>
+                                        <ItensContainerNavbarIsAuthenticated onClick={() => authlogout()}>
                                             <div>
                                                 <img src={iconLogout} alt="Sair" />
                                             </div>

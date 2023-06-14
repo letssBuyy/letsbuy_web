@@ -6,10 +6,13 @@ import { ContainerError, InputContainer, Label } from '../assets/styles/componen
 import { Container, SignIn, SignUp, Title } from '../assets/styles/loginStyle';
 import { Checkbox, ContainerCheckbox } from '../assets/styles/registerStyle';
 import Navbar from "../components/Navbar";
-
-import { containsNumbers, validateEmail, validateAge } from "../utils/strings"
+import { useNavigate } from 'react-router-dom';
+import { containsNumbers, validateEmail, validateAge } from "../utils/strings";
 import InputMask from 'react-input-mask';
-
+import { url } from "../utils/request";
+import axios from "axios";
+import { successAlert, errorAlert } from "../utils/alerts"
+ 
 export default function Register() {
     const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
@@ -17,8 +20,8 @@ export default function Register() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [terms, setTerms] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [terms, setTerms] = useState(false);
 
     const [showNameError, setShowNameError] = useState(false);
     const [showCpfError, setShowCpfError] = useState(false);
@@ -32,16 +35,37 @@ export default function Register() {
     const [textPhoneError, setTextPhoneError] = useState("Telefone inválido");
     const [textEmailError, setTextEmailError] = useState("E-mail inválido");
 
-    function cadastrar() {
+    let navigate = useNavigate();
+
+    async function cadastrar() {
         let isValidFields = validateFields()
 
         if (isValidFields) {
-            console.log("todos os campos estão validos")
+            try {
+                await axios.post(`${url}/users`, {
+                    name: name,
+                    email: email,
+                    cpf: cpf,
+                    birthDate: dateOfBirth,
+                    password: password,
+                    phoneNumber: phoneNumber
+                }).then((response) => {
+                    if (response.status === 409) {
+                        errorAlert("Email ou CPF já cadastrados")
+                    }
+
+                    if (response.status === 200) {
+                        successAlert("Cadastro realizado com sucesso!")
+                    }
+                })
+            } catch (error) {
+                errorAlert("Ocorreu um erro ao realizar o cadastro")
+            }
         }
     }
 
     function haveAccount() {
-        console.log('ja tenho conta')
+        navigate('/entrar')
     }
 
     function validateFields() {
@@ -219,7 +243,7 @@ export default function Register() {
                             }
                         </InputContainer>
                         <ContainerError style={showPasswordError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Digite a senha corretamente" />
+                            <img src={IconError} alt="senha inválida (Minímo 6 digitos)" />
                             <span>senha inválida (Minímo 6 digitos)</span>
                         </ContainerError>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import IconCamPink from "../assets/images/icon-cam-gray.svg";
 import IconError from '../assets/images/icon-error.svg';
 import {
@@ -20,6 +20,11 @@ import Navbar from "../components/Navbar";
 import { containsNumbers, validateEmail, validateAge } from "../utils/strings"
 import InputMask from 'react-input-mask';
 import axios from "axios";
+import { url } from "../utils/request";
+import { AuthContext } from "../utils/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import { errorAlert, successAlert } from '../utils/alerts';
+import Loading from "../components/Loading";
 
 export default function EditProfile() {
     const [profileImage, setProfileImage] = useState('');
@@ -45,19 +50,22 @@ export default function EditProfile() {
     const [showCpfError, setShowCpfError] = useState(false);
     const [showDateOfBirthError, setShowDateOfBirthError] = useState(false)
     const [showPhoneNumberError, setShowPhoneNumberError] = useState(false)
-
     const [showEmailError, setShowEmailError] = useState(false);
+    const [disabledAdressInputs, setDisableAdressInputs] = useState(true);
 
-    const [textCpfError, setTextCpfError] = useState("CPF inválido");
-    const [textPhoneError, setTextPhoneError] = useState("Telefone inválido");
-    const [textEmailError, setTextEmailError] = useState("E-mail inválido");
+    const [loading, setLoading] = useState(false);
 
-    const [disabledAdressInputs, setDisableAdressInputs] = useState(true)
+    let navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const userID = user.id
 
+    const [file, setFile] = useState(null);
     function handleChangeProfileImage(event) {
-        const file = event.target.files[0];
+        const uploadedFile = event.target.files[0];
+        setFile(uploadedFile)
+
         const reader = new FileReader();
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(uploadedFile);
         reader.onload = () => {
             setProfileImage(reader.result);
         };
@@ -111,31 +119,88 @@ export default function EditProfile() {
         setAccount(formattedValue);
     };
 
-    async function buscarPorCep(cep) {
+    async function searchForCEP(cep) {
         if (cep) {
             if (cep.length === 8) {
-         try {
-            const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-            if (!response.data.erro) {
-                const { logradouro, localidade, uf, bairro } = response.data;
-                setCity(localidade)
-                setState(uf)
-                setNeighborhood(bairro)
-                setRoad(logradouro)
-                setDisableAdressInputs(false)
-            }
-        } catch (error) {
-            console.log('Erro ao obter o endereço:', error);
-        }   
+                try {
+                    setLoading(true)
+                    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+                    if (!response.data.erro) {
+                        const { logradouro, localidade, uf, bairro } = response.data;
+                        setCity(localidade)
+                        setState(uf)
+                        setNeighborhood(bairro)
+                        setRoad(logradouro)
+                        setDisableAdressInputs(false)
+                    }
+                } catch (error) {
+                    console.log('Erro ao obter o endereço:', error);
+                } finally {
+                    setLoading(false)
+                }
             }
         }
     }
 
-    function atualizar() {
+    async function update() {
         let isValidFields = validateFields()
 
         if (isValidFields) {
-            console.log("todos os campos estão validos")
+            try {
+                setLoading(true)
+                await axios.put(`${url}/users?sellerId=${userID}`, {
+                    name: name,
+                    email: email,
+                    cpf: cpf,
+                    birthDate: dateOfBirth,
+                    phoneNumber: phoneNumber,
+                    cep: cep,
+                    city: city,
+                    state: state,
+                    neighborhood: neighborhood,
+                    road: road,
+                    complement: complement,
+                    number: number,
+                    accountNumber: account,
+                    bankAccount: bank,
+                    agencyNumber: agency,
+                }).then((response) => {
+                    if (response.status === 200) {
+                        successAlert("Perfil atualizado com sucesso!")
+                    } else {
+                        errorAlert("Ocorreu um erro ao atualizar o perfil.")
+                    }
+                })
+            } catch (error) {
+                errorAlert("Ocorreu um erro ao atualizar o perfil.")
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
+
+    async function updateProfileImage() {
+        const formData = new FormData();
+        formData.append('img', file);
+
+        try {
+            setLoading(true);
+            const response = await axios.post(`${url}/images/user/${userID}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                successAlert("Imagem atualizada com sucesso!");
+            } else {
+                errorAlert("Ocorreu um erro ao atualizar a imagem.");
+            }
+        } catch (error) {
+            console.log(error);
+            errorAlert("Ocorreu um erro ao atualizar a imagem.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -177,37 +242,71 @@ export default function EditProfile() {
             setShowEmailError(false)
         }
 
-        if (phoneNumber) {
-            setShowPhoneNumberError(true)
-            setTextPhoneError("Telefone já cadastrado!")
-        }
-
-        if (email) {
-            setTextEmailError("E-mail já cadastrado!")
-        }
-
-        if (cpf) {
-            setTextCpfError("CPF já cadastrado!")
-        }
-
         return isValidAllFields
     }
 
-    console.log(cep, number, complement)
+    async function load() {
+        try {
+            setLoading(true)
+            await axios.get(`${url}/users?sellerId=${userID}`
+            ).then((response) => {
+                const data = response.data;
+
+                setProfileImage(data.profileImage ? data.profileImage : "");
+                setName(data.name ? data.name : '');
+                setCpf(data.cpf ? data.cpf : '');
+                setDateOfBirth(data.birthDate ? data.birthDate : "");
+                setPhoneNumber(data.phoneNumber ? data.phoneNumber : "");
+                setEmail(data.email ? data.email : "");
+
+                const bank = data.bankAccount ? data.bankAccount : "";
+                setAccount(bank.accountNumber ? bank.accountNumber : "");
+                setAgency(bank.agencyNumber ? bank.agencyNumber : "");
+                setBank(bank.bankNumber ? bank.bankNumber : "");
+
+                setCep(data.cep ? data.cep : "");
+                setState(data.state ? data.state : "");
+                setCity(data.city ? data.city : "");
+                setNeighborhood(data.neighborhood ? data.neighborhood : "");
+                setRoad(data.road ? data.road : "");
+                setComplement(data.complement ? data.complement : "");
+                setNumber(data.number ? data.number : "");
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        } else {
+            load();
+        }
+    }, [])
+
+    useEffect(() => {
+        if (file) {
+            updateProfileImage();
+        }
+    }, [file]);
 
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar type='basic' isAuthenticated={false} showBackButton={true} />
             <Container>
                 <Title>Editar perfil</Title>
-
                 <div>
                     <Accordion
                         header="Dados cadastrais"
                         content={
                             <>
                                 <ContainerInputs>
-                                    <ProfileImage>
+                                    <ProfileImage onChange={handleChangeProfileImage}>
                                         {
                                             profileImage !== '' ?
                                                 <div>
@@ -219,16 +318,16 @@ export default function EditProfile() {
                                                 </div>
                                         }
                                         <label htmlFor="imagem1"></label>
-                                        <input id="imagem1" type="file" onChange={handleChangeProfileImage} />
+                                        <input id="imagem1" type="file" />
                                         <h1>Alterar foto de perfil</h1>
                                     </ProfileImage>
-
                                     <div>
                                         <Label>Nome</Label>
                                         <InputContainer style={{ minWidth: '100%', height: '48px' }}>
                                             <input
                                                 type="text"
                                                 placeholder="Digite o nome"
+                                                value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                             ></input>
                                         </InputContainer>
@@ -243,12 +342,13 @@ export default function EditProfile() {
                                             <InputMask
                                                 mask="999.999.999-99"
                                                 placeholder="000.000.000-00"
+                                                value={cpf}
                                                 onChange={(e) => setCpf(e.target.value)}
                                             ></InputMask>
                                         </InputContainer>
                                         <ContainerError style={showCpfError ? { display: 'flex' } : { display: 'none' }}>
                                             <img src={IconError} alt="Digite o CPF corretamente" />
-                                            <span>{textCpfError}</span>
+                                            <span>CPF inválido</span>
                                         </ContainerError>
                                     </div>
                                     <div>
@@ -257,6 +357,7 @@ export default function EditProfile() {
                                             <input
                                                 type="date"
                                                 placeholder="00/00/0000"
+                                                value={dateOfBirth}
                                                 onChange={(e) => setDateOfBirth(e.target.value)}
                                             ></input>
                                         </InputContainer>
@@ -277,7 +378,7 @@ export default function EditProfile() {
                                         </InputContainer>
                                         <ContainerError style={showPhoneNumberError ? { display: 'flex' } : { display: 'none' }}>
                                             <img src={IconError} alt="Digite telefone corretamente" />
-                                            <span>{textPhoneError}</span>
+                                            <span>Telefone inválido</span>
                                         </ContainerError>
                                     </div>
                                 </ContainerInputs>
@@ -294,6 +395,7 @@ export default function EditProfile() {
                                         <InputContainer style={{ minWidth: '100%', height: '48px' }}>
                                             <input
                                                 type="text"
+                                                value={email}
                                                 placeholder="Digite o email"
                                                 onChange={(e) => setEmail(e.target.value)}
                                             ></input>
@@ -302,7 +404,7 @@ export default function EditProfile() {
                                             style={showEmailError ? { display: 'flex' } : { display: 'none' }}
                                         >
                                             <img src={IconError} alt="Digite o email corretamente" />
-                                            <span>{textEmailError}</span>
+                                            <span>E-mail inválido</span>
                                         </ContainerError>
                                     </div>
                                     <div>
@@ -353,8 +455,9 @@ export default function EditProfile() {
                                                 type="text"
                                                 placeholder="Digite o CEP"
                                                 onChange={(e) => setCep(e.target.value)}
-                                                onBlur={(e) => buscarPorCep(e.target.value)}
+                                                onBlur={(e) => searchForCEP(e.target.value)}
                                                 maxLength={8}
+                                                value={cep}
                                             ></input>
                                         </InputContainer>
                                     </div>
@@ -423,6 +526,7 @@ export default function EditProfile() {
                                         <InputContainer style={{ minWidth: '100%', height: '48px' }}>
                                             <input
                                                 type="text"
+                                                value={number}
                                                 placeholder="Digite o Número"
                                                 onChange={(e) => setNumber(e.target.value)}
                                             ></input>
@@ -433,6 +537,7 @@ export default function EditProfile() {
                                         <InputContainer style={{ minWidth: '100%', height: '48px' }}>
                                             <input
                                                 type="text"
+                                                value={complement}
                                                 placeholder="Digite o complemento"
                                                 onChange={(e) => setComplement(e.target.value)}
                                             ></input>
@@ -443,7 +548,7 @@ export default function EditProfile() {
                         }
                     />
                 </div>
-                <ButtonUpdate onClick={() => atualizar()}>Atualizar</ButtonUpdate>
+                <ButtonUpdate onClick={() => { update() }}>Atualizar</ButtonUpdate>
             </Container>
         </>
     )

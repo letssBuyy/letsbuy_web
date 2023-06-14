@@ -15,6 +15,7 @@ import { useEffect } from "react";
 
 
 export default function Exibir() {
+  let navigate = useNavigate()
 
   const chartData = {
     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho'],

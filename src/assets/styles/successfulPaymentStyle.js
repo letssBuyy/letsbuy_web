@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { colors } from "../../utils/colors";
-import { fonts } from '../../utils/fonts'
-
+import { fonts } from '../../utils/fonts';
 
 export const Container = styled.div`
     max-width: 630px;

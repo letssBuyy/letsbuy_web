@@ -5,11 +5,17 @@ import {
 } from "../assets/styles/myShoppingsStyle"
 import Accordion from "../components/AccordionMyShoppings";
 import Helpdesk from "../components/helpdesk";
+import { useNavigate } from "react-router";
 
 export default function MyShoppings() {
     const [shoppings, setShoppings] = useState([])
+    let navigate = useNavigate()
 
     useEffect(() => {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        }
         setShoppings([1,2,3,4,5])
     },[])
 

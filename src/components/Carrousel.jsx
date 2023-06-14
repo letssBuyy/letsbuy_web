@@ -4,7 +4,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {
     Item
-} from "../assets/styles/components/carrouselStyle"
+} from "../assets/styles/components/carrouselStyle";
+import { useNavigate } from 'react-router-dom';
 
 export default function Carrousel(props) {
     let items = props.items
@@ -35,11 +36,13 @@ export default function Carrousel(props) {
         ]
     };
 
+    let navigate = useNavigate();
+
     return (
         <>
             <Slider {...settings}>
                 {items.map((item, index) => (
-                    <Item key={index}>
+                    <Item key={index} onClick={() => {navigate(`/buscar-anuncios?category=${item.value}`)}}>
                         <p>{item.title}</p>
                     </Item>
                 ))}

@@ -1,73 +1,77 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from '../components/Navbar';
 import Verify from '../assets/images/icon-verify.svg';
-import Filter from '../assets/images/icon-filter.svg';
 import ImageDefault from '../assets/images/image-default.png';
 import {
     ProfileIcon,
     Container,
     InfoUser,
     BoxText,
-    TabButton,
-    TabContainer,
     ContainerAdvertise,
-    OrdinationSelect,
     ListAdvertise
 } from '../assets/styles/profileStyle';
 import Card from "../components/Card";
+import { useParams } from "react-router-dom";
+import { url } from "../utils/request";
+import axios from "axios";
+import NoContent from "../components/NoContent";
+import Loading from "../components/Loading";
+import moment from "moment";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function Profile() {
-    const [name, setName] = useState('Ana Julia')
-    const [city, setCity] = useState('São Paulo')
-    const [state, setState] = useState('SP')
-    const [subscribeSince, setSubscribeSince] = useState('2023')
+    const [idseller, setIdSeller] = useState('')
+    const [name, setName] = useState('');
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [subscribeSince, setSubscribeSince] = useState('');
     const [profileIcon, setProfileIcon] = useState('');
-    const [userVerify, setUserVerify] = useState(true);
+    const [cardList, setCardList] = useState([]);
+    const { id } = useParams();
+    const [loading, setLoading] = useState(false);
+    const { user } = useContext(AuthContext);
+    const userId = user.id;
 
-    const [ordination, setOrdination] = useState('mais_recentes"');
-    const [selectedTab, setSelectedTab] = useState(1);
+    async function load() {
+        try {
+            setLoading(true)
 
-    const [cardList, setCardList] = useState([1,2,3,4,5])
+            var urlcontent = ""
 
-    const handleSelectChange = (event) => {
-        setOrdination(event.target.value);
-    };
+            if (userId !== 0) {
+                urlcontent = `/users?sellerId=${id}&buyerId=${userId}`
+            } else {
+                urlcontent = `/users?sellerId=${id}`
+            }
 
-    const handleTabClick = (tabIndex) => {
-        setSelectedTab(tabIndex);
-    };
+            await axios.get(`${url}${urlcontent}`).then((response) => {
+                const data = response.data
+                console.log(data)
+                setIdSeller(data.id ? data.id : '')
+                setName(data.name ? data.name : '')
+                setCity(data.city ? data.city : '')
+                setState(data.state ? data.state : '')
+                const messageDate = moment(data.registrationDate ? data.registrationDate : '');
+                setSubscribeSince(messageDate.format("DD/MM/YYYY"))
+                setProfileIcon(data.profileImage ? data.profileImage : '');
+                setCardList(data.adversiments ? data.adversiments : '');
+            }).catch((e) => {
+                console.log(e)
+            })
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
         load()
     }, [])
 
-    function load() {
-        setName('Ana Julia')
-        setCity('São Paulo')
-        setState('SP')
-        setSubscribeSince('2023')
-        setProfileIcon('');
-        setUserVerify(true);
-        setOrdination('mais_recentes"')
-        setSelectedTab(1)
-        setCardList([1,2,3,4,5])
-    }
-
-    const [isSelectedHeart, setIsSelectedHeart] = useState(false)
-    function handleClickHeart() {
-        setIsSelectedHeart(!isSelectedHeart)
-    }
-
-    function handleClickSeller() {
-        console.log('clicou no vendedor')
-    }
-
-    function handleClickCard() {
-        console.log('clicou no card')
-    }
-
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
                 <InfoUser>
@@ -76,68 +80,45 @@ export default function Profile() {
                     </ProfileIcon>
                     <BoxText>
                         <h1>{name}</h1>
+                        <div>
+                            <img src={Verify} alt="Vendedor verificado" />
+                            <span>Vendedor verificado</span>
+                        </div>
                         {
-                            userVerify ?
-                                <div>
-                                    <img src={Verify} alt="Vendedor verificado" />
-
-                                    <span>Vendedor verificado</span>
-                                </div>
+                            city && state ?
+                                <span>{city}, {state} | na LetsBuy desde {subscribeSince}</span>
                                 :
-                                <div></div>
+                                <span>Na LetsBuy desde {subscribeSince}</span>
                         }
-
-                        <span>{city}, {state} | na LetsBuy desde {subscribeSince}</span>
                     </BoxText>
                 </InfoUser>
                 <ContainerAdvertise>
-                    <div>
-                        <TabContainer>
-                            <TabButton
-                                selected={selectedTab === 1}
-                                onClick={() => handleTabClick(1)}
-                                style={{ borderRadius: '5px 0px 0px 5px' }}>
-                                Á venda
-                            </TabButton>
-                            <TabButton
-                                selected={selectedTab === 2}
-                                onClick={() => handleTabClick(2)}
-                                style={{ borderRadius: '0px 5px 5px 0px' }}
-                            >
-                                Vendidos
-                            </TabButton>
-                        </TabContainer>
-                        <OrdinationSelect>
-                            <img src={Filter} alt="Selecione o tipo de filtro" />
-                            <select value={ordination} onChange={handleSelectChange}>
-                                <option value="mais_recentes">Mais recentes</option>
-                                <option value="mais_relevantes">Mais relevantes</option>
-                                <option value="maior_preco">Maior preço</option>
-                                <option value="menor_preco">Menor preço</option>
-                            </select>
-                        </OrdinationSelect>
-                    </div>
+                    <div></div>
                     <ListAdvertise>
-                        {cardList.map((card, index) => (
-                            <Card
-                            key={index}
-                            image={ImageDefault}
-                            price={'200'}
-                            name={'Bolsa marrom'}
-                            brand={'Tommy'}
-                            sellerName={'Luiz'}
-                            sellerCity={'São Paulo'}
-                            sellerState={'SP'}
-                            sellerIsVerify={true}
-                            sellerImageProfile={ImageDefault}
-                            isSelectedHeart={isSelectedHeart}
-                            onClickHeart={handleClickHeart}
-                            onClickSeller={handleClickSeller}
-                            onClickCard={handleClickCard}
-                            margin={'5px'}
-                        />
-                        ))}
-                        
+                        {cardList.length > 0 ?
+                            cardList.map((card, index) => (
+                                <Card
+                                    key={index}
+                                    id={card && card.id ? card.id : ''}
+                                    idSeller={idseller}
+                                    image={card.images && card.images.length > 0 ? card.images[0].url : null}
+                                    price={card.price}
+                                    name={card.title}
+                                    brand={card.category}
+                                    sellerName={name}
+                                    sellerCity={city}
+                                    sellerState={state}
+                                    sellerImageProfile={profileIcon}
+                                    isSelectedHeart={card && card.isLike}
+                                    likeId={card && card.likeId ? card.likeId : ''}
+                                />
+                            ))
+                            :
+                            <NoContent
+                                accessibilityMessage="Esse vendedor ainda não possui anúncios"
+                                message="Esse vendedor ainda não possui anúncios"
+                            />
+                        }
                     </ListAdvertise>
                 </ContainerAdvertise>
             </Container>
