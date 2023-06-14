@@ -89,6 +89,7 @@ export const Graficos = styled.div`
 `
 
 export const Limitador = styled.div`
-    width:90%;
+    width: 90%;
     margin-left:4.8%;
+    margin-top: 140px;
 `

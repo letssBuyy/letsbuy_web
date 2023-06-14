@@ -6,11 +6,32 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: 20px 100px;
+    padding: 90px 100px;
 
     @media screen and (max-width: 900px) {
         padding: 50px 20px;
         align-items: center;
+    }
+`;
+
+export const HEADERPAGE = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 48px;
+        background-color: ${colors.pink};
+        color: ${colors.white};
+        font-family: ${fonts.medium};
+        font-size: 16px;
+        border-radius: 5px;
+        color: ${colors.white};
+        margin-top: 25px;
     }
 `;
 
@@ -20,6 +41,7 @@ export const Title = styled.p`
   font-size: 20px;
   margin-bottom: 40px;
   margin-top: 90px;
+  height: 48px;
 
   @media screen and (max-width: 900px) {
     width: 100%;

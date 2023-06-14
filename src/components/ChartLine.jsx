@@ -6,7 +6,7 @@ const LineChart = ({ data }) => {
 
   useEffect(() => {
     if (chartRef && chartRef.current) {
-      const myChart = new Chart(chartRef.current, {
+      new Chart(chartRef.current, {
         type: 'line',
         data: data,
         options: {

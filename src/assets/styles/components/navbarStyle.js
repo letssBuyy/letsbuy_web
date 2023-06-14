@@ -31,18 +31,22 @@ export const ImageBackButton = styled.img`
 `
 
 export const ContainerPrincipal = styled.div`
-    position: relative;
-    max-width: 100vw;
+    width: 100vw;
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid ${colors.gray};
     align-items: center;
-    padding: 0 50px 0 50px;
+    background-color: white;
+    z-index: 5;
+
+    position: fixed;
+    top: 0;
 
     div {
         display: flex;
+        padding: 0 50px 0 50px;
     }
 
     div img {
@@ -129,8 +133,10 @@ export const ContainerPrincipal = styled.div`
 `
 
 export const NavbarMobile = styled.div`
+    position: fixed;
+    top: 80px; 
+     width: 100%;
     width: 275px;
-    position: absolute;
     top: 79px;
     bottom: 0;
     left: 0;
@@ -183,7 +189,7 @@ export const NavbarMobile = styled.div`
 export const BackgroundOffCanvas = styled.div`
     width: 100%;
     min-height: 100vh;
-    position: absolute;
+    position: fixed;
     top: 79px;
     left: 0;
     right: 0;

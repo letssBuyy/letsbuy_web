@@ -42,6 +42,8 @@ export default function CarouselCards(props) {
         ]
     };
 
+    console.log(props)
+
     return (
         <>
             <Slider {...settings}>
@@ -59,8 +61,8 @@ export default function CarouselCards(props) {
                             sellerCity={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.city : ''}
                             sellerState={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.state : ''}
                             sellerImageProfile={item.adversiments && item.adversiments.userSellerLikeDto ? item.adversiments.userSellerLikeDto.profileImage : ''}
-                            isSelectedHeart={item.adversiments && item.adversiments.isLike}
-                            likeId={item.adversiments && item.adversiments.likeId ? item.adversiments.likeId : undefined}
+                            isSelectedHeart={item.isLike && item.isLike}
+                            likeId={item.likeId ? item.likeId : undefined}
                         />
                     </Item>
                 ))}
