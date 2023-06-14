@@ -5,15 +5,9 @@ import { fonts } from '../utils/fonts';
 import iconHelp from "../assets/images/icon-helpdesk.svg"
 
 export default function Helpdesk() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleFormToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   return (
     <>
-      <FormContainer onClick={handleFormToggle}>
+      <FormContainer>
         <Text>Não recebeu o produto?</Text>
         <Icon>
           <img src={iconHelp} alt="Não recebeu o produto?" />

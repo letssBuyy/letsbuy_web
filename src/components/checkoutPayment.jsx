@@ -4,9 +4,12 @@ import { colors } from '../utils/colors';
 import { fonts } from '../utils/fonts';
 
 const steps = [
-  { label: 'Pedido recebido' },
-  { label: 'Pagamento processado' },
-  { label: 'A caminho' },
+  { label: 'Pedido criado' },
+  { label: 'Aguardando pagamento' },
+  { label: 'Aguardando envio' },
+  { label: 'Enviado' },
+  { label: 'Em trânsito' },
+  { label: 'Aguardando confirmação de recebimento' },
   { label: 'Entregue' },
 ];
 
@@ -31,7 +34,7 @@ export default function StepProgressBar(props) {
             <ProgressLabel>{step.label}</ProgressLabel>
           </ProgressStep>
           {
-            index < 3 ?
+            index < 6 ?
             <LineStep backgroundColor={index < etapa ? colors.pink : colors.gray}></LineStep>
             : 
             <></>

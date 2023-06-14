@@ -34,6 +34,7 @@ export const ProfileImage = styled.div`
   align-items: center;
   cursor: pointer;
   position: relative;
+  object-fit: cover;
 
   input[type="file"] {
     display: none;

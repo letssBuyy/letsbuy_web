@@ -6,28 +6,87 @@ import { colors } from "../utils/colors";
 import { fonts } from "../utils/fonts";
 import Accordion from "./Accordion";
 import { toUppercasedString } from "../utils/strings";
+import { useNavigate } from "react-router-dom";
+import { question, successAlert, errorAlert } from "../utils/alerts";
+import { url } from "../utils/request";
+import axios from "axios";
+import { formatCurrency } from "../utils/strings";
+import moment from "moment";
+import ImageDefault from "../assets/images/image-default.png";
 
 export default function CardMyAds(props) {
-    let type = props.type
+    let type = props.type;
+    console.log(props)
+    const idUser = props.item && props.item.userId ? props.item.userId : '';
+    const id = props.item.id;
+    const title = props.item.title;
+    const price = props.item.price;
+    const imageAdversiment = props.item && props.item.images && props.item.images.length ? props.item.images[0].url : ImageDefault;
+    const date = moment(props.item.postDate).format("DD/MM/YYYY");
+
+    const salleDate = props.item && props.item.saleDate ? props.item.saleDate : '';
+    const buyerName = props.buyer && props.buyer.name ? props.buyer.name : '';
+    const buyerCep = props.buyer && props.buyer.cep ? props.buyer.cep : '';
+    const buyerRoad = props.buyer && props.buyer.road ? props.buyer.road : '';
+    const buyerNumber = props.buyer && props.buyer.number ? props.buyer.number : '';
+    const buyerNeighborhood = props.buyer && props.buyer.neighborhood ? props.buyer.neighborhood : '';
+    const buyerComplement = props.buyer && props.buyer.complement ? props.buyer.complement : '';
+    const buyerCity = props.buyer && props.buyer.city ? props.buyer.city : '';
+    const buyerState = props.buyer && props.buyer.state ? props.buyer.state : '';
+    const isShipment = props.item && props.item.isShipment ? props.item.isShipment : false
+    const statusAd = props.item && props.item.isActive ? props.item.isActive : ''
+
+    let navigate = useNavigate();
+
+    function showModalDelete() {
+        question(
+            "Você tem certeza?",
+            "Essa ação não pode ser revertida",
+            "Sim, apagar",
+            () => deleteAd()
+        )
+    }
+
+    async function deleteAd() {
+        await axios.delete(`${url}/adversiments/${id}`).then(() => {
+            successAlert("Anúncio excluido com sucesso!")
+        }).catch(() => {
+            errorAlert("Ocorreu um erro ao excluir o anúncio.")
+        })
+    }
+
+    function editAd() {
+        navigate(`/editar-anuncio/${id}`)
+    }
+
+    async function changeStatusOrder() {
+        await axios.post(`${url}/trackings/${idUser}/${id}`, {
+            status: 'SENT'
+        }).then(() => {
+            successAlert("Status atualiado com sucesso!")
+        }).catch(() => {
+            errorAlert("Ocorreu um erro ao atualizar o status do anúncio.")
+        })
+    }
 
     switch (type) {
         case "progress":
             return <>
                 <Card>
                     <LeftSide>
-                        <img src="https://i.imgur.com/fwOCAJz.png" alt="anuncio" />
+                        <img src={imageAdversiment ? imageAdversiment : ImageDefault} alt="anuncio" />
                         <div>
-                            <h1>Bolsa marrom</h1>
-                            <p>R$ 200,00</p>
-                            <span>Criado em: 10/05/2024</span>
+                            <h1>{title}</h1>
+                            <p>{formatCurrency(price)}</p>
+                            <span>Criado em: {date}</span>
                         </div>
                     </LeftSide>
                     <RightSide>
                         <div>
-                            <button>
+                            <button onClick={() => { editAd() }}>
                                 <img src={edit} alt="Editar anúncio" />
                             </button>
-                            <button>
+                            <button onClick={() => { showModalDelete() }}>
                                 <img src={trash} alt="Apagar anúncio" />
                             </button>
                         </div>
@@ -41,17 +100,22 @@ export default function CardMyAds(props) {
                     headerHTML={
                         <CardAccordion>
                             <LeftSideAccordion>
-                                <img src="https://i.imgur.com/fwOCAJz.png" alt="anuncio" />
+                                <img src={imageAdversiment ? imageAdversiment : ImageDefault} alt="anuncio" />
                                 <div>
-                                    <h1>Bolsa marrom</h1>
-                                    <p>R$ 200,00</p>
-                                    <span>Criado em: 10/05/2024</span>
+                                    <h1>{title}</h1>
+                                    <p>{formatCurrency(price)}</p>
+                                    <span>Criado em: {date}</span>
                                 </div>
                             </LeftSideAccordion>
                             <RightSideAccordion>
                                 <div></div>
                                 <div>
-                                    <button>pedido enviado</button>
+                                    {
+                                        statusAd === "SALLED" ?
+                                            <button disabled={true}>Aguardando confirmação</button>
+                                            :
+                                            <button onClick={() => { changeStatusOrder() }}>Enviei o pedido!</button>
+                                    }
                                 </div>
                             </RightSideAccordion>
                         </CardAccordion>
@@ -60,50 +124,42 @@ export default function CardMyAds(props) {
                         <div>
                             <Content>
                                 <div>
-                                    <p>Informações do pedido</p>
-                                    <span>Vendido por: {toUppercasedString("andré luiz rodrigues")}
-                                        CPF: {"52355271860".substring(0, 3)}.***.***-**</span>
-                                    <span>22/05/2023</span>
-                                    <span>ID do anúncio: 0103920</span>
+                                    <p>Informações do comprador</p>
+                                    <span>Comprado por: {toUppercasedString(buyerName)}</span>
+                                    <span>{salleDate}</span>
+                                    <span>ID do anúncio: {id}</span>
                                 </div>
                                 <div>
                                     <p>Endereço de entrega</p>
-                                    <span>Rua Sabbado D’Angelo, 281 - 08210790
-                                        Apartamento 1007, torre B</span>
+                                    {
+                                        isShipment ?
+                                            <>
+                                                <span>{buyerRoad}, {buyerNumber} - {buyerCep}</span>
+                                                <span>{buyerNeighborhood}</span>
+                                                <span>{buyerCity - buyerState}</span>
+                                                <span>{buyerComplement}</span>
+                                            </>
+                                            :
+                                            <>
+                                                <span>O comprador irá retirar o produto pessoalmente.</span>
+                                                <span>Por favor, entre em contato com ele através do chat para combinar os detalhes da retirada.</span>
+                                            </>
+                                    }
                                 </div>
                             </Content>
                         </div>
                     }
                 />
             </>
-        case "inactive":
-            return <>
-                <Card>
-                    <LeftSide>
-                        <img src="https://i.imgur.com/fwOCAJz.png" alt="anuncio" />
-                        <div>
-                            <h1>Bolsa marrom</h1>
-                            <p>R$ 200,00</p>
-                            <span>Criado em: 10/05/2024</span>
-                        </div>
-                    </LeftSide>
-                    <RightSide>
-                        <div></div>
-                        <div>
-                            <button>reativar anúncio</button>
-                        </div>
-                    </RightSide>
-                </Card>
-            </>
         case "disabled":
             return <>
                 <CardDisabled>
                     <LeftSide>
-                        <img src="https://i.imgur.com/fwOCAJz.png" alt="anuncio" />
+                        <img src={imageAdversiment ? imageAdversiment : ImageDefault} alt="anuncio" />
                         <div>
-                            <h1>Bolsa marrom</h1>
-                            <p>R$ 200,00</p>
-                            <span>Criado em: 10/05/2024</span>
+                            <h1>{title}</h1>
+                            <p>{formatCurrency(price)}</p>
+                            <span>Criado em: {date}</span>
                         </div>
                     </LeftSide>
                 </CardDisabled>

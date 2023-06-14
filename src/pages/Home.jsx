@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Search from "../assets/images/icon-search.svg";
 import {
     CardsSection,
@@ -20,130 +20,25 @@ import CarouselCategory from "../components/CarrouselCategorys";
 import CarrouselCards from "../components/CarrouselCards";
 import Loading from "../components/Loading";
 import { categorys } from "../utils/enums";
+import { useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { url } from "../utils/request";
+import { AuthContext } from "../utils/AuthContext";
 
 export default function Home() {
     const [search, setSearch] = useState('');
     const [showResult, setShowResult] = useState(false);
     const [contentResult, setContentResult] = useState([]);
+    const { user } = useContext(AuthContext);
+    const idUser = user.id;
+    const [advertiseList1, setAdvertiseList1] = useState([]);
+    const [advertiseList2, setAdvertiseList2] = useState([])
 
-    const advertise = [
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-        {
-            image: "https://i.imgur.com/fwOCAJz.png",
-            price: "200",
-            name: "Bolsa marrom",
-            brand: "Tommy",
-            sellerName: "Luiz",
-            sellerCity: "São Paulo",
-            sellerIsVerify: true,
-            sellerImageProfile: "https://images.pexels.com/photos/10112053/pexels-photo-10112053.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            isSelectedHeart: false,
-            onClickHeart: null,
-            onClickSeller: null,
-            onClickCard: null
-        },
-    ]
+    let navigate = useNavigate();
 
     function handleSearch(e) {
         setSearch(e.target.value)
-
 
         if (search.length > 2) {
             setShowResult(true)
@@ -153,9 +48,42 @@ export default function Home() {
         }
     }
 
-    function searchResults() {
-        setContentResult([])
+    async function searchResults() {
+        var urlcontent = ""
+
+        if (idUser !== 0) {
+            urlcontent = `/searches?title=${search}&idUser=${idUser}&page=0&size=30`
+        } else {
+            urlcontent = `/searches?title=${search}&page=0&size=30`
+        }
+
+        await axios.get(`${url}${urlcontent}`).then((response) => {
+            const data = response.data.content
+            setContentResult(data)
+        })
     }
+
+    async function load() {
+        var urlcontent = ""
+
+        if (idUser !== 0) {
+            urlcontent = `/searches?idUser=${idUser}`
+        } else {
+            urlcontent = "/searches"
+        }
+
+        await axios.get(`${url}${urlcontent}`).then((response) => {
+            const data = response.data.content
+            const list1 = data.slice(0, 6)
+            const list2 = data.slice(7, 12)
+            setAdvertiseList1(list1)
+            setAdvertiseList2(list2)
+        })
+    }
+
+    useEffect(() => {
+        load()
+    }, [user])
 
     return (
         <>
@@ -176,10 +104,10 @@ export default function Home() {
                                 </Input>
                                 <ResultSearch style={showResult ? { display: 'flex' } : { display: 'none' }}>
                                     {
-                                        contentResult.length > 0 ?
-                                            contentResult.map((item) => (
-                                                <div>
-                                                    <p>{item.title}</p>
+                                        contentResult && contentResult.length > 0 ?
+                                            contentResult.map((item, index) => (
+                                                <div key={index} onClick={() => { navigate(`/buscar-anuncios?resultSearch=${item.adversiments.title}`) }}>
+                                                    <p>{item.adversiments.title}</p>
                                                 </div>
                                             ))
                                             :
@@ -196,9 +124,23 @@ export default function Home() {
                         <Banner />
                     </IndexSection>
                     <CardsSection>
-                        <TitleSection>Produtos em destaque</TitleSection>
-                        <CarrouselCards items={advertise} />
-                        <CarrouselCards items={advertise} />
+                        {
+                            advertiseList1 && advertiseList1.length >= 6 ?
+                                <>
+                                    <TitleSection>Produtos em destaque</TitleSection>
+                                    <CarrouselCards items={advertiseList1} />
+                                </>
+                                :
+                                <></>
+                        }
+                        {
+                            advertiseList2 && advertiseList2.length >= 6 ?
+                                <>
+                                    <CarrouselCards items={advertiseList2} />
+                                </>
+                                :
+                                <></>
+                        }
                     </CardsSection>
                     <CategorysSection>
                         <TitleSection>Explore nossas Categorias</TitleSection>

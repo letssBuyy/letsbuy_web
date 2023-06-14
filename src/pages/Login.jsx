@@ -1,58 +1,78 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from "react";
 import IconError from '../assets/images/icon-error.svg';
+import { useNavigate } from 'react-router-dom';
 import EyeClose from '../assets/images/icon-eye-close.svg';
 import EyeOpen from '../assets/images/icon-eye-open.svg';
 import { ContainerError, InputContainer, Label } from '../assets/styles/components/InputStyle';
 import { Container, ForgotPassword, SignIn, SignUp, Title } from '../assets/styles/loginStyle';
 import Navbar from "../components/Navbar";
+import { validateEmail } from "../utils/strings";
+import { AuthContext } from '../utils/AuthContext';
+import Loading from "../components/Loading";
+import { toastSucess } from "../utils/alerts";
 
-export default function Home() {
+export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [showLoginError, setShowLoginError] = useState(false);
     const [showEmailError, setShowEmailError] = useState(false);
     const [showPasswordError, setShowPasswordError] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { authlogin } = useContext(AuthContext);
     let navigate = useNavigate();
 
-    function handleEmailChange(event) {
-        setEmail(event.target.value);
+    async function login() {
+        if (validateFields()) {
+            setLoading(true);
+            try {
+                let response = await authlogin({ email, password })
+                if (response === 200) {
+                    toastSucess("Entrada realizada com sucesso!");
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000);
+                } else {
+                    setShowLoginError(true)
+                }
+            } catch (error) {
+                setShowLoginError(true)
+            } finally {
+                setLoading(false);
+            }
+        }
     }
 
-    function handlePasswordChange(event) {
-        setPassword(event.target.value);
-    }
+    function validateFields() {
+        let isValidAllFields = true
 
-    function login() {
-        console.log(email)
-        console.log(password)
-        setShowEmailError(false)
-        setShowPasswordError(false)
+        if (!validateEmail(email)) {
+            isValidAllFields = false
+            setShowEmailError(true)
+        } else {
+            setShowEmailError(false)
+        }
 
-        const token = ""
-        localStorage.setItem("TOKEN", token)
+        if (password.length < 6 || password.length > 50) {
+            isValidAllFields = false
+            setShowPasswordError(true)
+        } else {
+            setShowPasswordError(false)
+        }
 
-        navigate("/")
+        return isValidAllFields
     }
 
     return (
         <>
-            <Navbar
-                type='basic'
-                isAuthenticated={false}
-                showBackButton={true}
-            />
-            <div style={{
-                width: '100%',
-                height: '100%',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
+            <Loading isEnabled={loading} />
+            <Navbar type='basic' showBackButton={true} />
+            <div>
                 <Container>
                     <Title>Entre na sua conta</Title>
 
                     <ContainerError style={{ justifyContent: 'center' }}>
-                        <span>Email ou senha não correspondem</span>
+                        <span style={showLoginError ? { display: 'flex' } : { display: 'none' }}>Email ou senha não correspondem</span>
                     </ContainerError>
 
                     <div>
@@ -61,14 +81,14 @@ export default function Home() {
                             <input
                                 type="text"
                                 placeholder="Digite o email"
-                                onChange={handleEmailChange}
+                                onChange={(e) => setEmail(e.target.value)}
                             ></input>
                         </InputContainer>
                         <ContainerError
                             style={showEmailError ? { display: 'flex' } : { display: 'none' }}
                         >
-                            <img src={IconError} alt="Digite o email corretamente" />
-                            <span>Digite o email corretamente</span>
+                            <img src={IconError} alt="Digite um e-mail válido" />
+                            <span>Digite um e-mail válido</span>
                         </ContainerError>
                     </div>
                     <div>
@@ -77,7 +97,7 @@ export default function Home() {
                             <input
                                 type={showPassword ? "text" : "password"}
                                 placeholder="Digite a senha"
-                                onChange={handlePasswordChange}
+                                onChange={(e) => setPassword(e.target.value)}
                             ></input>
                             {
                                 showPassword ?
@@ -95,16 +115,15 @@ export default function Home() {
                             }
                         </InputContainer>
                         <ContainerError style={showPasswordError ? { display: 'flex' } : { display: 'none' }}>
-                            <img src={IconError} alt="Digite a senha corretamente" />
-                            <span>Digite a senha corretamente</span>
+                            <img src={IconError} alt="Preencha a senha" />
+                            <span>Preencha a senha</span>
                         </ContainerError>
                     </div>
-                    <ForgotPassword>Esqueci a senha</ForgotPassword>
+                    <ForgotPassword onClick={() => navigate("/recuperar-senha")}>Esqueci a senha</ForgotPassword>
                     <SignIn onClick={() => login()}>Entrar</SignIn>
-                    <SignUp>Não tem conta? Cadastre-se</SignUp>
+                    <SignUp onClick={() => navigate("/cadastrar")}>Não tem conta? Cadastre-se</SignUp>
                 </Container>
             </div>
-
         </>
     )
 }

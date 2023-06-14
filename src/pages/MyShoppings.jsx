@@ -4,39 +4,69 @@ import {
     Container
 } from "../assets/styles/myShoppingsStyle"
 import Accordion from "../components/AccordionMyShoppings";
-import Helpdesk from "../components/helpdesk";
+import { useNavigate } from "react-router";
+import { url } from "../utils/request";
+import axios from "axios";
+import Loading from "../components/Loading";
+import NoContent from "../components/NoContent";
 
 export default function MyShoppings() {
     const [shoppings, setShoppings] = useState([])
+    let navigate = useNavigate()
+    const userid = localStorage.getItem('userId')
+    const [loading, setLoading] = useState(false);
+
+    async function load() {
+        setLoading(true)
+
+        await axios.get(`${url}/adversiments/boughts/${userid}`).then((response) => {
+            const data = response.data
+            setShoppings(data)
+        })
+
+        setLoading(false)
+    }
 
     useEffect(() => {
-        setShoppings([1,2,3,4,5])
-    },[])
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        }
+
+        load()
+    }, [])
 
     return (
         <>
-            <Helpdesk />
-            <Navbar type='basic' showBackButton={true} />
+            <Loading isEnabled={loading} />
+            <Navbar type='principal' />
             <Container>
                 <h1>Minhas compras</h1>
 
                 <div>
-                    {shoppings.map(() => (
-                        <>
-                            <Accordion
-                                title="Bolsa marrom"
-                                preco="R$200"
-                                image="https://i.imgur.com/fwOCAJz.png"
-                                finalized={true}
-                                adress="Rua Sabbado D’Angelo, 281 - 08210790 Apartamento 1007, torre B"
-                                etapa={2}
-                                id="123456789"
-                                date="06/05/2023 10:00:00"
-                                cpf="523.552.718-60"
-                                sellerName="Luiz Alves Rodrigues Lopes"
-                            />
-                        </>
-                    ))
+                    {shoppings && shoppings.length ?
+
+                        shoppings.map((item) => (
+                            <>
+                                <Accordion
+                                    key={item.id}
+                                    title={item.title}
+                                    preco={item.price}
+                                    image={item.images[0].url}
+                                    finalized={item.isActive === "DELIVERED" ? true : false}
+                                    etapa={item.trackings}
+                                    id={item.id}
+                                    date={item.saleDate}
+                                    cpf={item.user.cpf}
+                                    sellerName={item.user.name}
+                                />
+                            </>
+                        ))
+                        :
+                        <NoContent
+                            message="Você não possui compras"
+                            accessibilityMessage="Você não possui compras"
+                        />
                     }
                 </div>
             </Container>

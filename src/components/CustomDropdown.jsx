@@ -22,11 +22,12 @@ const fadeOut = keyframes`
 `;
 
 const Container = styled.div`
+  width: 100%;
   position: relative;
 `;
 
 const ToggleButton = styled.button`
-  width: 335px;
+  width: 100%;
   display: flex;
   align-items: center;
   background-color: ${colors.white};

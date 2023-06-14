@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { fonts } from '../../utils/fonts'
+import { colors } from "../../utils/colors"
 
 export const Container = styled.div`
     display: column;
@@ -18,7 +19,6 @@ export const Container = styled.div`
 }
 `
 
-
 export const CaixaKpi = styled.div`
     height:12vh;
     display:flex;
@@ -26,31 +26,45 @@ export const CaixaKpi = styled.div`
     margin-top:5%;
     `
 export const CaixasFilhas = styled.div`
-    border:solid 2px #ECE8E5;
+    border: solid 2px #ECE8E5;
     border-radius: 15px;
-    width:16%;
+    width: 20%;
     display:flex;
     align-items: center;
     
 `
 
 export const ImagensCaixinhas = styled.div`
-   width:35%;
+   width: 35%;
    align-self: center;
    padding-left:8%;
    padding-top:3%;
 `
 
-export const Quantidades= styled.span`
-    font-size:30px;
-    margin-top:10%;
+export const Quantidades = styled.span`
+    font-size: 30px;
+    margin-top: 10%;
     align-self: center;
-    font-family:'${fonts.regular}';
+    font-family: ${fonts.regular};
+    margin-left: 10px;
 `
-export const Legendas= styled.span`
+export const Legendas = styled.span`
     font-size:12px;
-    font-family:'${fonts.regular}';
+    font-family: ${fonts.regular};
+    color: ${colors.blackGray};
+    margin-left: 10px;
+`
 
+export const TituloGrafico = styled.span`
+    font-size:30px;
+    font-family:'${fonts.semiBold}';
+    margin: -5px 35px;
+`
+
+export const SemiTitulo = styled.span`
+    font-size:15px;
+    font-family:'${fonts.light}';
+    margin: 0px 35px;   
 `
 
 export const Titulos = styled.div`
@@ -64,15 +78,17 @@ export const CaixaGraficos = styled.div`
     display:flex;
     justify-content: space-between;
     margin-top:5%;
-    `
+`
+
 export const Graficos = styled.div`
     border:solid 2px #ECE8E5;
     border-radius: 15px;
     width:44%;
+    padding-top:2%;
+    display:grid;
 `
 
 export const Limitador = styled.div`
     width:90%;
     margin-left:4.8%;
-
-    `
+`

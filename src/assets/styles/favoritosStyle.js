@@ -3,13 +3,13 @@ import { colors } from "../../utils/colors";
 import { fonts } from '../../utils/fonts';
 
 export const Container = styled.div`
-    padding: 50px 100px;
+    padding: 90px 100px;
 
-    h1 {
+    >h1 {
         font-family: ${fonts.semiBold};
         font-size: 20px;
         color: ${colors.blackGray};
-        margin-bottom: 20px;
+        margin-bottom: 50px;
     }
 
     >div {

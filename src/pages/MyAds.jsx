@@ -12,39 +12,58 @@ import { colors } from "../utils/colors";
 import Card from "../components/CardMyAds";
 import NoContent from "../components/NoContent";
 import CustomDropdown from "../components/CustomDropdown";
+import { useNavigate } from "react-router";
+import Loading from "../components/Loading";
+import { url } from "../utils/request";
+import axios from "axios";
 
 export default function MyAds() {
     const [option, setOption] = useState(0);
     const [ads, setAds] = useState([]);
     const [typeCard, setTypeCard] = useState("progress");
+    const [loading, setLoading] = useState(false);
+    const userid = localStorage.getItem('userId')
 
-    function loadProgress() {
+    let navigate = useNavigate()
+
+    async function loadProgress() {
         setOption(0)
         setTypeCard("progress")
-        setAds([1])
+
+        setLoading(true)
+        await axios.get(`${url}/adversiments/filters/${userid}/ACTIVE`).then((response) => {
+            const data = response.data
+            setAds(data)
+        })
+
+        setLoading(false)
     }
 
-    function loadingSalle() {
+    async function loadingSalle() {
         setOption(1)
         setTypeCard("sale")
-        setAds([1, 2, 3])
+
+        setLoading(true)
+        await axios.get(`${url}/adversiments/filters/${userid}/SALLED`).then((response) => {
+            const data = response.data
+            setAds(data)
+        })
+
+        setLoading(false)
     }
 
-    function loadInactive() {
-        setOption(2)
-        setTypeCard("inactive")
-        setAds([1, 2])
-    }
-    function loadDisabled() {
+    async function loadDisabled() {
         setOption(3)
         setTypeCard("disabled")
-        setAds([1, 2, 3, 4, 5])
-    }
 
-    // function deleteAd(id) { }
-    // function editAd(id) { }
-    // function enableAd(id) { }
-    // function orderDispatch(id) { }
+        setLoading(true)
+        await axios.get(`${url}/adversiments/filters/${userid}/INACTIVE`).then((response) => {
+            const data = response.data
+            setAds(data)
+        })
+
+        setLoading(false)
+    }
 
     function selectedMobile(data) {
         switch (data) {
@@ -53,9 +72,6 @@ export default function MyAds() {
                 break;
             case "Vendidos":
                 loadingSalle()
-                break;
-            case "Inativos":
-                loadInactive()
                 break;
             case "Desativados":
                 loadDisabled()
@@ -67,11 +83,16 @@ export default function MyAds() {
     }
 
     useEffect(() => {
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        }
         loadProgress()
     }, [])
 
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar type='principal' isAuthenticated={false} />
             <Container>
                 <Title>Meus anúncios</Title>
@@ -90,12 +111,6 @@ export default function MyAds() {
                         <span>Vendidos</span>
                     </ItemTabBar>
                     <ItemTabBar
-                        style={option === 2 ? { borderBottom: `2px solid ${colors.pink}` } : { borderBottom: "2px solid transparent" }}
-                        onClick={() => loadInactive()}
-                    >
-                        <span>Inativos</span>
-                    </ItemTabBar>
-                    <ItemTabBar
                         style={option === 3 ? { borderBottom: `2px solid ${colors.pink}` } : { borderBottom: "2px solid transparent" }}
                         onClick={() => loadDisabled()}
                     >
@@ -110,7 +125,11 @@ export default function MyAds() {
                         ads.length > 0 ?
                             ads.map((item, index) => (
                                 <>
-                                    <Card item={item} key={index} type={typeCard} />
+                                    <Card
+                                        item={item}
+                                        key={index}
+                                        type={typeCard}
+                                    />
                                 </>
                             ))
                             :

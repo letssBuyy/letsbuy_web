@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 import Home from '../pages/Home';
 import Login from '../pages/Login';
@@ -23,25 +23,38 @@ import SearchAd from '../pages/SearchAd';
 import Help from '../pages/Help';
 import MyAds from '../pages/MyAds';
 import DetailsAd from '../pages/DetailsAd';
+import Wallet from '../pages/Wallet';
+
+function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
 
 export default function Routers() {
+
     return (
         <Router>
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path='/entrar' element={<Login />} />
                 <Route path='/cadastrar' element={<Register />} />
                 <Route path='/recuperar-senha' element={<RecoveryEmail />} />
-                <Route path='/alterar-senha' element={<RecoveryPassword />} />
-                <Route path='/sobre-nos' element={<AboutUs />} />
                 <Route path='/perguntas-frequentes' element={<Faq />} />
                 <Route path='/buscar-anuncios' element={<SearchAd />} />
-                <Route path='/anuncio' element={<DetailsAd />} />
-
-                <Route path='/perfil' element={<Profile />} />
+                <Route path='/sobre-nos' element={<AboutUs />} />
+                <Route path='/alterar-senha/:id' element={<RecoveryPassword />} />
+                <Route path='/anuncio/:id' element={<DetailsAd />} />
+                <Route path='/perfil/:id' element={<Profile />} />
                 <Route path='/pagamento-concluido' element={<SuccessfulPayment />} />
-                <Route path='/checkout-pagamento' element={<Checkout />} />
-                <Route path='/editar-anuncio' element={<EditAd />} />
+                
+                <Route path='/checkout-pagamento/:id' element={<Checkout />} />
+                <Route path='/editar-anuncio/:id' element={<EditAd />} />
                 <Route path='/publicar-anuncio' element={<PublishAd />} />
                 <Route path='/chat' element={<Chat />} />
                 <Route path='/minhas-compras' element={<MyShoppings />} />
@@ -50,7 +63,7 @@ export default function Routers() {
                 <Route path='/disputa' element={<Help />} />
                 <Route path='/meus-anuncios' element={<MyAds />} />
                 <Route path='/dashboard' element={<Dashboard />} />
-                
+                <Route path='/minha-carteira' element={<Wallet />} />
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>

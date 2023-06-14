@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import IconError from "../assets/images/icon-error.svg";
 import IconCamPink from "../assets/images/icon-cam-pink.svg";
@@ -23,6 +23,13 @@ import {
     ImagesContainer,
     ImagemSelecionada
 } from '../assets/styles/components/InputStyle';
+import { AuthContext } from "../utils/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { url } from "../utils/request";
+import { successAlert, errorAlert } from "../utils/alerts";
+import Loading from "../components/Loading";
+import { removeCurrencyFormatting } from "../utils/strings";
 
 export default function PublishAd() {
     const [title, setTitle] = useState('');
@@ -36,7 +43,6 @@ export default function PublishAd() {
     const [imageTwo, setImageTwo] = useState('');
     const [imageThree, setImageThree] = useState('');
     const [imageFour, setImageFour] = useState('');
-    const [imageFive, setImageFive] = useState('');
 
     const [showTituloError, setShowTituloError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
@@ -44,9 +50,17 @@ export default function PublishAd() {
     const [showQualityError, setShowQualityError] = useState(false);
     const [showPriceError, setShowPriceError] = useState(false);
     const [showImagesError, setShowImagesError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
+    let navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const idUser = user.id;
+
+    const [img1, setImg1] = useState(null);
     function handleImageOneChange(event) {
         const file = event.target.files[0];
+        setImg1(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -54,8 +68,11 @@ export default function PublishAd() {
         };
     }
 
+    const [img2, setImg2] = useState(null);
     function handleImageTwoChange(event) {
         const file = event.target.files[0];
+        setImg2(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -63,8 +80,11 @@ export default function PublishAd() {
         };
     }
 
+    const [img3, setImg3] = useState(null);
     function handleImageThreeChange(event) {
         const file = event.target.files[0];
+        setImg3(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -72,8 +92,11 @@ export default function PublishAd() {
         };
     }
 
+    const [img4, setImg4] = useState(null);
     function handleImageFourChange(event) {
         const file = event.target.files[0];
+        setImg4(file)
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
@@ -81,21 +104,52 @@ export default function PublishAd() {
         };
     }
 
-    function handleImageFiveChange(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            setImageFive(reader.result);
-        };
+    async function registerAd() {
+        try {
+            setLoading(true)
+
+            let isValidFields = validateFields()
+
+            if (isValidFields) {
+                await axios.post(`${url}/adversiments`, {
+                    userId: idUser,
+                    title: title,
+                    description: description,
+                    price: removeCurrencyFormatting(price),
+                    category: category,
+                    quality: quality,
+                    color: color
+                }).then(async (response) => {
+                    await uploadImages(response.data.id).then(() => {
+                        successAlert("Anúncio públicado com sucesso!")
+                        navigate('/meus-anuncios')
+                    }).catch(() => {
+                        errorAlert("Ocorreu um erro ao públicar o anúncio")
+                    })
+                }).catch((e) => {
+                    errorAlert("Ocorreu um erro ao públicar o anúncio")
+                })
+            }
+        } catch (error) {
+            errorAlert("Ocorreu um erro ao públicar o anúncio")
+        } finally {
+            setLoading(false)
+        }
     }
 
-    function atualizar() {
-        let isValidFields = validateFields()
-        
-        if (isValidFields) {
-            console.log('todos os campos estão validos')
-        }
+    async function uploadImages(idAdvertise) {
+        const formData = new FormData();
+
+        formData.append('img1', img1);
+        formData.append('img2', img2);
+        formData.append('img3', img3);
+        formData.append('img4', img4);
+
+        await axios.post(`${url}/images/adversiment/${idAdvertise}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     }
 
     function validateFields() {
@@ -108,10 +162,8 @@ export default function PublishAd() {
             setShowTituloError(false)
         }
 
-        const formattedPrice = price.replace(/[R$,]/g, '');
-        const parsedPrice = parseFloat(formattedPrice);
 
-        if (parsedPrice <= 100) {
+        if (removeCurrencyFormatting(price) <= 1) {
             isValidAllFields = false
             setShowPriceError(true)
         } else {
@@ -143,8 +195,7 @@ export default function PublishAd() {
             imageOne === null || imageOne === undefined || imageOne === "" ||
             imageTwo === null || imageTwo === undefined || imageTwo === "" ||
             imageThree === null || imageThree === undefined || imageThree === "" ||
-            imageFour === null || imageFour === undefined || imageFour === "" ||
-            imageFive === null || imageFive === undefined || imageFive === ""
+            imageFour === null || imageFour === undefined || imageFour === ""
         ) {
             isValidAllFields = false
             setShowImagesError(true)
@@ -155,8 +206,17 @@ export default function PublishAd() {
         return isValidAllFields
     }
 
+    useEffect(() => {
+        let isAuthenticated = localStorage.getItem('userId')
+        console.log(isAuthenticated)
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/entrar")
+        }
+    }, [])
+
     return (
         <>
+            <Loading isEnabled={loading} />
             <Navbar
                 type='basic'
                 isAuthenticated={false}
@@ -309,16 +369,6 @@ export default function PublishAd() {
                                     <label htmlFor="imagem4"></label>
                                     <input id="imagem4" type="file" onChange={handleImageFourChange} />
                                 </div>
-                                <div>
-                                    {
-                                        imageFive !== '' ?
-                                            <ImagemSelecionada src={imageFive} alt="imagemSelecionada" />
-                                            :
-                                            <img src={IconCamGray} alt="Selecione uma imagem dos seus arquivos" />
-                                    }
-                                    <label htmlFor="imagem5"></label>
-                                    <input id="imagem5" type="file" onChange={handleImageFiveChange} />
-                                </div>
                             </div>
 
                         </ImagesContainer>
@@ -328,7 +378,7 @@ export default function PublishAd() {
                         </ContainerError>
                     </div>
 
-                    <Button onClick={() => atualizar()}>Publicar</Button>
+                    <Button onClick={() => registerAd()}>Publicar</Button>
                 </Container>
             </div>
         </>

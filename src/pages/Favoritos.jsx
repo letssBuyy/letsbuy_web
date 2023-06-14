@@ -1,60 +1,83 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
-import ImageDefault from '../assets/images/image-default.png';
 import {
     Container
-} from "../assets/styles/favoritosStyle"
+} from "../assets/styles/favoritosStyle";
+import { AuthContext } from "../utils/AuthContext";
+import { useNavigate } from 'react-router-dom';
+import { url } from "../utils/request";
+import axios from "axios";
+import Loading from "../components/Loading";
+import NoContent from "../components/NoContent";
+
 export default function Favoritos() {
-    const [cardList, setCardList] = useState([])
+    const [cardList, setCardList] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const { user } = useContext(AuthContext);
+    const userId = user.id
 
-    function handleClickSeller() {
-        console.log('clicou no vendedor')
-    }
+    let navigate = useNavigate();
 
-    function handleClickCard() {
-        console.log('clicou no card')
-    }
-
-    function loadFavorites() {
-        setCardList([1,2,3,4,5,6,7,8,9,10])
-    }
-
-    const [isSelectedHeart, setIsSelectedHeart] = useState(false)
-    function handleClickHeart() {
-        setIsSelectedHeart(!isSelectedHeart)
+    async function load() {
+        try {
+            setLoading(true)
+            await axios.get(`${url}/adversiments/like/${userId}`).then((response) => {
+                const data = response.data
+                console.log(data)
+                setCardList(data)
+            }).catch((e) => {
+                console.log(e)
+            })
+        } catch (e) {
+            console.log(e)
+        } finally {
+            setLoading(false)
+        }
     }
 
     useEffect(() => {
-        loadFavorites()
+        let isAuthenticated = localStorage.getItem('userId')
+        if (isAuthenticated === undefined || isAuthenticated === null) {
+            navigate("/")
+        } else {
+            load()
+        }
     }, [])
 
     return (
         <>
-            <Navbar type='basic' showBackButton={true} />
+            <Loading isEnabled={loading} />
+            <Navbar type='principal' />
             <Container>
                 <h1>Favoritos</h1>
 
                 <div>
-                    {cardList.map((card, index) => (
-                        <Card
-                            key={index}
-                            image={ImageDefault}
-                            price={'200'}
-                            name={'Bolsa marrom'}
-                            brand={'Tommy'}
-                            sellerName={'Luiz'}
-                            sellerCity={'São Paulo'}
-                            sellerState={'SP'}
-                            sellerIsVerify={true}
-                            sellerImageProfile={ImageDefault}
-                            isSelectedHeart={isSelectedHeart}
-                            onClickHeart={handleClickHeart}
-                            onClickSeller={handleClickSeller}
-                            onClickCard={handleClickCard}
-                            margin={'5px'}
-                        />
-                    ))}
+                    {
+                        cardList && cardList.length > 0 ?
+                            cardList.map((card, index) => (
+                                <Card
+                                    key={index}
+                                    id={card.adversiments && card.adversiments.id ? card.adversiments.id : ''}
+                                    idSeller={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.id : ''}
+                                    image={card.adversiments && card.adversiments.images && card.adversiments.images.length > 0 ? card.adversiments.images[0].url : null}
+                                    price={card.adversiments && card.adversiments.price}
+                                    name={card.adversiments && card.adversiments.title}
+                                    brand={card.adversiments && card.adversiments.category}
+                                    sellerName={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.name : ''}
+                                    sellerCity={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.city : ''}
+                                    sellerState={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.state : ''}
+                                    sellerImageProfile={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.profileImage : ''}
+                                    isSelectedHeart={true}
+                                    likeId={card.id ? card.id : ""}
+                                />
+                            ))
+                            :
+                            <NoContent
+                                accessibilityMessage="Você ainda não possui anúncios curtidos"
+                                message="Você ainda não possui anúncios curtidos"
+                            />
+                    }
                 </div>
             </Container>
         </>

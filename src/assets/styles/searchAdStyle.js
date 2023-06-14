@@ -4,6 +4,7 @@ import { fonts } from "../../utils/fonts";
 
 export const Container = styled.div`
     display: flex;
+    height: 100vh;
 
     >div:last-child {
         width: 100%;
@@ -231,4 +232,32 @@ export const ResultSearch = styled.div`
 
 export const ContainerSarchAndInput = styled.div`
   position: relative;
+`;
+
+export const Pagination = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+
+  p {
+    background-color: transparent;
+    font-family: ${fonts.regular};
+    color: ${colors.blackGray};
+    font-size: 15px;
+  }
+
+  button {
+    max-width: 300px;
+    width: 100%;
+    height: 48px;
+    background-color: ${colors.pink};
+    font-family: ${fonts.medium};
+    font-size: 18px;
+    color: ${colors.white};
+    cursor: pointer;
+    margin: 20px 0;
+    border-radius: 5px;
+  }
 `;

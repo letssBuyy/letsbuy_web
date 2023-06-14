@@ -200,6 +200,7 @@ export const ItensContainerNavbarIsAuthenticated = styled.div`
     display: flex;
     align-items: center;
     height: 50px;
+    cursor: pointer;
 
     img {
             width: 24px;
@@ -220,6 +221,7 @@ export const ContainerMyAccount = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 70px;
+    cursor: pointer;
 
     div:first-child {
         display: flex;
