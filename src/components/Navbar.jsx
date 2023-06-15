@@ -21,7 +21,6 @@ import {
     ContainerPrincipal,
     NavbarMobile,
     BackgroundOffCanvas,
-
     ContainerNavbarIsAuthenticated,
     ContainerMyAccount,
     ItensContainerNavbarIsAuthenticated
@@ -30,11 +29,12 @@ import IconAdmin from "../assets/images/icon-admin.svg";
 import IconFile from "../assets/images/icon-file.svg";
 import axios from "axios";
 import { successAlert, errorAlert } from "../utils/alerts";
+import { url } from "../utils/request";
 
 export default function Navbar(props) {
     var type = props.type ? props.type : 'basic'
     var showBackButton = props.showBackButton ? props.showBackButton : false
-
+    
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userName, setUserName] = useState('');
     const [userImageProfile, setUserImageProfile] = useState('');
@@ -60,7 +60,7 @@ export default function Navbar(props) {
             const formData = new FormData();
             formData.append('arquivo', file);
 
-            axios.post('/adversiments/import-txt', formData)
+            axios.post(`${url}/adversiments/import-txt`, formData)
                 .then((response) => {
                     successAlert("Importação realizada com sucesso!")
                 })

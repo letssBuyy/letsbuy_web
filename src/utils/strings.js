@@ -43,11 +43,16 @@ export function formatCurrency(value) {
 }
 
 export function removeCurrencyFormatting(value) {
+    // Verifica se o valor é uma string
+    if (typeof value !== 'string') {
+        value = String(value); // Converte o valor em uma string
+    }
+
     // Remove todos os caracteres não numéricos da string
     const numericValue = value.replace(/[^\d]/g, '');
-  
+
     // Obtém somente a parte inteira do valor
     const integerValue = parseFloat(numericValue, 10);
-  
+
     return integerValue / 100;
-  }
+}

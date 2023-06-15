@@ -142,5 +142,5 @@ export const CardList = styled.div`
 `;
 
 export const Padding = styled.div`
-  padding: 0 9%;
+  padding: 100px 9% 0 9%;
 `;
