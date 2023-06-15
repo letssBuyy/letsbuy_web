@@ -12,7 +12,7 @@ import InputMask from 'react-input-mask';
 import { url } from "../utils/request";
 import axios from "axios";
 import { successAlert, errorAlert } from "../utils/alerts"
- 
+
 export default function Register() {
     const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
@@ -54,9 +54,8 @@ export default function Register() {
                         errorAlert("Email ou CPF já cadastrados")
                     }
 
-                    if (response.status === 200) {
-                        successAlert("Cadastro realizado com sucesso!")
-                    }
+                    successAlert("Cadastro realizado com sucesso!")
+                    navigate('/entrar')
                 })
             } catch (error) {
                 errorAlert("Ocorreu um erro ao realizar o cadastro")
