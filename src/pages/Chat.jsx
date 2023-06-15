@@ -221,12 +221,6 @@ export default function Chat() {
         loadMessages(currentChatID)
     }, [message])
 
-    setInterval(() => {
-        if (currentChatID !== '' && currentChatID !== null && currentChatID !== undefined) {
-            loadMessages(currentChatID)
-        }
-    }, 2000);
-
     return (
         <>
             <Loading isEnabled={loading} />
