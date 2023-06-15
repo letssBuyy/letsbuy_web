@@ -115,6 +115,7 @@ export default function Chat() {
         }).then((response) => {
             const data = response.data
             console.log(response.data)
+
             setAdvertiseId(data.adversiment && data.adversiment.id ? data.adversiment.id : "");
             setAdvertiseTitle(data.adversiment && data.adversiment.title ? data.adversiment.title : "");
             setAdvertiseImage(data.adversiment && data.adversiment.images && data.adversiment.images.length > 0 ? data.adversiment.images[0].url : "");
@@ -140,6 +141,7 @@ export default function Chat() {
         setLoading(true)
         await axios.get(`${url}/chats/${userId}`).then((response) => {
             const data = response.data
+            console.log(data)
             setChats(data)
         })
         setLoading(false)
@@ -241,7 +243,7 @@ export default function Chat() {
                 <SideBar ref={sideBarRef}>
                     {chats && chats.length > 0 ? (
                         chats.map((item) => (
-                            <div key={item.id} onClick={() => handleSelectedItem(item.id, item.seller.id, item.adversiment.id)}>
+                            <div key={item.id} onClick={() => handleSelectedItem(item.seller.id, item.adversiment.id)}>
                                 <ChatItem
                                     image={item.adversiment && item.adversiment.images && item.adversiment.images.length > 0 ? item.adversiment.images[0].url : ImageDefault}
                                     advertiseName={item.adversiment ? item.adversiment.title : ''}
