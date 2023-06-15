@@ -16,12 +16,14 @@ import axios from "axios";
 import { url } from "../utils/request";
 import { AuthContext } from "../utils/AuthContext";
 import { formatCurrency } from "../utils/strings";
+import { useEffect } from "react";
 
 export default function Card(props) {
     const [isHovering, setIsHovering] = useState(false);
     let navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const userID = user.id;
+    const [isLiked, setIsLiked] = useState('');
 
     const handleMouseEnter = () => {
         setIsHovering(true);
@@ -58,6 +60,11 @@ export default function Card(props) {
     function handleChangeCard() {
         navigate(`/anuncio/${props.id}`)
     }
+
+    useEffect(() => {
+        setIsLiked(props.isSelectedHeart)
+        console.log(isLiked)
+    }, [props.isSelectedHeart])
 
     return (
         <>

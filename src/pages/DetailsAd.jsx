@@ -168,7 +168,10 @@ export default function Advertise() {
     return (
         <>
             <Loading isEnabled={loading} />
-            <Navbar type='basic' />
+            <Navbar
+                type='basic'
+                showBackButton={true}
+            />
             <Container>
                 <ContainerImages>
                     <ImageGallery

@@ -35,7 +35,10 @@ export default function AccordionMyShoppings(props) {
 
     async function confirm() {
         await axios.post(`${url}/trackings/${userId}/${idAd}`, {
-            status: 'DELIVERED'
+            status: 'DELIVERED',
+            adversiment: {
+                id: idAd
+            }
         }).then(() => {
             successAlert("Status atualiado com sucesso!")
         }).catch(() => {

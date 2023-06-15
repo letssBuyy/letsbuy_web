@@ -256,7 +256,7 @@ export default function SearchAd() {
                                     sellerCity={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.city : ''}
                                     sellerState={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.state : ''}
                                     sellerImageProfile={card.adversiments && card.adversiments.userSellerLikeDto ? card.adversiments.userSellerLikeDto.profileImage : ''}
-                                    isSelectedHeart={card.adversiments && card.adversiments.isLike}
+                                    isSelectedHeart={card.adversiments && card.adversiments.isLike ? card.adversiments.isLike : false}
                                     likeId={card.adversiments && card.adversiments.likeId ? card.adversiments.likeId : ''}
                                 />
                             ))

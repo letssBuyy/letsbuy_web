@@ -16,7 +16,6 @@ import ImageDefault from "../assets/images/image-default.png";
 
 export default function CardMyAds(props) {
     let type = props.type;
-    console.log(props)
     const idUser = props.item && props.item.userId ? props.item.userId : '';
     const id = props.item.id;
     const title = props.item.title;
@@ -25,7 +24,9 @@ export default function CardMyAds(props) {
     const date = moment(props.item.postDate).format("DD/MM/YYYY");
 
     const salleDate = props.item && props.item.saleDate ? props.item.saleDate : '';
-    const buyerName = props.buyer && props.buyer.name ? props.buyer.name : '';
+
+    const buyerName = props.item && props.item.buyer && props.item.buyer.name ? props.item.buyer.name : '';
+
     const buyerCep = props.buyer && props.buyer.cep ? props.buyer.cep : '';
     const buyerRoad = props.buyer && props.buyer.road ? props.buyer.road : '';
     const buyerNumber = props.buyer && props.buyer.number ? props.buyer.number : '';
@@ -34,7 +35,7 @@ export default function CardMyAds(props) {
     const buyerCity = props.buyer && props.buyer.city ? props.buyer.city : '';
     const buyerState = props.buyer && props.buyer.state ? props.buyer.state : '';
     const isShipment = props.item && props.item.isShipment ? props.item.isShipment : false
-    const statusAd = props.item && props.item.isActive ? props.item.isActive : ''
+    const statusAd = props.item && props.item.trackings && props.item.trackings.length ? props.item.trackings.length + 1 : 1
 
     let navigate = useNavigate();
 
@@ -61,12 +62,27 @@ export default function CardMyAds(props) {
 
     async function changeStatusOrder() {
         await axios.post(`${url}/trackings/${idUser}/${id}`, {
-            status: 'SENT'
+            status: 'SENT',
+            adversiment: {
+                id: id
+            }
         }).then(() => {
             successAlert("Status atualiado com sucesso!")
         }).catch(() => {
             errorAlert("Ocorreu um erro ao atualizar o status do anúncio.")
         })
+    }
+
+    function getStatusButton() {
+        if (statusAd === 3) {
+            return <button onClick={() => { changeStatusOrder() }}>Enviei o pedido!</button>;
+        } else if (statusAd === 6) {
+            return <ButtonDisabled disabled={true}>Aguardando confirmação</ButtonDisabled>;
+        } else if (statusAd === 7) {
+            return <ButtonDisabled disabled={true}>Entregue</ButtonDisabled>;
+        } else {
+            return null; // Caso nenhum dos valores seja correspondente, retorna null ou outra ação desejada.
+        }
     }
 
     switch (type) {
@@ -110,12 +126,7 @@ export default function CardMyAds(props) {
                             <RightSideAccordion>
                                 <div></div>
                                 <div>
-                                    {
-                                        statusAd === "SALLED" ?
-                                            <button disabled={true}>Aguardando confirmação</button>
-                                            :
-                                            <button onClick={() => { changeStatusOrder() }}>Enviei o pedido!</button>
-                                    }
+                                    {getStatusButton()}
                                 </div>
                             </RightSideAccordion>
                         </CardAccordion>
@@ -398,4 +409,8 @@ export const Content = styled.div`
       color: ${colors.blackGray};
       margin-bottom: 10px;
   }
+`;
+
+export const ButtonDisabled = styled.button`
+    background-color: ${colors.grayMedium} !important;
 `;
