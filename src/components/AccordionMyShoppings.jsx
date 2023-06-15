@@ -33,6 +33,16 @@ export default function AccordionMyShoppings(props) {
         return deliveredIndex;
     };
 
+    function findTrackings() {
+        if (trackings.length === 6) {
+            return <button onClick={() => confirm()}>Pedido recebido</button>
+        } else if (trackings.length === 7) {
+            return <ButtonDisabled disabled={true}>Pedido finalizado</ButtonDisabled>
+        } else {
+            return <ButtonDisabled disabled={true}>Aguardando envio</ButtonDisabled>
+        }
+    }
+
     async function confirm() {
         await axios.post(`${url}/trackings/${userId}/${idAd}`, {
             status: 'DELIVERED',
@@ -58,12 +68,7 @@ export default function AccordionMyShoppings(props) {
                         </div>
                     </div>
                     <div>
-                        {
-                            findDeliveredIndex() === -1 ?
-                                <button onClick={() => confirm()}>Pedido recebido</button>
-                                :
-                                <ButtonDisabled disabled={true}>Pedido finalizado</ButtonDisabled>
-                        }
+                        {findTrackings()}
                     </div>
                 </AccordionHeader>
                 <AccordionContent

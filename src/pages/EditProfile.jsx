@@ -111,10 +111,7 @@ export default function EditProfile() {
                     neighborhood: neighborhood,
                     road: road,
                     complement: complement,
-                    number: number,
-                    accountNumber: account,
-                    bankAccount: bank,
-                    agencyNumber: agency,
+                    number: number
                 }).then((response) => {
                     if (response.status === 200) {
                         successAlert("Perfil atualizado com sucesso!")
