@@ -28,6 +28,7 @@ import InputMask from 'react-input-mask';
 import Loading from "../components/Loading";
 import { findByCategory } from "../utils/enums";
 import { formatCurrency, removeCardFormatting } from "../utils/strings";
+import { successAlert, errorAlert } from "../utils/alerts";
 
 export default function Checkout() {
     let navigate = useNavigate();
@@ -88,10 +89,12 @@ export default function Checkout() {
                     setNeighborhood(data.neighborhood)
                     setRoad(data.road)
                     setNumber(data.number)
+                    successAlert("Pagamento realizado com sucesso!")
+                }).catch(() => {
+                    errorAlert("Ocorreu um erro ao realizar o pagamento")
                 })
-
             } catch (error) {
-
+                errorAlert("Ocorreu um erro ao realizar o pagamento")
             } finally {
                 setLoading(false)
             }
@@ -114,7 +117,7 @@ export default function Checkout() {
             })
 
             //Preenche os campos do vendedor e do anuncio
-            await axios.get(`${url}/adversiments/${id}/${userId}`).then((response) => {
+            await axios.get(`${url}/adversiments/${id}?idUser=${userId}`).then((response) => {
                 const data = response.data[0].adversiments
                 console.log(data)
                 setAdvertiseName(data.title)
@@ -154,7 +157,7 @@ export default function Checkout() {
             setShowHolderNameError(false)
         }
 
-        if (expirationDate.length !== 10) {
+        if (expirationDate.length !== 7) {
             setShowExpirationDateError(true);
             isValidateAllFields = false;
         } else {
