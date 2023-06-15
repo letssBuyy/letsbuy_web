@@ -217,11 +217,11 @@ export default function Chat() {
         loadMessages(currentChatID)
     }, [message])
 
-    setTimeout(() => {
+    setInterval(() => {
         if (currentChatID !== '' && currentChatID !== null && currentChatID !== undefined) {
             loadMessages(currentChatID)
         }
-    }, 15000);
+    }, 2000);
 
     return (
         <>
