@@ -12,7 +12,7 @@ import InputMask from 'react-input-mask';
 import { url } from "../utils/request";
 import axios from "axios";
 import { successAlert, errorAlert } from "../utils/alerts";
-import { removePhoneNumberFormatter } from "../utils/strings";
+import { removePhoneNumberFormatter, removeCPFFormatter } from "../utils/strings";
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -46,7 +46,7 @@ export default function Register() {
                 await axios.post(`${url}/users`, {
                     name: name,
                     email: email,
-                    cpf: cpf,
+                    cpf: removeCPFFormatter(cpf),
                     birthDate: dateOfBirth,
                     password: password,
                     phoneNumber: removePhoneNumberFormatter(phoneNumber)
@@ -54,7 +54,6 @@ export default function Register() {
                     if (response.status === 409) {
                         errorAlert("Email ou CPF já cadastrados")
                     }
-
                     successAlert("Cadastro realizado com sucesso!")
                     navigate('/entrar')
                 })
@@ -134,8 +133,6 @@ export default function Register() {
 
         return isValidAllFields
     }
-
-    console.log(removePhoneNumberFormatter(phoneNumber))
 
     return (
         <>

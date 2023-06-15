@@ -68,3 +68,21 @@ export function removePhoneNumberFormatter(phoneNumber) {
 
     return numericPhoneNumber;
 }
+
+export function removeCardFormatting(cardNumber) {
+    if (typeof cardNumber !== 'string') {
+        cardNumber = String(cardNumber);
+    }
+
+    const numericCardNumber = cardNumber.replace(/\s/g, '');
+    return numericCardNumber;
+}
+
+export function removeCPFFormatter(cpf) {
+    if (typeof cpf !== 'string') {
+        cpf = String(cpf);
+    }
+
+    const numericCPF = cpf.replace(/\D/g, '');
+    return numericCPF;
+}

@@ -27,7 +27,7 @@ import {
 import InputMask from 'react-input-mask';
 import Loading from "../components/Loading";
 import { findByCategory } from "../utils/enums";
-import { formatCurrency } from "../utils/strings"
+import { formatCurrency, removeCardFormatting } from "../utils/strings";
 
 export default function Checkout() {
     let navigate = useNavigate();
@@ -75,7 +75,7 @@ export default function Checkout() {
                     isShipment: deliveryOption === 1 ? true : false,
                     idAdvertisement: id,
                     idUser: userId,
-                    cardNumber: cardNumber,
+                    cardNumber: removeCardFormatting(cardNumber),
                     expMonth: month,
                     expYear: year,
                     securityCode: securityCode,
@@ -139,7 +139,7 @@ export default function Checkout() {
 
     function validateFields() {
         let isValidateAllFields = true;
-        
+
         if (cardNumber.length !== 19) {
             setShowCardNumberError(true);
             isValidateAllFields = false;
@@ -166,6 +166,15 @@ export default function Checkout() {
             isValidateAllFields = false;
         } else {
             setShowSecurityCodeError(false);
+        }
+
+        if (deliveryOption === 1 &&
+            state !== '' &&
+            city !== '' &&
+            neighborhood !== '' &&
+            road !== '' &&
+            number !== '') {
+            isValidateAllFields = false;
         }
 
         return isValidateAllFields;
@@ -290,7 +299,7 @@ export default function Checkout() {
                                             type="text"
                                             placeholder="0000"
                                             value={expirationDate}
-                                            mask="99/99/9999"
+                                            mask="99/9999"
                                             onChange={(e) => setExpirationDate(e.target.value)}
                                         />
                                     </div>

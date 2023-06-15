@@ -24,7 +24,7 @@ import { url } from "../utils/request";
 import { useNavigate } from 'react-router-dom';
 import { errorAlert, successAlert } from '../utils/alerts';
 import Loading from "../components/Loading";
-import { removePhoneNumberFormatter } from "../utils/strings";
+import { removePhoneNumberFormatter, removeCPFFormatter } from "../utils/strings";
 
 export default function EditProfile() {
     const [profileImage, setProfileImage] = useState('');
@@ -150,7 +150,7 @@ export default function EditProfile() {
                 await axios.put(`${url}/users/${userID}`, {
                     name: name,
                     email: email,
-                    cpf: cpf,
+                    cpf: removeCPFFormatter(cpf),
                     birthDate: dateOfBirth,
                     phoneNumber: removePhoneNumberFormatter(phoneNumber),
                     cep: cep,
@@ -193,7 +193,7 @@ export default function EditProfile() {
             if (response.status === 200) {
                 localStorage.setItem('profileImage', response.data.profileImage)
                 localStorage.setItem('name', response.data.name)
-                
+
                 successAlert("Imagem atualizada com sucesso!");
             } else {
                 errorAlert("Ocorreu um erro ao atualizar a imagem.");

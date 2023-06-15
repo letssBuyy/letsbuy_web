@@ -75,7 +75,15 @@ export default function Advertise() {
     async function load() {
         try {
             setLoading(true)
-            await axios.get(`${url}/adversiments/${id}/${idUser}`).then((response) => {
+            let content = ''
+
+            if (idUser !== null && idUser !== 'null') {
+                content = `/adversiments/${id}?idUser=${idUser}`
+            } else {
+                content = `/adversiments/${id}`
+            }
+
+            await axios.get(`${url}${content}`).then((response) => {
                 const data = response.data[0]
                 setIsFavorite(data.isLike)
                 setLikeId(data.likeId)
@@ -93,7 +101,7 @@ export default function Advertise() {
                 const seller = advertisement.userSellerLikeDto
                 setSellerName(seller.name)
                 setSellerId(seller.id)
-                
+
                 setSellerImage(seller.profileImage)
                 setSellerCity(seller.city)
                 setSellerState(seller.state)
@@ -126,19 +134,19 @@ export default function Advertise() {
             setLoading(false)
         }
     }
-    
+
     function sendToSellerProfile() {
         navigate(`/perfil/${sellerId}`)
     }
-    
+
     function buyAdvertise() {
         navigate(`/checkout-pagamento/${idAdvertise}`)
     }
-    
+
     function sendToChat() {
         navigate(`/chat?openChatWithSeller=${sellerId}&idBuyer=${idUser}&idAdvertise=${idAdvertise}`)
     }
-    
+
     function sendProposal() {
         navigate(`/chat?openChatWithSeller=${sellerId}&idBuyer=${idUser}&idAdvertise=${idAdvertise}&openModalPropose=true`)
     }
