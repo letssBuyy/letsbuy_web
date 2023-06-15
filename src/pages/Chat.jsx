@@ -92,8 +92,8 @@ export default function Chat() {
         }
     }
 
-    function handleSelectedItem(sellerId, idAdvertise) {
-        createChat(sellerId, idAdvertise)
+    function handleSelectedItem(sellerId, idAdvertise, idBuyer) {
+        createChat(sellerId, idAdvertise, idBuyer)
 
         if (window.innerWidth < 900) {
             sideBarRef.current.style.display = "none";
@@ -106,11 +106,11 @@ export default function Chat() {
         subContainerRef.current.style.display = "none";
     }
 
-    async function createChat(sellerId, idAdvertise) {
+    async function createChat(sellerId, idAdvertise, idBuyer) {
         setLoading(true)
         await axios.post(`${url}/chats`, {
             idSeller: sellerId,
-            idBuyer: userId,
+            idBuyer: idBuyer,
             idAdversiment: idAdvertise
         }).then((response) => {
             const data = response.data
@@ -243,11 +243,11 @@ export default function Chat() {
                 <SideBar ref={sideBarRef}>
                     {chats && chats.length > 0 ? (
                         chats.map((item) => (
-                            <div key={item.id} onClick={() => handleSelectedItem(item.seller.id, item.adversiment.id)}>
+                            <div key={item.id} onClick={() => handleSelectedItem(item.seller.id, item.adversiment.id, item.buyer.id)}>
                                 <ChatItem
                                     image={item.adversiment && item.adversiment.images && item.adversiment.images.length > 0 ? item.adversiment.images[0].url : ImageDefault}
                                     advertiseName={item.adversiment ? item.adversiment.title : ''}
-                                    userName={item.seller ? item.seller.name : ''}
+                                    userName={item.seller.id === userId ? item.buyer.name : item.seller.name}
                                     date={item.lastMessageAt ? formatDate(item.lastMessageAt) : ''}
                                     isSelected={selected === item.id}
                                 />
