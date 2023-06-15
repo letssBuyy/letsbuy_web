@@ -25,7 +25,7 @@ import { url } from "../utils/request";
 import axios from "axios";
 import { successAlert, errorAlert } from "../utils/alerts";
 import Loading from "../components/Loading";
-import { removeCurrencyFormatting } from "../utils/strings";
+import { removeCurrencyFormatting } from "../utils/strings"
 
 export default function EditAd() {
     const [title, setTitle] = useState('');
@@ -33,7 +33,7 @@ export default function EditAd() {
     const [color, setColor] = useState('');
     const [category, setCategory] = useState('');
     const [quality, setQuality] = useState('');
-    const [price, setPrice] = useState('0');
+    const [price, setPrice] = useState("");
 
     const [showTituloError, setShowTituloError] = useState(false);
     const [showColorError, setShowColorError] = useState(false);
