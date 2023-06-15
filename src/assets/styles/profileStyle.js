@@ -5,7 +5,7 @@ import { fonts } from '../../utils/fonts'
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 0 10%;
+    padding: 100px 10%;
 `;
 
 export const InfoUser = styled.div`
