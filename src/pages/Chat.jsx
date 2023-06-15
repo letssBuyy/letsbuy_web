@@ -121,7 +121,10 @@ export default function Chat() {
             setAdvertiseImage(data.adversiment && data.adversiment.images && data.adversiment.images.length > 0 ? data.adversiment.images[0].url : "");
             setAdvertisePrice(data.adversiment && data.adversiment.price ? data.adversiment.price : "");
             setUserImageProfile(data.seller && data.seller.profileImage ? data.seller.profileImage : "");
-            setUserName(data.seller && data.seller.name ? data.seller.name : "");
+            if (data.seller && data.buyer) {
+                setUserName(data.seller.id === userId ? data.buyer.name : data.seller.name);
+            }
+            
             setSellerChatId(data.seller && data.seller.id ? data.seller.id : '');
 
             if (data.id) {

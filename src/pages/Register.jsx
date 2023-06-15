@@ -11,7 +11,8 @@ import { containsNumbers, validateEmail, validateAge } from "../utils/strings";
 import InputMask from 'react-input-mask';
 import { url } from "../utils/request";
 import axios from "axios";
-import { successAlert, errorAlert } from "../utils/alerts"
+import { successAlert, errorAlert } from "../utils/alerts";
+import { removePhoneNumberFormatter } from "../utils/strings";
 
 export default function Register() {
     const [name, setName] = useState('');
@@ -48,7 +49,7 @@ export default function Register() {
                     cpf: cpf,
                     birthDate: dateOfBirth,
                     password: password,
-                    phoneNumber: phoneNumber
+                    phoneNumber: removePhoneNumberFormatter(phoneNumber)
                 }).then((response) => {
                     if (response.status === 409) {
                         errorAlert("Email ou CPF já cadastrados")
@@ -133,6 +134,8 @@ export default function Register() {
 
         return isValidAllFields
     }
+
+    console.log(removePhoneNumberFormatter(phoneNumber))
 
     return (
         <>

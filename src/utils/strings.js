@@ -56,3 +56,15 @@ export function removeCurrencyFormatting(value) {
 
     return integerValue / 100;
 }
+
+export function removePhoneNumberFormatter(phoneNumber) {
+    // Verifica se o número de telefone é uma string
+    if (typeof phoneNumber !== 'string') {
+        phoneNumber = String(phoneNumber); // Converte o número de telefone em uma string
+    }
+
+    // Remove todos os caracteres não numéricos da string
+    const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
+
+    return numericPhoneNumber;
+}

@@ -24,6 +24,7 @@ import { url } from "../utils/request";
 import { useNavigate } from 'react-router-dom';
 import { errorAlert, successAlert } from '../utils/alerts';
 import Loading from "../components/Loading";
+import { removePhoneNumberFormatter } from "../utils/strings";
 
 export default function EditProfile() {
     const [profileImage, setProfileImage] = useState('');
@@ -151,7 +152,7 @@ export default function EditProfile() {
                     email: email,
                     cpf: cpf,
                     birthDate: dateOfBirth,
-                    phoneNumber: phoneNumber,
+                    phoneNumber: removePhoneNumberFormatter(phoneNumber),
                     cep: cep,
                     city: city,
                     state: state,
