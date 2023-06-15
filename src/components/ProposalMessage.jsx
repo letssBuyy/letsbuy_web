@@ -23,10 +23,8 @@ export default function ProposalMessage(props) {
     }
 
     async function deleteProposal() {
-        await axios.delete(`${url}/messages/${messageID}`).then((response) => {
-            successAlert("Proposta recusada com sucesso!")
+        await axios.delete(`${url}/messages/${messageID}`).then(() => {
         }).catch(() => {
-            errorAlert("Ocorreu um erro ao recusar a proposta.")
         })
     }
 
