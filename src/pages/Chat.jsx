@@ -124,7 +124,7 @@ export default function Chat() {
             if (data.seller && data.buyer) {
                 setUserName(data.seller.id === userId ? data.buyer.name : data.seller.name);
             }
-            
+
             setSellerChatId(data.seller && data.seller.id ? data.seller.id : '');
 
             if (data.id) {
@@ -198,14 +198,15 @@ export default function Chat() {
         const openChatWithSeller = chatParams.get('openChatWithSeller');
         const idAdvertise = chatParams.get('idAdvertise')
         const openModalPropose = chatParams.get('openModalPropose');
+        const idBuyer = chatParams.get('idBuyer');
 
-        if (openModalPropose && idAdvertise && openChatWithSeller) {
-            createChat(openChatWithSeller, idAdvertise)
+        if (openModalPropose && idAdvertise && openChatWithSeller && idBuyer) {
+            createChat(openChatWithSeller, idAdvertise, idBuyer)
             openModal()
         }
 
-        if (openChatWithSeller && idAdvertise) {
-            createChat(openChatWithSeller, idAdvertise)
+        if (openChatWithSeller && idAdvertise && idBuyer) {
+            createChat(openChatWithSeller, idAdvertise, idBuyer)
         }
 
         let isAuthenticated = localStorage.getItem('userId')

@@ -70,7 +70,7 @@ export default function Advertise() {
     let navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const { id } = useParams();
-    const idUser = user.id
+    const idUser = localStorage.getItem('userId')
 
     async function load() {
         try {
@@ -93,6 +93,7 @@ export default function Advertise() {
                 const seller = advertisement.userSellerLikeDto
                 setSellerName(seller.name)
                 setSellerId(seller.id)
+                
                 setSellerImage(seller.profileImage)
                 setSellerCity(seller.city)
                 setSellerState(seller.state)
@@ -125,21 +126,21 @@ export default function Advertise() {
             setLoading(false)
         }
     }
-
-    function sendToChat() {
-        navigate(`/chat?openChatWithSeller=${sellerId}&idAdvertise=${idAdvertise}`)
-    }
-
+    
     function sendToSellerProfile() {
         navigate(`/perfil/${sellerId}`)
     }
-
+    
     function buyAdvertise() {
         navigate(`/checkout-pagamento/${idAdvertise}`)
     }
-
+    
+    function sendToChat() {
+        navigate(`/chat?openChatWithSeller=${sellerId}&idBuyer=${idUser}&idAdvertise=${idAdvertise}`)
+    }
+    
     function sendProposal() {
-        navigate(`/chat?openChatWithSeller=${sellerId}&idAdvertise=${idAdvertise}&openModalPropose=true`)
+        navigate(`/chat?openChatWithSeller=${sellerId}&idBuyer=${idUser}&idAdvertise=${idAdvertise}&openModalPropose=true`)
     }
 
     async function handleChangeHeart() {
