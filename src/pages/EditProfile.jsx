@@ -70,54 +70,6 @@ export default function EditProfile() {
         };
     }
 
-    const formatBankNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, '');
-
-        if (formattedValue.length > 3) {
-            return `${formattedValue.slice(0, 3)}-${formattedValue.slice(3)}`;
-        } else {
-            return formattedValue;
-        }
-    };
-
-    const formatAgencyNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, '');
-
-        if (formattedValue.length > 4) {
-            return `${formattedValue.slice(0, 4)}-${formattedValue.slice(4)}`;
-        } else {
-            return formattedValue;
-        }
-    };
-
-    const formatAccountNumber = (value) => {
-        const formattedValue = value.replace(/\D/g, '');
-
-        if (formattedValue.length > 5) {
-            return `${formattedValue.slice(0, 5)}-${formattedValue.slice(5)}`;
-        } else {
-            return formattedValue;
-        }
-    };
-
-    const handleBankChange = (e) => {
-        const inputValue = e.target.value;
-        const formattedValue = formatBankNumber(inputValue);
-        setBank(formattedValue);
-    };
-
-    const handleAgencyChange = (e) => {
-        const inputValue = e.target.value;
-        const formattedValue = formatAgencyNumber(inputValue);
-        setAgency(formattedValue);
-    };
-
-    const handleAccountChange = (e) => {
-        const inputValue = e.target.value;
-        const formattedValue = formatAccountNumber(inputValue);
-        setAccount(formattedValue);
-    };
-
     async function searchForCEP(cep) {
         if (cep) {
             if (cep.length === 8) {
@@ -216,7 +168,7 @@ export default function EditProfile() {
             setShowNameError(false)
         }
 
-        if (cpf.length !== 14) {
+        if (removeCPFFormatter(cpf).length !== 11) {
             isValidAllFields = false
             setShowCpfError(true)
         } else {
@@ -230,7 +182,7 @@ export default function EditProfile() {
             setShowDateOfBirthError(false)
         }
 
-        if (phoneNumber.length !== 15) {
+        if (removePhoneNumberFormatter(phoneNumber).length !== 11) {
             isValidAllFields = false
             setShowPhoneNumberError(true)
         } else {
@@ -417,8 +369,10 @@ export default function EditProfile() {
                                                 <input
                                                     type="text"
                                                     placeholder="0000"
+                                                    max={4}
+                                                    maxLength={4}
                                                     value={bank}
-                                                    onChange={handleBankChange}
+                                                    onChange={(e) => setBank(e.target.value)}
                                                 />
                                             </div>
                                             <div>
@@ -426,8 +380,10 @@ export default function EditProfile() {
                                                 <input
                                                     type="text"
                                                     placeholder="0000"
+                                                    max={4}
+                                                    maxLength={4}
                                                     value={agency}
-                                                    onChange={handleAgencyChange}
+                                                    onChange={(e) => setAgency(e.target.value)}
                                                 />
                                             </div>
                                             <div>
@@ -435,8 +391,10 @@ export default function EditProfile() {
                                                 <input
                                                     type="text"
                                                     placeholder="0000"
+                                                    max={4}
+                                                    maxLength={4}
                                                     value={account}
-                                                    onChange={handleAccountChange}
+                                                    onChange={(e) => setAccount(e.target.value)}
                                                 />
                                             </div>
                                         </CoupleInputs>
