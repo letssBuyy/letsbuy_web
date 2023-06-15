@@ -34,9 +34,9 @@ export default function AccordionMyShoppings(props) {
     };
 
     function findTrackings() {
-        if (trackings.length === 6) {
+        if (trackings.length === 5) {
             return <button onClick={() => confirm()}>Pedido recebido</button>
-        } else if (trackings.length === 7) {
+        } else if (trackings.length === 6) {
             return <ButtonDisabled disabled={true}>Pedido finalizado</ButtonDisabled>
         } else {
             return <ButtonDisabled disabled={true}>Aguardando envio</ButtonDisabled>

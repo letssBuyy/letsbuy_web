@@ -90,6 +90,7 @@ export default function Checkout() {
                     setRoad(data.road)
                     setNumber(data.number)
                     successAlert("Pagamento realizado com sucesso!")
+                    navigate("/pagamento-concluido")
                 }).catch(() => {
                     errorAlert("Ocorreu um erro ao realizar o pagamento")
                 })
