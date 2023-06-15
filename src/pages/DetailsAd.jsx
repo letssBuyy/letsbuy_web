@@ -159,7 +159,7 @@ export default function Advertise() {
     return (
         <>
             <Loading isEnabled={loading} />
-            <Navbar type='principal' />
+            <Navbar type='basic' />
             <Container>
                 <ContainerImages>
                     <ImageGallery

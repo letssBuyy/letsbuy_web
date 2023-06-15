@@ -4,7 +4,7 @@ import { colors } from "../../utils/colors";
 
 export const Container = styled.div`
     display: flex;
-    margin: 90px 100px 90px 100px;
+    margin: 100px 100px 90px 100px;
     justify-content: space-between;
 
     @media screen and (max-width: 1000px) {
