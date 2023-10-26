@@ -65,7 +65,7 @@ export default function Footer() {
                 </SpeedLinks>
             </Container>
             <BaseFooter>
-                <span>LetsBuy - © Todos os direitos reservados 2023</span>
+                <span>LetsBuy - © Todos os direitos reservados 2023 - Frontend 2</span>
             </BaseFooter>
         </>
     )
